@@ -1,0 +1,143 @@
+/* global */
+* {
+  font-family: "JetbrainsMonoNL Nerd Font Mono";
+  color: rgb(254,254,254);
+  font-size: 10pt;
+  font-weight: bold;
+  border-radius: 10px;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+}
+@keyframes blink_red {
+  to {
+    background-color: rgb(242, 143, 173);
+    color: rgb(26, 24, 38);
+  }
+}
+.warning,
+.critical,
+.urgent {
+  animation-name: blink_red;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+window#waybar {
+  background-color: transparent;
+}
+window > box {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+.modules-left,
+.modules-center,
+.modules-right {
+  background-color: rgb(30, 30, 46);
+  opacity: calc(0.80);
+}
+
+/* workspaces */
+#workspaces button {
+  border-radius: 24px;
+  padding: 0;
+  margin: 5px;
+}
+#workspaces button.active {
+  background-color: rgb(120, 112, 165);
+  color: rgb(26, 24, 38);
+}
+#workspaces button.urgent {
+  color: rgb(26, 24, 38);
+}
+#workspaces button:hover {
+  background-color: rgb(248, 189, 150);
+  color: rgb(26, 24, 38);
+}
+
+/* tooltip */
+tooltip {
+  background: rgb(48, 45, 65);
+}
+tooltip label {
+  color: rgb(217, 224, 238);
+}
+
+/* modules */
+#mode,
+#clock,
+#memory,
+#temperature,
+#cpu,
+#mpd,
+#temperature,
+#backlight,
+#pulseaudio,
+#network,
+#battery {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#mode {
+  margin-left: 10px;
+  background-color: rgb(248, 189, 150);
+  color: rgb(26, 24, 38);
+}
+#memory {
+  color: rgb(181, 232, 224);
+}
+#cpu {
+  color: rgb(245, 194, 231);
+}
+#clock {
+  color: #D2C3D5;
+}
+#idle_inhibitor {
+  color: rgb(221, 182, 242);
+}
+#temperature {
+  color: rgb(150, 205, 251);
+}
+#backlight {
+  color: rgb(248, 189, 150);
+}
+#pulseaudio {
+  color: rgb(245, 224, 220);
+}
+#network {
+  color: #abe9b3;
+}
+#network.disconnected {
+  color: rgb(255, 255, 255);
+}
+#battery.charging,
+#battery.full,
+#battery.discharging {
+  color: rgb(250, 227, 176);
+}
+#battery.critical:not(.charging) {
+  color: rgb(242, 143, 173);
+}
+#tray {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+#mpd.paused {
+  color: #414868;
+  font-style: italic;
+}
+#mpd.stopped {
+  background: transparent;
+}
+#mpd {
+  color: #c0caf5;
+}
+#cava-internal {
+  font-family: "Hack Nerd Font";
+}
+@keyframes blink-update {
+	to {
+		background-color: dodgerblue;
+	}
+}
