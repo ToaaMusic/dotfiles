@@ -20,4 +20,3 @@ cd Dotfiles
 # Copy files to ~/.config/* or run:
 ./link.sh
 ```
-
