@@ -1,7 +1,7 @@
 /* global */
 * {
   font-family: "JetbrainsMonoNL Nerd Font Mono";
-  color: rgb(254,254,254);
+  /* color: rgb(254,254,254); */
   font-size: 10pt;
   font-weight: bold;
   border-radius: 10px;
@@ -27,9 +27,9 @@ window#waybar {
   background-color: transparent;
 }
 window > box {
-  margin-left: 5px;
-  margin-right: 5px;
-  margin-top: 5px;
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-top: 2px;
 }
 .modules-left,
 .modules-center,
@@ -40,9 +40,10 @@ window > box {
 
 /* workspaces */
 #workspaces button {
+  padding: 0rem 0.35rem;
+  margin: 0.4rem 0.25rem;
   border-radius: 24px;
-  padding: 0;
-  margin: 5px;
+  color: rgb(254,254,254);
 }
 #workspaces button.active {
   background-color: rgb(120, 112, 165);
@@ -59,6 +60,7 @@ window > box {
 /* tooltip */
 tooltip {
   background: rgb(48, 45, 65);
+  border: 2px solid #89b4fa;
 }
 tooltip label {
   color: rgb(217, 224, 238);
@@ -75,7 +77,8 @@ tooltip label {
 #backlight,
 #pulseaudio,
 #network,
-#battery {
+#battery,
+#mpris {
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -84,6 +87,14 @@ tooltip label {
   background-color: rgb(248, 189, 150);
   color: rgb(26, 24, 38);
 }
+#mpris.playing {
+  color: rgb(150, 205, 251);
+}
+
+#mpris.paused {
+  color: #9399b2;
+}
+/* colors */
 #memory {
   color: rgb(181, 232, 224);
 }

@@ -4,19 +4,30 @@ This repository contains my personal configuration files for Arch Linux with the
 
 ## Components
 
-- **Fastfetch**: System information tool.
-- **Hyprland**: Dynamic tiling window manager.
-- **Waybar**: Status bar for Wayland.
-- **Rofi**: Application launcher.
-- **Kitty**: Terminal emulator.
+- **fastfetch**: System information tool.
+- **hyprland**: Dynamic tiling window manager.
+- **waybar**: Status bar for Wayland.
+- **rofi**: Application launcher.
+- **kitty**: Terminal emulator.
 - **yazi**: File manager.
+- **dunst** : Notification daemon.
+
 
 ## Installation
 To use these configurations, clone the repository and copy the files to their respective locations in your home directory. Make sure to back up any existing configuration files before overwriting them.
 
 ```bash
-git clone https://github.com/ToaaMusic/Dotfiles.git
+git clone https://github.com/ToaaMusic/dotfiles.git
 cd Dotfiles
 # Copy files to ~/.config/* or run:
 ./link.sh
 ```
+
+link.sh is a script that creates symbolic links from the repository to the appropriate configuration directories.
+
+## Dependencies
+
+Except the components, ensure you have the following packages installed on your system:
+
+- `musicfox` <- waybar mpris
+- `hyprpaper` <- wallpaper for hyprland

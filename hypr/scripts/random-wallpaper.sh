@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+WALLDIR="$HOME/Pictures/wallpapers"
+
+WALL=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.jpeg' \) | shuf -n 1)
+
+# hyprctl hyprpaper wallpaper '[mon], [path], [fit_mode]'
+
+echo "$WALL"
+
+hyprctl hyprpaper reload "eDP-1,$WALL"
+
+# hyprctl hyprpaper preload "$WALL"
+# hyprctl hyprpaper wallpaper "eDP-1,$WALL"
+# hyprctl hyprpaper unload unused
+
+# send notification
+notify-send "Wallpaper Changed" "New wallpaper set." -i "$WALL"
+
+
+
