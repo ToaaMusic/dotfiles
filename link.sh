@@ -2,11 +2,12 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_TARGET_DIR="$DOTFILES_DIR/config"
 CONFIG_DIR="$HOME/.config"
 
 mkdir -p "$CONFIG_DIR"
 
-for dir in "$DOTFILES_DIR"/*/; do
+for dir in "$CONFIG_TARGET_DIR"/*/; do
   name="$(basename "$dir")"
   target="$CONFIG_DIR/$name"
 
