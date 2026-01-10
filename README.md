@@ -18,7 +18,7 @@ To use these configurations, clone the repository and copy the files to their re
 
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
-cd Dotfiles
+cd dotfiles
 # Copy files to ~/.config/* or run:
 ./link.sh
 ```
