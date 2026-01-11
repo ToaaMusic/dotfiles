@@ -8,14 +8,18 @@ WALL=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.
 
 echo "$WALL"
 
-hyprctl hyprpaper reload "eDP-1,$WALL"
+#hyprctl hyprpaper reload "eDP-1,$WALL"
+
+# or
 
 # hyprctl hyprpaper preload "$WALL"
 # hyprctl hyprpaper wallpaper "eDP-1,$WALL"
 # hyprctl hyprpaper unload unused
 
+# newest
+
+hyprctl hyprpaper wallpaper ",$WALL"
+
 # send notification
 notify-send "Wallpaper Changed" "New wallpaper set." -i "$WALL"
-
-
 
