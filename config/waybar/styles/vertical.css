@@ -1,10 +1,10 @@
-@import "vars.css";
+@import "../vars.css";
 /* global */
 * {
   font-family: "JetbrainsMonoNL Nerd Font Mono";
   font-size: 10pt;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 5px;
   transition-property: background-color;
   transition-duration: 0.5s;
 }
@@ -14,38 +14,46 @@ window#waybar {
 window > box {
   margin-left: 3px;
   margin-right: 3px;
-  margin-top: 2px;
+  margin-top: 1px;
   padding-top: 3px;
   padding-bottom: 6px;
 }
 .modules-left,
 .modules-center,
 .modules-right {
-  background: shade(alpha(rgb(48, 45, 65), 0.9), 1);
+  padding-bottom: 3px;
+  background: shade(alpha(rgb(48, 45, 65), 0.8), 1);
   box-shadow: 1px 2px 2px #101010;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.377);
   /* opacity: calc(0.80); */
 }
 
 /* workspaces */
+#workspaces {
+  margin-top: 5px;
+  margin-bottom: -2px;
+}
 #workspaces button {
-  margin-left: 3px;
-  margin-right: 3px;
-  padding: 0rem 0.35rem;
-  border-radius: 24px;
-  background-color: rgb(150, 205, 251);
+  padding: 0px;
+  margin: 0px;
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  text-shadow: none;
+  margin-top: -3px;
   color: rgb(254,254,254);
 }
 #workspaces button.active {
-  background-color: rgb(120, 112, 165);
-  color: rgb(26, 24, 38);
+  background-color: transparent;
+  color: rgb(120, 112, 165);
 }
 #workspaces button.urgent {
-  color: rgb(26, 24, 38);
+  background: transparent;
+  color: rgb(150, 205, 251);
 }
 #workspaces button:hover {
-  background-color: rgb(248, 189, 150);
-  color: rgb(26, 24, 38);
+  background: transparent;
+  color: rgb(120, 112, 165);
 }
 
 /* tooltip */
@@ -71,8 +79,9 @@ tooltip label {
 #battery,
 #mpris,
 #cava {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 5px;
 }
 #mode {
   margin-left: 10px;

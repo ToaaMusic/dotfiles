@@ -1,6 +1,6 @@
 {
   "layer": "bottom",
-  "position": "top",
+  "position": "bottom",
   "reload_style_on_change": true,
   "modules-left": [
     "hyprland/workspaces",
@@ -9,8 +9,8 @@
     "cpu"
   ],
   "modules-center": [
-    "mpris"
-    //"clock"
+    "mpris",
+    "cava"
   ],
   "modules-right": [
     "pulseaudio",
@@ -18,7 +18,7 @@
   ],
   //left
   "hyprland/workspaces": {
-    "format": "{icon}",
+    "format": "", //{icon}
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch workspace e+1",
     "on-scroll-down": "hyprctl dispatch workspace e-1",
@@ -51,6 +51,16 @@
     "player-icons": {
       "default": ""
     }
+  },
+  "cava": {
+//      "cava_config": "$XDG_CONFIG_HOME/cava/config",
+      "framerate": 60,
+      "autosens": 1,
+      "bars": 150,
+      "method": "pipewire",
+      "source": "auto",
+      "bar_delimiter": 0,
+      "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ]
   },
   "pulseaudio": {
     "scroll-step": 1,

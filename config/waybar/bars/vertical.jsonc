@@ -1,7 +1,4 @@
 {
-  // "style": [
-  //   "~/.config/waybar/bars/vertical.css"
-  // ],
   "layer": "bottom",
   "position": "left",
   "reload_style_on_change": true,
@@ -22,18 +19,13 @@
   //left
   "hyprland/workspaces": {
     "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      "active": ""
+    },
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
-    "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7"
-    }
+    "on-scroll-down": "hyprctl dispatch workspace e-1"
   },
   "temperature": {
     "interval": 1,
@@ -41,13 +33,13 @@
     "critical-threshold": 80,
     //"on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type temp",
     "tooltip": true,
-    "format": " {temperatureC}°C"
+    "format": "" // {temperatureC}°C
   },
   "memory": {
     "font-size": 8,
     "interval": 1,
-    "format": "󰍛 {}%",
-    "format-alt": "󰍛 {used}/{total} GiB",
+    "format": "󰍛", // {}%
+    "format-alt": "󰍛", // {used}/{total} GiB
     // "on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type proc",
     "states": {
       "warning": 85
@@ -55,8 +47,8 @@
   },
   "cpu": {
     "interval": 1,
-    "format": "󰻠 {usage}%",
-    "format-alt": "󰻠 {avg_frequency} GHz"
+    "format": "󰻠", // {usage}%
+    "format-alt": "󰻠" // {avg_frequency} GHz
     // "on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type cpu",
   },
   //center
@@ -90,7 +82,7 @@
     "on-click-right": "~/.config/hypr/scripts/control/volume --toggle",
     "tooltip": true,
     "tooltip-format": "{volume}%"
-  },
+  }, 
   "battery": {
     "interval": 10,
     "states": {
