@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 pkill waybar
 
-waybar --config ~/.config/waybar/bars/horizontal.jsonc --style ~/.config/waybar/style.css & 
+waybar & 

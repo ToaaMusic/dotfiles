@@ -68,8 +68,8 @@
         ""
       ]
     },
-    "on-click": "pavucontrol",
-    "on-click-right": "~/.config/hypr/scripts/control/volume --toggle",
+    "on-click-right": "pavucontrol",
+    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "tooltip": false
   },
   "battery": {
