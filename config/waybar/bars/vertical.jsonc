@@ -70,7 +70,7 @@
   "pulseaudio": {
     "scroll-step": 1,
     "format": "{icon}",
-    "format-muted": "󰖁 Muted",
+    "format-muted": "󰖁",
     "format-icons": {
       "default": [
         "",
@@ -79,7 +79,7 @@
       ]
     },
     "on-click": "pavucontrol",
-    "on-click-right": "~/.config/hypr/scripts/control/volume --toggle",
+    //"on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "tooltip": true,
     "tooltip-format": "{volume}%"
   }, 

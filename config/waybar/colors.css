@@ -1,0 +1,22 @@
+
+@define-color bg rgb(48, 45, 65);
+@define-color bg-hover rgb(58, 55, 75);
+@define-color bg-border rgb(88, 85, 105);
+@define-color bg-shadow #101010;
+
+/* text */
+
+@define-color fg #d8cdd4;
+@define-color fg-hover #c3bac6;
+@define-color fg-shadow rgba(0, 0, 0, 0.377);
+@define-color fg-muted #9a8f99;
+
+/* accents */
+
+@define-color a rgb(120, 112, 165);
+@define-color a1 rgb(150, 205, 251);
+@define-color a2 rgb(181, 232, 224);
+@define-color a3 rgb(245, 194, 231);
+@define-color a4 rgb(245, 224, 220);
+@define-color a5 rgb(248, 189, 150);
+@define-color a6 rgb(242, 143, 173);

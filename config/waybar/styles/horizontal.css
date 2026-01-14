@@ -1,10 +1,9 @@
-@import "../colors.css";
 /* global */
 * {
   /* font-family: "JetbrainsMonoNL Nerd Font Mono"; */
-  font-size: 10pt;
+  font-size: 11pt;
   font-weight: bold;
-  border-radius: 5px;
+  border-radius: 10px;
   transition-property: background-color;
   transition-duration: 0.5s;
 }
@@ -14,14 +13,14 @@ window#waybar {
 window > box {
   margin-left: 3px;
   margin-right: 3px;
-  margin-top: 1px;
+  margin-top: 2px;
   padding-top: 3px;
   padding-bottom: 6px;
 }
 .modules-left,
 .modules-center,
 .modules-right {
-  padding-bottom: 3px;
+  padding-top: 3px;
   background: shade(alpha(@bg, 0.9), 1);
   box-shadow: 1px 2px 2px @bg-shadow;
   text-shadow: 1px 1px 2px @fg-shadow;
@@ -29,18 +28,14 @@ window > box {
 }
 
 /* workspaces */
-#workspaces {
-  margin-top: 5px;
-  margin-bottom: -2px;
-}
 #workspaces button {
-  padding: 0px;
-  margin: 0px;
   border: none;
+  margin-left: 5px;
+  margin-right: 3px;
+  padding: 0rem;
   background-color: transparent;
   box-shadow: none;
   text-shadow: none;
-  margin-top: -3px;
   color: @fg;
 }
 #workspaces button.active {
@@ -83,9 +78,8 @@ tooltip label {
 #battery,
 #mpris,
 #cava {
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 #mode {
   margin-left: 10px;
@@ -93,18 +87,23 @@ tooltip label {
   color: rgb(26, 24, 38);
 }
 #mpris.playing {
-  color: rgb(150, 205, 251);
+  color: @a1;
 }
-
 #mpris.paused {
-  color: #d8cdd4;
+  color: @fg;
 }
 /* colors */
+#temperature {
+  color: @a1;
+}
 #memory {
-  color: rgb(181, 232, 224);
+  color: @a2;
 }
 #cpu {
-  color: rgb(245, 194, 231);
+  color: @a3;
+}
+#pulseaudio {
+  color: @a4;
 }
 #clock {
   color: #D2C3D5;
@@ -112,14 +111,8 @@ tooltip label {
 #idle_inhibitor {
   color: rgb(221, 182, 242);
 }
-#temperature {
-  color: rgb(150, 205, 251);
-}
 #backlight {
   color: rgb(248, 189, 150);
-}
-#pulseaudio {
-  color: rgb(245, 224, 220);
 }
 #network {
   color: #abe9b3;

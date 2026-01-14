@@ -1,6 +1,6 @@
 {
   "layer": "bottom",
-  "position": "bottom",
+  "position": "top",
   "reload_style_on_change": true,
   "modules-left": [
     "hyprland/workspaces",
@@ -9,8 +9,7 @@
     "cpu"
   ],
   "modules-center": [
-    "mpris",
-    "cava"
+    "mpris"
   ],
   "modules-right": [
     "pulseaudio",
@@ -18,24 +17,20 @@
   ],
   //left
   "hyprland/workspaces": {
-    "format": "", //{icon}
+    "format": "{icon}",
+    "format-icons": {
+      "default": "",
+      "active": ""
+    },
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
-    "format-icons": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4",
-      "5": "5",
-      "6": "6",
-      "7": "7"
-    }
+    "on-scroll-down": "hyprctl dispatch workspace e-1"
   },
   "temperature": {
     "interval": 1,
     "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
     "critical-threshold": 80,
+    "on-click" : "btop]]]]",
     //"on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type temp",
     "tooltip": true,
     "format": " {temperatureC}°C"
@@ -52,16 +47,16 @@
       "default": ""
     }
   },
-  "cava": {
-//      "cava_config": "$XDG_CONFIG_HOME/cava/config",
-      "framerate": 60,
-      "autosens": 1,
-      "bars": 150,
-      "method": "pipewire",
-      "source": "auto",
-      "bar_delimiter": 0,
-      "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ]
-  },
+//   "cava": {
+// //      "cava_config": "$XDG_CONFIG_HOME/cava/config",
+//       "framerate": 60,
+//       "autosens": 1,
+//       "bars": 150,
+//       "method": "pipewire",
+//       "source": "auto",
+//       "bar_delimiter": 0,
+//       "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ]
+//   },
   "pulseaudio": {
     "scroll-step": 1,
     "format": "{icon} {volume}%",
@@ -96,7 +91,7 @@
       "󰂂",
       "󰁹"
     ],
-    "format-full": "{icon} {capacity}%",
+    "format-full": "",
     "format-charging": "󰂄 {capacity}%",
     "tooltip": false
   },
