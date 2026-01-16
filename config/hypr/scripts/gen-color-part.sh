@@ -22,5 +22,7 @@ GEN_LUA="$PARENT_DIR/tools/colorscheme/gen.lua"
 
 # 如果 gen.lua 存在则执行
 if [ -f "$GEN_LUA" ]; then
-  grim -t ppm - | lua "$GEN_LUA"
+  GEOM="$(slurp)" || exit 0
+  [ -n "$GEOM" ] || exit 0
+  grim -g "$GEOM" -t ppm - | lua "$GEN_LUA"
 fi

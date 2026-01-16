@@ -1,17 +1,29 @@
 // --------------- global ---------------- //
-@import "~/.config/rofi/vars.rasi"
 
 * {
-  background-color: #282738;
-  text-color:       #E5B9C6;
+  bg:               #282738;
+  fg:               #E5B9C6;
+
+  bg-lighter:       #353446;
+
+  a1:               #E5B9C6;
+  a6:               #E5B9C6;
+
+  background-color:   @bg;
+  text-color:         @fg;
   font: "JetBrainsMono Bold 10";
 }
 
+// !!! DO NOT remove this or put it before "*{}" 
+// unless you want rofi ignore the color scheme generator
+@import "~/.config/rofi/colors.g.rasi" 
+
 
 window {
-  border-color: #69577aff;
-  border:       2px;
-  border-radius: 10px;
+  background-color: @bg;
+  border-color: @a6;
+  border:       1.5px;
+  border-radius: 8px;
   width: 666px;
 }
 
@@ -64,11 +76,12 @@ inputbar {
 }
 entry {
     placeholder: "";
-    placeholder-color: #282738;
-    background-color: #353446;
+    placeholder-color: @bg;
+    cursor: text;
+    background-color: @bg-lighter;
     padding: 8px;
     border-radius: 5px;
-    text-color: #E5B9C6;
+    text-color: @fg;
   }
 
 // --------------- listview ----------------- //
@@ -84,7 +97,7 @@ listview {
 scrollbar {
     width:        4px ;
     border:       0;
-    handle-color: #E5B9C6;
+    handle-color: @a1;
     handle-width: 8px ;
     padding:      0;
 }
@@ -96,78 +109,76 @@ element {
   children: [ element-icon, element-text ];
 }
 element,element-text,element-icon, button {
+    background-color: transparent;
+    border: none;
     cursor: pointer;
 }
 
 element {
-    border:  0px;
     border-radius: 5px;
     padding: 5px;
-    border-color: transparent;
 }
 element-text {
-    background-color: #282738;
-    text-color:       #FFFFFF;
-    font: "JetBrains Mono Medium";
+    background-color: transparent;
 }
 
 element normal.normal {
-    background-color: #282738;
-    text-color:       #E5B9C6;
+    background-color: @bg;
+    text-color:       @fg;
 }
 element.normal.urgent {
-    background-color: #282738;
-    text-color:       #E5B9C6;
+    background-color: @bg;
+    text-color:       @fg;
 }
 element.normal.active {
-    background-color: #282738;
-    text-color:       #E5B9C6;
+    background-color: @bg;
+    text-color:       @fg;
 }
 element.selected.normal {
-    background-color: #E5B9C6;
-    border-color: #E5B9C6;
-    text-color:       #E5B9C6;
+    background-color: @a1;
+    border-color: @a1;
+    text-color:       @bg;
 }
 element.selected.urgent {
-    background-color: #E5B9C6;
-    border-color: #E5B9C6;
-    text-color:       #E5B9C6;
+    background-color: @a1;
+    border-color: @a1;
+    text-color:       @bg;
 }
 element.selected.active {
-    background-color: #E5B9C6;
-    border-color: #E5B9C6;
-    text-color:       #E5B9C6;
+    background-color: @a1;
+    border-color: @a1;
+    text-color:       @bg;
 }
 element.alternate.normal {
-    background-color: #282738;
-    text-color:       #E5B9C6;
+    background-color: @bg;
+    text-color:       @fg;
 }
 element.alternate.urgent {
-    background-color: #282738;
-    text-color:       #E5B9C6;
+    background-color: @bg;
+    text-color:       @fg;
 }
 element.alternate.active {
-    background-color: #282738;
-    text-color:       #E5B9C6;
+    background-color: @bg;
+    text-color:       @fg;
 }
 
 
 element-text.selected.normal {
-    background-color: #E5B9C6;
-    border-color: #E5B9C6;
-    text-color:       #282738;
+    background-color: @a1;
+    border-color: @a1;
+    text-color:       @bg;
     font: "JetBrains Mono Medium";
 }
 element-text.selected.urgent {
-    background-color: #E5B9C6;
-    border-color: #E5B9C6;
-    text-color:       #282738;
+    background-color: @a1;
+    border-color: @a1;
+    text-color:       @bg;
     font: "JetBrains Mono Medium";
 }
 element-text.selected.active {
-    background-color: #E5B9C6;
-    border-color: #E5B9C6;
-    text-color:       #282738;
+    background-color: @a1;
+    border-color: @a1;
+    text-color:       @bg;
     font: "JetBrains Mono Medium";
 }
 mode-switcher {
@@ -175,7 +186,7 @@ mode-switcher {
     spacing: 0px;
     expand: true;
 }
-button {
+/* button {
     text-color: #E5B9C6;
     border:       0px 0px 5px ;
     border-color: #282738;
@@ -191,4 +202,4 @@ button selected.normal {
     border-color: #282738;
     border-radius:    10px 10px 10px 10px;
     background-color: #353446;
-}
+} */

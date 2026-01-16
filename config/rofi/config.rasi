@@ -16,3 +16,5 @@ configuration {
 }
 
 @theme "default.rasi"
+
+// About theme see https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown 
