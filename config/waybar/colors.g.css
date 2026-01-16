@@ -1,0 +1,21 @@
+@define-color bg #444454;
+@define-color bg-hover #4e4e5e;
+@define-color bg-border #676777;
+@define-color bg-shadow #101010;
+
+/* text */
+
+@define-color fg #F4F4F4;
+@define-color fg-hover #e5e5e5;
+@define-color fg-shadow rgba(0, 0, 0, 0.377);
+@define-color fg-muted #b8b8b8;
+
+/* accents */
+
+@define-color a #7494DC;
+@define-color a1 #9CACE4;
+@define-color a2 #A4ACE4;
+@define-color a3 #ACB4E4;
+@define-color a4 #B4BCE4;
+@define-color a5 #B4BCEC;
+@define-color a6 #BCC4EC;

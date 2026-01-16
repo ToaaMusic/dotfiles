@@ -20,6 +20,6 @@ echo "$WALL"
 
 hyprctl hyprpaper wallpaper ",$WALL"
 
-# send notification
-notify-send "Wallpaper Changed" "New wallpaper set." -i "$WALL"
+# send notification 只显示图片名字
+notify-send "Wallpaper Changed" "$(basename "$WALL")" -i "$WALL"
 

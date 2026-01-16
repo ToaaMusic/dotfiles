@@ -1,4 +1,4 @@
--- lua/ppm.lua
+-- ppm.lua (chatgpt 5.2 generated and ToaaM. modified)
 -- PPM (P6) parser for Lua 5.4
 -- Supports:
 --   - Read from stdin/file/string (binary)
@@ -57,7 +57,7 @@ end
 
 --- Parse PPM(P6) binary data from a string.
 --- @param data string
---- @return table ppm  { data, width, height, maxval, pixel_start, pixel_bytes }
+--- @return table|nil ppm  { data, width, height, maxval, pixel_start, pixel_bytes }
 --- @return string|nil err
 function M.parse(data)
   if type(data) ~= "string" or #data == 0 then

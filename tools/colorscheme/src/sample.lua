@@ -1,13 +1,14 @@
--- lua/sample.lua
+-- sample.lua (chatgpt 5.2 generated and ToaaM. modified)
 -- Sampling + quantization histogram for PPM pixels.
--- Depends on: lua/ppm.lua
+-- Depends on: ppm.lua
 --
 -- Usage pattern:
---   local ppm = require("lua.ppm")
---   local sample = require("lua.sample")
+--   local ppm = require("ppm")
+--   local sample = require("sample")
 --   local img = assert(ppm.from_stdin())
 --   ppm.seed_rng(img)
 --   local colors = sample.top_colors(img, { samples=20000, topn=12 })
+
 local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
 package.path = script_dir .. "src/?.lua;" .. package.path
 

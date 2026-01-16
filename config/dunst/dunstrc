@@ -1,8 +1,5 @@
 [global]
-
     # --- Display --- #
-
-    # The monitor to be displayed to
     monitor = 0
 
     # Follow monitor with mouse
@@ -13,6 +10,7 @@
     origin = top-right
     offset = (24,24)
 
+    corner_radius = 8
 
     progress_bar = true
     progress_bar_height = 14
@@ -143,8 +141,6 @@
     # Define the class of the windows spawned by dunst
     class = Dunst
 
-    # Define the corner radius of the notification window
-    corner_radius = 1
 
     # Don't gnore the dbus closeNotification message.
     ignore_dbusclose = false
@@ -161,6 +157,16 @@
     mouse_middle_click = do_action, close_current
     mouse_right_click = close_all
 
+[music]
+    appname = "musicfox"
+
+[change-notify-send-format]
+    appname = notify-send
+    format = "<b>%s</b>\n<i>%b</i>"
+
+[change-dunstify-format]
+    appname = dunstify
+    format = "<b>%s</b>\n<i>%b</i>"
 
 [experimental]
     per_monitor_dpi = false
@@ -193,8 +199,6 @@
     highlight = "#f1cf8a"
     set_stack_tag = "backlight"
 
-[music]
-    appname = "Music"
 
 [volume]
     summary = "Volume*"
@@ -209,5 +213,9 @@
     summary = "*"
     highlight = "#e05f65"
 
-[logger]
-summary = "*"
+# generated
+[fullscreen]
+  background = "#444454"
+  foreground = "#F4F4F4"
+
+# generated end
