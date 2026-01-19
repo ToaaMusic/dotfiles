@@ -12,9 +12,10 @@
 local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
 package.path = script_dir .. "src/?.lua;" .. package.path
 
-local ppm = require("ppm")
-
 local M = {}
+
+local ppm = require("ppm")
+M.ppm = ppm
 
 -- ---------- quantization ----------
 -- Default: 5 bits per channel => 32 levels each => 32768 bins

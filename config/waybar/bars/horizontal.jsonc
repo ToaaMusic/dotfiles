@@ -36,7 +36,7 @@
     "format": " {temperatureC}°C"
   },
   "mpris": {
-    "player": "musicfox",
+    //"player": "musicfox",
     "dynamic-order": ["artist", "title"],
     "format": "{player_icon} {dynamic}",
     "format-paused": "{status_icon} {dynamic}",

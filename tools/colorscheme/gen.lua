@@ -2,9 +2,9 @@
 local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
 package.path = script_dir .. "src/?.lua;" .. package.path
 
-local ppm = require("ppm")
-local sample = require("sample")
-local helper = require("helper")
+require 'helper'
+local sample = require 'sample'
+local ppm = sample.ppm
 
 local img, err = ppm.from_stdin()
 if not img then error(err) end
@@ -49,25 +49,8 @@ local function preview_colors()
     print(hex)
   end
 end
--------------------------------------------- ===== write waybar css variables ===== --------------------------------------------
+-------------------------------------------- ===== generate colorscheme ===== --------------------------------------------
 --#region helpers
-
---- 避免RGB数值溢出
-local function clamp(x) return math.max(0, math.min(255, x)) end
-
---- 计算感知亮度
-local function luma(hex)
-  local r, g, b = hex_to_rgb(hex)
-  -- perceptual-ish luma
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b
-end
-
---- RGB整体加减
---- delta: -255..255
-local function adjust(hex, delta) 
-  local r, g, b = hex_to_rgb(hex)
-  return rgb_to_hex(clamp(r + delta), clamp(g + delta), clamp(b + delta))
-end
 
 --- 根据得到的排序判断白天还是黑夜模式合适
 --- @return boolean
@@ -79,49 +62,63 @@ end
 
 --#endregion
 
--- 算luma排序
+-- 按照luma排序
 table.sort(colors, function(a, b) return luma(a) < luma(b) end)
 
-local bg, fg
--- 新：看整体亮度，如果暗色多就用亮的做bg
-if is_day_mode() then
-  -- local rev_colors = {}
-  -- for i = #colors, 1, -1 do
-  --   table.insert(rev_colors, colors[i])
-  -- end
-  -- colors = rev_colors
-  bg = colors[#colors]
-  fg = colors[1]
-else
-  bg = colors[1]
-  fg = colors[#colors]
-end
+-- 配色表
+local bg, fg, bg_hover, bg_border, fg_hover, fg_muted, bg_shadow, fg_shadow
 
--- accents: take mid colors (skip bg/fg ends)
 local accents = {}
+-- accents: take mid colors (skip bg/fg ends)
 for i = 2, math.min(#colors - 1, 8) do
   table.insert(accents, colors[i])
 end
 -- ensure we have at least 7 accents
 while #accents < 7 do
-  table.insert(accents, fg)
+  table.insert(accents, colors[#colors])
+end
+
+-- 新：看整体亮度，如果暗色多就用亮的做bg
+if is_day_mode() then
+  bg = colors[#colors]
+  fg = colors[1]
+  bg_hover = adjust(bg, -15)
+  bg_border = adjust(bg, -35)
+  fg_hover = adjust(fg, 35)
+  fg_muted = adjust(fg, 60)
+
+  bg_shadow = '#aaaaaa'
+  fg_shadow = bg
+
+else
+  bg = colors[1]
+  fg = colors[#colors]
+  bg_hover = adjust(bg, 15)
+  bg_border = adjust(bg, 35)
+  fg_hover = adjust(fg, -35)
+  fg_muted = adjust(fg, -60)
+
+  bg_shadow = '#101010'
+  fg_shadow = "rgba(0, 0, 0, 0.377)"
+
+  accents = reverse_table(accents)
 end
 
 -------------------------------------------- ===== write waybar color scheme ===== --------------------------------------------
 
-local out_path = os.getenv("HOME") .. "/.config/waybar/colors.g.css"
-local f = assert(io.open(out_path, "w"))
+local bar_path = os.getenv("HOME") .. "/.config/waybar/colors.g.css"
+local f = assert(io.open(bar_path, "w"))
 
 f:write(string.format('@define-color bg %s;\n', bg))
-f:write(string.format('@define-color bg-hover %s;\n', adjust(bg, 10)))
-f:write(string.format('@define-color bg-border %s;\n', adjust(bg, 35)))
-f:write('@define-color bg-shadow #101010;\n\n')
+f:write(string.format('@define-color bg-hover %s;\n', bg_hover))
+f:write(string.format('@define-color bg-border %s;\n', bg_border))
+f:write(string.format('@define-color bg-shadow %s;\n\n', bg_shadow))
 
 f:write('/* text */\n\n')
 f:write(string.format('@define-color fg %s;\n', fg))
-f:write(string.format('@define-color fg-hover %s;\n', adjust(fg, -15)))
-f:write('@define-color fg-shadow rgba(0, 0, 0, 0.377);\n')
-f:write(string.format('@define-color fg-muted %s;\n\n', adjust(fg, -60)))
+f:write(string.format('@define-color fg-hover %s;\n', fg_hover))
+f:write(string.format('@define-color fg-shadow %s;\n', fg_shadow))
+f:write(string.format('@define-color fg-muted %s;\n\n', fg_muted))
 
 f:write('/* accents */\n\n')
 f:write(string.format('@define-color a %s;\n', accents[1]))
@@ -130,10 +127,6 @@ for i = 1, 6 do
 end
 
 f:close()
-
--- print path for debugging
-print("Wrote:", out_path)
-preview_colors()
 
 -------------------------------------------- ===== write kitty color scheme ===== --------------------------------------------
 local kitty_path = os.getenv("HOME") .. "/.config/kitty/colors.g.conf"
@@ -150,7 +143,7 @@ rf:write("* {\n")
 rf:write(string.format("    bg: %s;\n", bg))
 rf:write(string.format("    fg: %s;\n", fg))
 
-rf:write(string.format("    bg-lighter: %s;\n", adjust(bg, 15))) -- for rofi entry bg
+rf:write(string.format("    bg-lighter: %s;\n", bg_hover)) -- for rofi entry bg
 
 for i = 1, 6 do
   rf:write(string.format("    a%d: %s;\n", i, accents[i + 1]))
@@ -171,5 +164,7 @@ upsert_generated_block(dunst_path,content,"#")
 os.execute("dunstctl reload")
 
 -------------------------------------------- ===== send notification ===== --------------------------------------------
+
+preview_colors()
 
 send_notify("Color Scheme updated", "waybar/colors.g.css\nkitty/colors.g.conf\nrofi/colors.g.rasi\ndunst/dunstrc")

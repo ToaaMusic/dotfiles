@@ -1,5 +1,11 @@
-
-local M = {}
+--normal
+function _G.reverse_table(t)
+  local r = {}
+  for i = #t, 1, -1 do
+    r[#r + 1] = t[i]
+  end
+  return r
+end
 
 --- notify send
 
@@ -7,6 +13,8 @@ function _G.send_notify(title, message)
   local command = string.format('notify-send "%s" "%s"', title, message)
   os.execute(command)
 end
+
+-- color helper
 
 function _G.hex_to_rgb(hex)
   hex = hex:gsub("#", "")
@@ -19,7 +27,27 @@ function _G.rgb_to_hex(r, g, b)
   return string.format("#%02x%02x%02x", r, g, b)
 end
 
-function upsert_generated_block(
+--- 避免RGB数值溢出
+function _G.clamp(x) return math.max(0, math.min(255, x)) end
+
+--- 计算感知亮度
+function _G.luma(hex)
+  local r, g, b = hex_to_rgb(hex)
+  -- perceptual-ish luma
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b
+end
+
+--- RGB整体加减,+浅-深
+--- delta: -255..255
+function _G.adjust(hex, delta) 
+  local r, g, b = hex_to_rgb(hex)
+  return rgb_to_hex(clamp(r + delta), clamp(g + delta), clamp(b + delta))
+end
+
+
+-- file writing helper
+
+function _G.upsert_generated_block(
   path,
   new_content,
   comment_symbol,  -- 可选，默认 "//"
@@ -84,6 +112,3 @@ function upsert_generated_block(
   wf:write(text)
   wf:close()
 end
-
-
-return M

@@ -2,5 +2,6 @@
 *.g.*
 
 fcitx5/
+nvim/
 
 others/

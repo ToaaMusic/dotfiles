@@ -129,7 +129,7 @@ end
 --- Get pixel RGB by absolute pixel index (0..w*h-1).
 --- @param ppm table
 --- @param idx integer
---- @return integer r,g,b
+--- @return integer r,integer g,integer b
 function M.get_pixel_by_index(ppm, idx)
   local w, h = ppm.width, ppm.height
   local total = w * h
@@ -145,7 +145,7 @@ end
 --- @param ppm table
 --- @param x integer
 --- @param y integer
---- @return integer r,g,b
+--- @return integer r,integer g,integer b
 function M.get_pixel(ppm, x, y)
   if x < 0 or x >= ppm.width or y < 0 or y >= ppm.height then
     error(("ppm.get_pixel: out of range (%d,%d) in %dx%d"):format(x, y, ppm.width, ppm.height))
@@ -175,7 +175,7 @@ end
 
 --- Sample a random pixel's RGB.
 --- @param ppm table
---- @return integer r,g,b
+--- @return integer r,integer g,integer b
 function M.random_pixel(ppm)
   local idx = M.random_index(ppm)
   return M.get_pixel_by_index(ppm, idx)
@@ -188,7 +188,7 @@ end
 --- @param y0 integer
 --- @param x1 integer
 --- @param y1 integer
---- @return integer r,g,b
+--- @return integer r,integer g,integer b
 function M.random_pixel_in(ppm, x0, y0, x1, y1)
   if x0 < 0 then x0 = 0 end
   if y0 < 0 then y0 = 0 end

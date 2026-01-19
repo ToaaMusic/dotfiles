@@ -1,3 +1,6 @@
 @import "styles/default-colors.css";
 @import "colors.g.css";
 @import "styles/horizontal.css";
+*{
+    font-family: LXGW WenKai;
+}
