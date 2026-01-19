@@ -4,17 +4,19 @@ This repository contains my personal configuration files for Arch Linux with the
 
 ## Components
 
-- **fastfetch**: System information tool.
-- **hyprland**: Dynamic tiling window manager.
-- **waybar**: Status bar for Wayland.
-- **rofi**: Application launcher.
-- **kitty**: Terminal emulator.
-- **yazi**: File manager.
-- **dunst** : Notification daemon.
+- **`fastfetch`**: System information tool.
+- **`hyprland`**: Dynamic tiling window manager.
+- **`hyprpaper`** Wallpaper manager of hyprland.
+- **`waybar`**: Status bar for Wayland.
+- **`rofi`**: Application launcher.
+- **`kitty`**: Terminal emulator.
+- **`yazi`**: File manager.
+- **`dunst`**: Notification daemon.
+- **`cava`**: Audio Visualizer.
 
 
 ## Installation
-To use these configurations, clone the repository and copy the files to their respective locations in your home directory. Make sure to back up any existing configuration files before overwriting them.
+To use these configurations, clone the repository to a location you like, for example `~/repos`, and copy the files in `~/repos/dotfiles/config/*` to `~/.config/*`. Make sure to back up any existing configuration files before overwriting them.
 
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
@@ -23,11 +25,30 @@ cd dotfiles
 ./link.sh
 ```
 
-link.sh is a script that creates symbolic links from the repository to the appropriate configuration directories.
+`link.sh` is a script that creates symbolic links from the repository to the appropriate configuration directories.
+
+```bash
+~/.config   symlink    ~/repos/dotfiles/config
+├── hypr   --------->  ├── hypr
+├── waybar --------->  ├── waybar
+├── rofi   --------->  ├── rofi
+├── kitty  --------->  ├── kitty
+└── ...                      └── ...
+```
 
 ## Dependencies
 
-Except the components, ensure you have the following packages installed on your system:
-
 - `musicfox` <- waybar mpris
-- `hyprpaper` <- wallpaper for hyprland
+- `mpvpaper` <- Dynamic wallpaper.
+- `grim`, `slurp`, `wl-copy` <- Screenshot, Selection, and copy to clipboard
+- `lua` ~ tool language
+
+After installing the key components, if you want the full experience or just prefer not to customize everything, you can simply install them all.
+
+```bash
+sudo pacman -S kitty hyprland hyprpaper waybar fastfetch rofi dunst cava yazi
+```
+
+```bash
+sudo pacman -S musicfox grim slurp wl-copy mpvpaper lua
+```

@@ -56,26 +56,11 @@
     # Set line height to font height
     line_height = 0
 
-    # Reference for markup and formatting:
-    #  <b>bold</b>
-    #  <i>italic</i>
-    #  <s>strikethrough</s>
-    #  <u>underline</u>
-    #  <https://developer.gnome.org/pango/stable/pango-Markup.html>.
-    #  %a appname
-    #  %s summary
-    #  %b body
-    #  %i iconname (including its path)
-    #  %I iconname (without its path)
-    #  %p progress value if set ([  0%] to [100%]) or nothing
-    #  %n progress value if set without any extra characters
-    #  %% Literal %
-
     markup = full
     format = "<b>%a</b>\n%s"
 
     # Left align the text
-    alignment = left
+    alignment = right
 
     # Vertical alignment of message text and icon.
     vertical_alignment = center
@@ -114,7 +99,7 @@
     max_icon_size = 60
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/kora/apps/scalable:/usr/share/icons/kora/status/scalable:/usr/share/icons/kora/actions/scalable:/usr/share/icons/kora/emblems/scalable:/usr/share/icons/kora/devices/scalable
+    icon_path = /usr/share/icons/Adwaita/16x16/status/:/usr/share/icons/Adwaita/16x16/devices/
  
     # --- History --- #
 
@@ -130,7 +115,7 @@
     dmenu = /usr/bin/dmenu -p dunst:
 
     # Browser for opening urls in context menu.
-    browser = /usr/bin/firefox -new-tab
+    browser = /usr/bin/microsoft-edge-stable -new-tab
 
     # Always run rule-defined scripts, even if the notification is suppressed
     always_run_script = false
@@ -159,6 +144,7 @@
 
 [music]
     appname = "musicfox"
+    new_icon = "$HOME/.local/share/icons/hicolor/512x512/apps/musicfox.png"
 
 [change-notify-send-format]
     appname = notify-send
@@ -215,7 +201,7 @@
 
 # generated
 [fullscreen]
-  background = "#444454"
-  foreground = "#F4F4F4"
+  background = "#548C84"
+  foreground = "#F4F4FC"
 
 # generated end
