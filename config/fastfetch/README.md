@@ -1,4 +1,4 @@
-# Waybar
+# fastfetch
 
 See : https://github.com/fastfetch-cli/fastfetch/wiki/Configuration
 

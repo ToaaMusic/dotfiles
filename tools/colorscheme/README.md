@@ -1,4 +1,4 @@
-# Color Schema Generator
+# Color Scheme Generator
 
 This tool generates color schemes from ppm (depends on `grim`), and outputs configuration files for `waybar`, `kitty` and so on.
 
@@ -15,5 +15,9 @@ This tool generates color schemes from ppm (depends on `grim`), and outputs conf
 2. The script will output:
    - A waybar CSS file at `~/.config/waybar/colors.g.css`
    - A kitty color configuration at `~/.config/kitty/color.g.conf`
+   - A rofi color .rasi file at `~/.config/rofi/colors.g.rasi`
+   - Add a fullscreen rule in `~/.config/dunst/dunstrc`
 
 3. Apply the generated files in your respective configuration files.
+
+   See https://github.com/ToaaMusic/dotfiles/tree/main/config for exmaples
