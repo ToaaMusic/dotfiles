@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WALLDIR="$HOME/Pictures/wallpapers"
+WALLDIR="$HOME/Pictures/wallpapers/current"
 
 WALL=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.jpeg' \) | shuf -n 1)
 
