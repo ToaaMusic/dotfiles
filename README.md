@@ -97,7 +97,7 @@ See [tools/](https://github.com/ToaaMusic/dotfiles/tree/main/tools/) for more.
 
 * **colorscheme/**
 
-    Give `gen.lua` a **ppm** input an it will output `*.g.*` to `./config/*/`, then those components will apply the color scheme by themselves.
+    Give `gen.lua` a **ppm** input and it will output `*.g.*` to `~/.config/*/`, then those components will apply the color scheme by themselves.
 
     ```bash
     grim -t ppm - | lua gen.lua
