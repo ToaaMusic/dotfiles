@@ -1,5 +1,0 @@
-#!/bin/bash
-
-LUA_SCRIPT="/home/ToaaM/repos/linux/dotfiles/tools/todo/todo.lua"
-
-lua "$LUA_SCRIPT" "$@"
