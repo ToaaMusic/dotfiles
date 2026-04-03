@@ -1,6 +1,6 @@
-# My Arch Linux + Hyprland Configuration
+# My Arch Linux Configuration
 
-This repository contains my personal configuration files for Arch Linux with the Hyprland window manager. It includes settings for various applications and tools that I use regularly.
+This repository contains my personal configuration for Arch Linux and some tools written by lua script.
 
 
 ### Components
@@ -64,8 +64,9 @@ sudo pacman -S musicfox grim slurp wl-copy mpvpaper lua ffmpeg
 
 See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr/) for more.
 
+#### Default
 
-| Default            | Action                                   |
+| Shortcut           | Action                                   |
 |--------------------|------------------------------------------|
 | `ALT + C`          | Close active window                      |
 | `ALT + M`          | Exit hyprland                            |
@@ -76,7 +77,9 @@ See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/c
 | `F11`              | Toggle fullsceen                         |
 |``||
 
-| Custom             | Action                                   |
+#### Custom
+
+| Shortcut           | Action                                   |
 |--------------------|------------------------------------------|
 | `ALT + F`          | Open File Manager (yazi)                 |
 | `ALT + Z`          | Open musicfox                            |
@@ -105,4 +108,15 @@ See [tools/](https://github.com/ToaaMusic/dotfiles/tree/main/tools/) for more.
     or
     ```bash
     ffmpeg -v error -i "$WALL" -f image2pipe -vcodec ppm - | lua gen.lua
+    ```
+
+* **todo/**
+
+    A lightweight Lua-based todo manager with interactive cross-day archive prompts and Markdown storage.
+
+    ```bash
+    lua todo.lua add "My new task"
+    lua todo.lua ls
+    lua todo.lua done 1
+    lua todo.lua archive
     ```
