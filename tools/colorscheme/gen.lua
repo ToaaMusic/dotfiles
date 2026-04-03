@@ -131,10 +131,29 @@ f:close()
 -------------------------------------------- ===== write kitty color scheme ===== --------------------------------------------
 local kitty_path = os.getenv("HOME") .. "/.config/kitty/colors.g.conf"
 local kf = assert(io.open(kitty_path, "w"))
+
+kf:write(string.format("# Generated Kitty Theme\n"))
 kf:write(string.format("background %s\n", bg))
-kf:write(string.format("foreground %s\n\n", fg))
+kf:write(string.format("foreground %s\n", fg))
+
+kf:write(string.format("cursor %s\n", accents[1]))
+kf:write(string.format("selection_background %s\n", fg))
+kf:write(string.format("selection_foreground %s\n\n", bg))
+
+kf:write(string.format("active_tab_background %s\n", accents[1]))
+kf:write(string.format("active_tab_foreground %s\n", bg))
+kf:write(string.format("inactive_tab_background %s\n", bg_hover))
+kf:write(string.format("inactive_tab_foreground %s\n\n", fg_muted))
+
+for i = 0, 7 do
+    local color = accents[i + 1] or fg
+    kf:write(string.format("color%d %s\n", i, color))
+    kf:write(string.format("color%d %s\n", i + 8, adjust(color, 20)))
+end
 
 kf:close()
+
+--- os.execute("kill -SIGUSR1 $(pgrep kitty)")
 
 -------------------------------------------- ===== write rofi color scheme ===== ---------------------------------------------
 local rofi_path = os.getenv("HOME") .. "/.config/rofi/colors.g.rasi"

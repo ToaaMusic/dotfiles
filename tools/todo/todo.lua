@@ -19,7 +19,8 @@ end
 local function load_state()
   local f = loadfile(STATE_FILE)
   if f then
-    return f()
+    local s = f()
+    if s then return s end
   end
   return { last_run_date = "1970-01-01" }
 end
@@ -39,7 +40,7 @@ local function read_file(path)
   if not f then return {} end
   local lines = {}
   for line in f:lines() do
-    table.insert(lines, line)
+    if line ~= "" then table.insert(lines, line) end
   end
   f:close()
   return lines
@@ -84,35 +85,46 @@ end
 
 function M.done(id)
   id = tonumber(id)
-  if not id then
-    print("Usage: todo done <task_id>")
-    return
-  end
-
   local lines = read_file(TODAY_FILE)
-  if id < 1 or id > #lines then
+  if not id or id < 1 or id > #lines then
     print("Invalid task ID!")
     return
   end
 
-  local task_line = table.remove(lines, id)
-  write_file(TODAY_FILE, lines)
+  local line = lines[id]
+  if line:find("%[x%]") then
+    print("Task already marked as done.")
+    return
+  end
 
-  -- Prepare archive entry
+  lines[id] = line:gsub("%[ %]", "[x]") .. string.format(" (completed: %s)", get_date())
+  write_file(TODAY_FILE, lines)
+  print("Marked as done: " .. lines[id])
+end
+
+function M.archive_tasks()
+  local lines = read_file(TODAY_FILE)
+  local today_remaining = {}
+  local archived_count = 0
   local current_month = get_date("%Y-%m")
-  local completed_date = get_date()
   local archive_file = ARCHIVE_PATH .. current_month .. ".md"
 
-  -- Update [ ] to [x] and add completed date
-  task_line = task_line:gsub("%[ %]", "[x]")
-  task_line = task_line .. string.format(" (completed: %s)", completed_date)
+  local f_archive = io.open(archive_file, "a")
 
-  local f = io.open(archive_file, "a")
-  if f then
-    f:write(task_line .. "\n")
-    f:close()
-    print("Completed and archived: " .. task_line)
+  for _, line in ipairs(lines) do
+    if line:find("%[x%]") then
+      if f_archive then
+        f_archive:write(line .. "\n")
+        archived_count = archived_count + 1
+      end
+    else
+      table.insert(today_remaining, line)
+    end
   end
+
+  if f_archive then f_archive:close() end
+  write_file(TODAY_FILE, today_remaining)
+  print(string.format("Archived %d completed tasks to %s.", archived_count, archive_file))
 end
 
 function M.sync()
@@ -120,21 +132,44 @@ function M.sync()
   local today = get_date()
 
   if state.last_run_date ~= today then
-    -- Check for old tasks in today.md
     local lines = read_file(TODAY_FILE)
-    local has_old_tasks = false
-    for _, line in ipairs(lines) do
-      if not line:find(today) then
-        has_old_tasks = true
-        break
+    if #lines > 0 then
+      print("\n--- New Day Detected! ---")
+      local completed = {}
+      local pending = {}
+
+      for _, line in ipairs(lines) do
+        if line:find("%[x%]") then
+          table.insert(completed, line)
+        else
+          table.insert(pending, line)
+        end
       end
+
+      -- 1. Handle Pending Tasks (Carry Over)
+      if #pending > 0 then
+        print(string.format("Found %d pending tasks from yesterday. They are automatically carried over.", #pending))
+        -- Update the 'created' date if you want, or just keep it.
+        -- We'll keep them as they are to show when they were originally created.
+      end
+
+      -- 2. Handle Completed Tasks (Ask to Archive)
+      if #completed > 0 then
+        print(string.format("\nFound %d completed tasks from yesterday:", #completed))
+        for _, line in ipairs(completed) do
+          print("  " .. line)
+        end
+        io.write("\nArchive these completed tasks now? [Y/n]: ")
+        local answer = io.read()
+        if answer == "" or answer:lower() == "y" then
+          M.archive_tasks()
+        else
+          print("Skipping archival. They will remain in today.md.")
+        end
+      end
+      print("--------------------------\n")
     end
 
-    if has_old_tasks then
-      print("Found tasks from previous days. Carrying them over to today...")
-      -- Optionally: Prompt user or just update state
-      -- For now, we update state to today.
-    end
     state.last_run_date = today
     save_state(state)
   end
@@ -144,7 +179,7 @@ end
 local args = {...}
 local command = table.remove(args, 1)
 
-M.sync() -- Always sync on start
+M.sync()
 
 if command == "add" then
   M.add(table.concat(args, " "))
@@ -152,8 +187,10 @@ elseif command == "ls" then
   M.ls()
 elseif command == "done" then
   M.done(args[1])
+elseif command == "archive" then
+  M.archive_tasks()
 else
-  print("Available commands: add, ls, done")
+  print("Available commands: add, ls, done, archive")
 end
 
 return M

@@ -1,7 +1,12 @@
+# different between users
+tools/todo/data/
+
 # auto generated files
 *.g.*
 
+# unready components
 fcitx5/
 nvim/
 
+# personal files
 others/
