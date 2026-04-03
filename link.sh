@@ -57,3 +57,24 @@ for dir in "$CONFIG_TARGET_DIR"/*/; do
   ln -s "$dir" "$target"
   echo "Linked $name"
 done
+
+echo "Generating Rofi desktop entry..."
+
+DESKTOP_ENTRY_DIR="$HOME/.local/share/applications"
+mkdir -p "$DESKTOP_ENTRY_DIR"
+
+cat > "$DESKTOP_ENTRY_DIR/toaam-dotfiles.desktop" <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Zed: Edit Dotfiles
+Comment=Open Dotfiles project in Zed
+Exec=zeditor $DOTFILES_DIR
+Icon=zed
+Terminal=false
+Categories=Development;TextEditor;
+Keywords=dotfiles;config;zed;
+EOF
+
+chmod +x "$DESKTOP_ENTRY_DIR/toaam-dotfiles.desktop"
+# echo "Success! You can now find 'Zed: Edit Dotfiles' in Rofi."

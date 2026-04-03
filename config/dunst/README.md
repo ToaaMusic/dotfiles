@@ -1,1 +1,0 @@
-See https://github.com/dunst-project/dunst/blob/master/dunstrc

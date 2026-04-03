@@ -1,17 +1,9 @@
--- ppm.lua (chatgpt 5.2 generated and ToaaM. modified)
--- PPM (P6) parser for Lua 5.4
--- Supports:
---   - Read from stdin/file/string (binary)
---   - Parse header with comments (# ...)
---   - Provide pixel offset, width/height, and fast pixel access
---
--- Notes:
---   - Only supports maxval = 255 (8-bit per channel), which is what grim outputs.
---   - Data layout after header: RGBRGBRGB... (row-major)
+-- ppm.lua
 
 local M = {}
 
--- ---------- internal helpers ----------
+-- internal helpers
+
 local function is_space(b)
   return b == 32 or b == 9 or b == 10 or b == 13 or b == 12 -- space \t \n \r \f
 end
@@ -53,7 +45,7 @@ local function read_all_file(path)
   return data
 end
 
--- ---------- public API ----------
+-- public API
 
 --- Parse PPM(P6) binary data from a string.
 --- @param data string

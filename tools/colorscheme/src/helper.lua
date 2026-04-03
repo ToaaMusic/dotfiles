@@ -1,4 +1,4 @@
---normal
+--- normal
 function _G.reverse_table(t)
   local r = {}
   for i = #t, 1, -1 do
@@ -14,7 +14,7 @@ function _G.send_notify(title, message)
   os.execute(command)
 end
 
--- color helper
+--- color helper
 
 function _G.hex_to_rgb(hex)
   hex = hex:gsub("#", "")
@@ -39,13 +39,13 @@ end
 
 --- RGB整体加减,+浅-深
 --- delta: -255..255
-function _G.adjust(hex, delta) 
+function _G.adjust(hex, delta)
   local r, g, b = hex_to_rgb(hex)
   return rgb_to_hex(clamp(r + delta), clamp(g + delta), clamp(b + delta))
 end
 
 
--- file writing helper
+--- file writing helper
 
 function _G.upsert_generated_block(
   path,

@@ -3,7 +3,7 @@ configuration {
     // Timeout from user input.
     timeout {
         // The delay after inactivity to execute action.
-        delay: 3;
+        delay: 5;
         // The action to execute once the delay expires.
         action: "kb-cancel";
     }
@@ -17,4 +17,4 @@ configuration {
 
 @theme "default.rasi"
 
-// About theme see https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown 
+// About theme see https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown
