@@ -2,11 +2,11 @@
 tools/todo/data/
 
 # auto generated files
+g.*
 *.g.*
 
 # unready components
 fcitx5/
-nvim/
 
 # personal files
 others/
