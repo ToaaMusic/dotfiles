@@ -28,7 +28,7 @@ hl(0, "Normal",          { bg = colors.bg, fg = colors.fg })
 hl(0, "NormalFloat",     { bg = colors.bg_elevated, fg = colors.fg })
 hl(0, "NormalNC",        { bg = colors.bg, fg = colors.fg_muted })
 
-hl(0, "Comment",         { fg = colors.fg_muted, italic = true })
+hl(0, "Comment",         { fg = colors.fg_subtle, italic = true })
 hl(0, "LineNr",          { fg = colors.fg_subtle })
 hl(0, "CursorLineNr",    { fg = colors.fg_hover, bold = true })
 hl(0, "CursorLine",      { bg = colors.bg_hover })

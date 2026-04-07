@@ -63,7 +63,8 @@ return {
 			keyword = { range = "prefix" },
 			menu = {
 				-- Use treesitter to highlight the label text for the given list of sources
-				draw = {
+				border = "rounded",
+        draw = {
 					treesitter = { "lsp" },
 				},
 			},
@@ -80,4 +81,3 @@ return {
 	},
 	opts_extend = { "sources.default" },
 }
-  

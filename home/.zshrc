@@ -14,9 +14,9 @@ function todo() {
 }
 
 # open dotfiles project
-function tconf() {
-    local opener=${1:-${GUI_EDITOR:-nvim}}
-    $opener "$TOAAM_DOTFILES"
+function tdf() {
+    # local opener=${1:-${GUI_EDITOR:-nvim}}
+    nvim "$TOAAM_DOTFILES"
 }
 
 alias yazi=y
