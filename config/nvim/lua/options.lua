@@ -1,11 +1,22 @@
 local op = vim.opt
 
--- base
+-- editor
 op.relativenumber = false
 op.number = true
+op.cursorline = true
+op.cursorlineopt = "number"
+
+op.formatoptions:remove({ "c", "r", "o" })
+op.iskeyword:append("-")
 
 -- tab
 op.tabstop = 2
 op.shiftwidth = 2
 op.expandtab = true
 op.autoindent = true
+
+-- ui
+op.laststatus = 0
+op.ruler = false
+
+op.clipboard = "unnamedplus"

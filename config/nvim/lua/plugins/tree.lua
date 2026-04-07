@@ -11,13 +11,25 @@ return {
 
     config = function()
       require("neo-tree").setup({
-        close_if_last_window = true,
+        close_if_last_window = false,
+        popup_border_style = "NC",
+        clipboard = {
+          sync = "none", -- or "global"/"universal"
+        },
         enable_git_status = true,
         enable_diagnostics = true,
 
         window = {
-          position = "left",
-          width = 0.1,
+          position = "right",
+          width = 0.15,
+        },
+
+        -- different window types
+        sources = {
+          "filesystem",
+          "buffers",
+          "git_status",
+          "document_symbols"
         },
 
         filesystem = {
@@ -31,6 +43,11 @@ return {
             hide_dotfiles = false,
             hide_gitignored = false,
           },
+        },
+
+        document_symbols = {
+          follow_cursor = true,
+          follow_tree_cursor = true,
         },
 
       })
