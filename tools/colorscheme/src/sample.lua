@@ -1,16 +1,10 @@
 -- sample.lua
 
-local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
-package.path = script_dir .. "src/?.lua;" .. package.path
-
 local M = {}
-
 local ppm = require("ppm")
-M.ppm = ppm
 
--- ---------- quantization ----------
--- Default: 5 bits per channel => 32 levels each => 32768 bins
--- key layout: RRRRR GGGGG BBBBB in 15 bits
+-- internal
+
 local function qbits_default()
   return 5
 end
@@ -22,7 +16,6 @@ local function clamp(v, lo, hi)
 end
 
 local function quant_key(r, g, b, qbits)
-  -- qbits: 1..8
   local shift = 8 - qbits
   local rq = r >> shift
   local gq = g >> shift
@@ -37,7 +30,6 @@ local function repr_from_key(k, qbits)
   local rq = (k >> (2 * qbits)) & mask
 
   local shift = 8 - qbits
-  -- center of the bin: q*2^shift + 2^(shift-1)
   local half = (shift > 0) and (1 << (shift - 1)) or 0
   local r = rq * (1 << shift) + half
   local g = gq * (1 << shift) + half
@@ -45,25 +37,13 @@ local function repr_from_key(k, qbits)
   return clamp(r, 0, 255), clamp(g, 0, 255), clamp(b, 0, 255)
 end
 
--- perceived luminance (approx), 0..255
 local function luma(r, g, b)
-  -- integer-friendly approximation of Rec.601:
-  -- Y ≈ 0.299R + 0.587G + 0.114B
   return (299 * r + 587 * g + 114 * b) // 1000
 end
 
--- ---------- options ----------
--- opts:
---   samples   (int)  number of random samples, default 12000
---   topn      (int)  number of colors to return, default 12
---   qbits     (int)  quantization bits per channel, default 5
---   region    (table) {x0,y0,x1,y1} 0-based, x1/y1 exclusive; default nil = full image
---   min_luma  (int)  filter out too dark pixels (<), default nil
---   max_luma  (int)  filter out too bright pixels (>), default nil
---   oversample_factor (number) try more bins than topn to dedup, default 10
---
--- returns:
---   { "#RRGGBB", ... }  length <= topn
+-- public
+
+--- Return the most common quantized colors from random samples.
 function M.top_colors(img, opts)
   opts = opts or {}
   local samples = tonumber(opts.samples or "12000")
@@ -81,15 +61,13 @@ function M.top_colors(img, opts)
   local hist = {}
   local collected = 0
   local tries = 0
-  local max_tries = samples * 4 -- avoid infinite loops if filters too strict
+  local max_tries = samples * 4
 
-  -- Sampling function
   local function next_rgb()
     if region then
       return ppm.random_pixel_in(img, region.x0, region.y0, region.x1, region.y1)
-    else
-      return ppm.random_pixel(img)
     end
+    return ppm.random_pixel(img)
   end
 
   while collected < samples and tries < max_tries do
@@ -128,8 +106,7 @@ function M.top_colors(img, opts)
   return picked
 end
 
--- Convenience: center region sampler (e.g. avoid bars/edges).
--- margin_ratio: 0..0.49 (e.g. 0.1 means ignore 10% border)
+--- Return a centered half-open sampling region.
 function M.center_region(img, margin_ratio)
   margin_ratio = tonumber(margin_ratio or "0.1")
   margin_ratio = clamp(margin_ratio, 0, 0.49)
