@@ -63,28 +63,93 @@ local function push_if_varied(out, hex, min_dist, min_hue_dist)
   return true
 end
 
--- [[ Palette Logic ]]
-
-local function kitty_ansi_palette(p)
-  local normal, bright = {}, {}
-  local bg, fg = p.bg, p.fg
-
-  local black_slot = p.dark_mode and h.mix(bg, fg, 0.26) or h.mix(bg, fg, 0.68)
-  local white_slot = p.dark_mode and h.mix(fg, bg, 0.18) or h.mix(fg, bg, 0.30)
-
-  normal[1] = lift_contrast(black_slot, bg, 1.8, 0.18)
-  for i = 1, 6 do
-    normal[i + 1] = lift_contrast(p.accents[i], bg, 2.8, 0.16)
+local function role_score(hex, target_hue, bg)
+  local hue = h.get_hue(hex)
+  local hue_score = 0
+  if hue then
+    local diff = math.abs(hue - target_hue)
+    hue_score = (180 - math.min(diff, 360 - diff)) * 0.9
   end
-  normal[8] = ensure_contrast(white_slot, bg, 4.5)
 
-  bright[1] = lift_contrast(h.mix(normal[1], fg, p.dark_mode and 0.28 or 0.18), bg, 2.4, 0.16)
+  return hue_score + h.get_chroma(hex) * 0.7 + math.min(h.get_contrast(hex, bg), 6) * 16
+end
+
+local function pick_role_color(candidates, bg, used, target_hue, fallback)
+  local best_hex, best_score
+  for _, hex in ipairs(candidates) do
+    if not used[hex] then
+      local score = role_score(hex, target_hue, bg)
+      if not best_score or score > best_score then
+        best_hex, best_score = hex, score
+      end
+    end
+  end
+
+  if best_hex then
+    used[best_hex] = true
+    return best_hex
+  end
+
+  return fallback
+end
+
+local function build_terminal_palette(p, candidates)
+  local used = {}
+  local dark = p.dark_mode
+  local seed = p.accent
+  local base_hue = h.get_hue(seed) or h.get_hue(p.accents[1] or seed) or 0
+
+  local function role_color(hue_offset, sat, val, mix_ratio, contrast_ratio, fallback)
+    local target_hue = (base_hue + hue_offset) % 360
+    local generated = h.hsv_to_hex(target_hue, sat, val)
+    local source = pick_role_color(candidates, p.bg, used, target_hue, fallback or generated)
+    if source and source ~= generated then
+      generated = h.mix(generated, source, mix_ratio or 0.25)
+    end
+    return lift_contrast(generated, p.bg, contrast_ratio or (dark and 3.2 or 3.0), 0.12)
+  end
+
+  local black_slot = dark and h.mix(p.bg, p.fg, 0.26) or h.mix(p.bg, p.fg, 0.68)
+  local white_slot = dark and h.mix(p.fg, p.bg, 0.18) or h.mix(p.fg, p.bg, 0.30)
+
+  local normal = {}
+  normal[1] = lift_contrast(black_slot, p.bg, 1.8, 0.18)
+  normal[2] = role_color(15,  dark and 0.78 or 0.70, dark and 0.84 or 0.72, 0.22, dark and 3.2 or 3.0, p.accents[1] or seed)
+  normal[3] = role_color(135, dark and 0.72 or 0.66, dark and 0.82 or 0.70, 0.22, dark and 3.2 or 3.0, p.accents[2] or seed)
+  normal[4] = role_color(60,  dark and 0.78 or 0.68, dark and 0.86 or 0.74, 0.20, dark and 3.0 or 2.8, p.accents[3] or seed)
+  normal[5] = role_color(225, dark and 0.72 or 0.64, dark and 0.82 or 0.70, 0.22, dark and 3.2 or 3.0, p.accents[4] or seed)
+  normal[6] = role_color(300, dark and 0.76 or 0.68, dark and 0.84 or 0.72, 0.22, dark and 3.2 or 3.0, p.accents[5] or seed)
+  normal[7] = role_color(185, dark and 0.74 or 0.66, dark and 0.82 or 0.70, 0.22, dark and 3.2 or 3.0, p.accents[6] or seed)
+  normal[8] = ensure_contrast(white_slot, p.bg, 4.5)
+
+  local bright = {}
+  bright[1] = lift_contrast(h.mix(normal[1], p.fg, dark and 0.28 or 0.18), p.bg, 2.4, 0.16)
   for i = 2, 7 do
-    bright[i] = lift_contrast(h.mix(normal[i], fg, p.dark_mode and 0.22 or 0.14), bg, 3.2, 0.16)
+    bright[i] = lift_contrast(h.mix(normal[i], p.fg, dark and 0.14 or 0.10), p.bg, 4.0, 0.14)
   end
-  bright[8] = ensure_contrast(fg, bg, 7.0)
+  bright[8] = ensure_contrast(p.fg, p.bg, 7.0)
 
-  return normal, bright
+  local syntax = {
+    keyword = normal[6],
+    keyword_flow = lift_contrast(h.mix(normal[4], normal[2], 0.20), p.bg, 4.4, 0.14),
+    keyword_return = lift_contrast(h.mix(normal[6], normal[2], 0.35), p.bg, 4.6, 0.14),
+    string = normal[3],
+    number = normal[4],
+    type = normal[5],
+    func = normal[7],
+    func_call = lift_contrast(h.mix(normal[7], p.fg, 0.10), p.bg, 4.8, 0.14),
+    variable = p.fg_hover,
+    constant = lift_contrast(h.mix(normal[4], normal[2], 0.25), p.bg, 4.2, 0.14),
+    macro = normal[2],
+    builtin = lift_contrast(h.mix(normal[2], normal[4], 0.45), p.bg, 4.4, 0.14),
+    property = normal[7],
+    parameter = lift_contrast(h.mix(normal[7], normal[5], 0.38), p.bg, 4.4, 0.14),
+    operator = p.fg_subtle,
+    punctuation = p.fg_subtle,
+    namespace = lift_contrast(h.mix(normal[5], normal[6], 0.32), p.bg, 4.4, 0.14),
+  }
+
+  return normal, bright, syntax
 end
 
 --- Build a full palette from dominant sampled colors.
@@ -106,12 +171,12 @@ function M.from_dominant_colors(dominant_colors)
   local bg_hover = h.mix(bg, fg, dark_mode and 0.15 or 0.12)
   local bg_active = h.mix(bg, fg, dark_mode and 0.22 or 0.18)
   local bg_border = h.mix(bg, fg, dark_mode and 0.28 or 0.24)
-  
+
   -- Text variants
   local fg_muted = ensure_contrast(h.mix(fg, bg, 0.35), bg, 4.5)
   local fg_subtle = ensure_contrast(h.mix(fg, bg, 0.48), bg, 3.2)
   local fg_hover = ensure_contrast(h.mix(fg, bg, 0.14), bg, 6.0)
-  
+
   local bg_shadow = dark_mode and "#101010" or "#bfb7af"
   local fg_shadow = dark_mode and "rgba(0, 0, 0, 0.377)" or bg
 
@@ -137,7 +202,7 @@ function M.from_dominant_colors(dominant_colors)
   -- Fallbacks
   local accent_seed = accents[1] or sorted[math.floor(#sorted / 2)] or fg
   local accent = lift_contrast(accent_seed, bg, 2.6, 0.16)
-  
+
   local fallback_accents = {
     accent,
     lift_contrast(h.mix(accent, fg, 0.25), bg, 3.0, 0.16),
@@ -171,8 +236,8 @@ function M.from_dominant_colors(dominant_colors)
     accents = accents,
   }
 
-  p.kitty_normal, p.kitty_bright = kitty_ansi_palette(p)
-  
+  p.kitty_normal, p.kitty_bright, p.syntax = build_terminal_palette(p, candidates)
+
   -- Preview build
   p.preview = {bg, fg, accent}
   for _, a in ipairs(accents) do
