@@ -19,5 +19,10 @@ function tdf() {
     nvim "$TOAAM_DOTFILES"
 }
 
+# cd repos dir
+function repos() {
+  cd ~/repos/
+}
+
 alias yazi=y
 alias zed=zeditor
