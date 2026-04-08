@@ -1,13 +1,22 @@
 local M = {}
 
--- Utility to get absolute path to current directory
-local function get_script_path()
-  local str = debug.getinfo(2, "S").source:sub(2)
-  return str:match("(.*/)") or "./"
+local function get_home_dir()
+  return os.getenv("HOME") or "."
 end
 
-local BASE_PATH = get_script_path()
-local DATA_PATH = BASE_PATH .. "data/"
+local function get_data_path()
+  local xdg_data_home = os.getenv("XDG_DATA_HOME")
+  if xdg_data_home and xdg_data_home ~= "" then
+    return xdg_data_home .. "/toaam-dotfiles/todo/"
+  end
+  return get_home_dir() .. "/.local/share/toaam-dotfiles/todo/"
+end
+
+local function ensure_dir(path)
+  os.execute(string.format('mkdir -p "%s"', path))
+end
+
+local DATA_PATH = get_data_path()
 local TODAY_FILE = DATA_PATH .. "today.md"
 local ARCHIVE_PATH = DATA_PATH .. "archive/"
 local STATE_FILE = DATA_PATH .. "state.lua"
@@ -178,6 +187,9 @@ end
 -- CLI Entry Point
 local args = {...}
 local command = table.remove(args, 1)
+
+ensure_dir(DATA_PATH)
+ensure_dir(ARCHIVE_PATH)
 
 M.sync()
 
