@@ -7,10 +7,6 @@ local sample = require("sample")
 local colors = require("colors")
 local write = require("write")
 
-local function send_notify(title, message)
-  os.execute(string.format('notify-send %q %q', title, message))
-end
-
 -- 1. Load Image from Stdin (PPM)
 local img, err = ppm.from_stdin()
 if not img then error(err) end
@@ -38,5 +34,3 @@ local palette = colors.from_dominant_colors(dominant_colors)
 -- 4. Output: Preview & Apply
 write.preview(palette)
 write.apply(palette)
-
-send_notify("Color Scheme Updated", "Waybar, Kitty, Cava, Rofi, Dunst, Nvim have been refreshed.")

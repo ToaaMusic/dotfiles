@@ -63,7 +63,7 @@ return {
 			keyword = { range = "prefix" },
 			menu = {
 				-- Use treesitter to highlight the label text for the given list of sources
-				border = "rounded",
+				border = "single",
         draw = {
 					treesitter = { "lsp" },
 				},
@@ -73,11 +73,19 @@ return {
 			documentation = {
 				-- Show documentation automatically
 				auto_show = true,
+				window = {
+					border = "single",
+				},
 			},
 		},
 
 		-- Signature help when tying
-		signature = { enabled = true },
+		signature = {
+			enabled = true,
+			window = {
+				border = "single",
+			},
+		},
 	},
 	opts_extend = { "sources.default" },
 }

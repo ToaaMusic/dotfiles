@@ -7,7 +7,7 @@ local M = {}
 local function upsert_block(path, new_content, comment_symbol, marker)
   comment_symbol = comment_symbol or "//"
   marker = marker or "generated"
-  
+
   local text = ""
   local rf = io.open(path, "r")
   if rf then
@@ -19,7 +19,7 @@ local function upsert_block(path, new_content, comment_symbol, marker)
   local escaped_mk = marker:gsub("([%%%^%$%(%)%.%[%]%*%+%-%?])", "%%%1")
   local start_pat = escaped_cs .. "%s*" .. escaped_mk .. "%s*\n"
   local end_pat = escaped_cs .. "%s*" .. escaped_mk .. "%s*end%s*\n?"
-  
+
   local s, e = text:find(start_pat)
   if s then
     local s2, e2 = text:find(end_pat, e + 1)
@@ -89,7 +89,7 @@ local function write_cava(p)
   local path = os.getenv("HOME") .. "/.config/cava/themes/colors.g.theme"
   os.execute("mkdir -p " .. path:match("(.*/)"))
   local f = assert(io.open(path, "w"))
-  
+
   local b = p.dark_mode and quick_lift(h.mix(p.accent, p.fg, 0.60), p.bg, 4.4, 0.14) or quick_lift(h.mix(p.accent, "#ffffff", 0.34), p.bg, 3.6, 0.14)
   local m = p.dark_mode and quick_lift(h.mix(p.accent, p.accents[2], 0.48), p.bg, 3.2, 0.14) or quick_lift(h.mix(p.accent, p.accents[2], 0.55), p.bg, 3.0, 0.14)
   local t = p.dark_mode and quick_lift(h.mix(p.accents[2], p.bg, 0.78), p.bg, 1.35, 0.14) or quick_lift(h.mix(p.accents[2], "#000000", 0.58), p.bg, 2.1, 0.14)
@@ -114,6 +114,25 @@ local function write_rofi(p)
 end
 
 local function write_nvim(p)
+  local syntax_keys = {
+    "keyword",
+    "keyword_flow",
+    "keyword_return",
+    "string",
+    "number",
+    "type",
+    "func",
+    "func_call",
+    "variable",
+    "constant",
+    "macro",
+    "builtin",
+    "property",
+    "parameter",
+    "operator",
+    "punctuation",
+    "namespace",
+  }
   local path = os.getenv("HOME") .. "/.config/nvim/lua/colors/g.lua"
   os.execute("mkdir -p " .. path:match("(.*/)"))
   local f = assert(io.open(path, "w"))
@@ -124,6 +143,10 @@ local function write_nvim(p)
   f:write(string.format("  accent = %q, accent_soft = %q, accent_strong = %q, accent_fg = %q,\n", p.accent, p.accent_soft, p.accent_strong, p.accent_fg))
   f:write("  accents = {\n")
   for _, a in ipairs(p.accents) do f:write(string.format("    %q,\n", a)) end
+  f:write("  },\n  syntax = {\n")
+  for _, key in ipairs(syntax_keys) do
+    f:write(string.format("    %s = %q,\n", key, p.syntax[key]))
+  end
   f:write("  },\n  kitty_normal = {")
   for i = 1, 8 do f:write(string.format("%q%s", p.kitty_normal[i], i < 8 and ", " or "")) end
   f:write("},\n  kitty_bright = {")
@@ -150,7 +173,7 @@ function M.apply(p)
   write_cava(p)
   write_rofi(p)
   write_nvim(p)
-  
+
   -- Dunst
   local dunst_path = os.getenv("HOME") .. "/.config/dunst/dunstrc"
   local dunst_cont = string.format("[fullscreen]\n  background = %q\n  foreground = %q\n", p.bg, p.fg)

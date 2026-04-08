@@ -11,6 +11,10 @@ local function clamp(x)
   return math.max(0, math.min(255, x))
 end
 
+local function clamp01(x)
+  return math.max(0, math.min(1, x))
+end
+
 -- [[ Conversion ]]
 
 --- Convert hex string to RGB.
@@ -24,6 +28,56 @@ end
 --- Convert RGB components to hex string.
 function M.to_hex(r, g, b)
   return string.format("#%02x%02x%02x", math.floor(clamp(r)), math.floor(clamp(g)), math.floor(clamp(b)))
+end
+
+--- Convert hex string to HSV components.
+function M.hex_to_hsv(hex)
+  local r, g, b = M.to_rgb(hex)
+  r, g, b = r / 255, g / 255, b / 255
+  local maxc, minc = math.max(r, g, b), math.min(r, g, b)
+  local delta = maxc - minc
+
+  local h = 0
+  if delta ~= 0 then
+    if maxc == r then h = ((g - b) / delta) % 6
+    elseif maxc == g then h = ((b - r) / delta) + 2
+    else h = ((r - g) / delta) + 4 end
+    h = h * 60
+  end
+
+  local s = maxc == 0 and 0 or delta / maxc
+  local v = maxc
+  return h, s, v
+end
+
+--- Convert HSV components to hex string.
+function M.hsv_to_hex(h, s, v)
+  h = (h or 0) % 360
+  s = clamp01(s or 0)
+  v = clamp01(v or 0)
+
+  local c = v * s
+  local x = c * (1 - math.abs(((h / 60) % 2) - 1))
+  local m = v - c
+
+  local r1, g1, b1
+  if h < 60 then r1, g1, b1 = c, x, 0
+  elseif h < 120 then r1, g1, b1 = x, c, 0
+  elseif h < 180 then r1, g1, b1 = 0, c, x
+  elseif h < 240 then r1, g1, b1 = 0, x, c
+  elseif h < 300 then r1, g1, b1 = x, 0, c
+  else r1, g1, b1 = c, 0, x end
+
+  return M.to_hex((r1 + m) * 255, (g1 + m) * 255, (b1 + m) * 255)
+end
+
+--- Rotate a color hue in HSV space.
+function M.rotate_hue(hex, degrees, sat_floor, val_floor)
+  local h, s, v = M.hex_to_hsv(hex)
+  h = (h + (degrees or 0)) % 360
+  if sat_floor then s = math.max(s, sat_floor) end
+  if val_floor then v = math.max(v, val_floor) end
+  return M.hsv_to_hex(h, s, v)
 end
 
 
