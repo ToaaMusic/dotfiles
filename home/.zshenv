@@ -15,4 +15,5 @@ if [ -z "$TOAAM_DOTFILES" ] || [ ! -d "$TOAAM_DOTFILES" ]; then
     unset _src _dir
 fi
 
+export EDITOR='nvim'
 export GUI_EDITOR='zeditor'

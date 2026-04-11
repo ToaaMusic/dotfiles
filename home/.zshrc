@@ -26,3 +26,5 @@ function repos() {
 
 alias yazi=y
 alias zed=zeditor
+alias oc=opencode
+alias sd=shutdown
