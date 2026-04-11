@@ -1,6 +1,3 @@
-# different between users
-tools/todo/data/
-
 # auto generated files
 g.*
 *.g.*
@@ -10,3 +7,4 @@ fcitx5/
 
 # personal files
 others/
+TODO.md
