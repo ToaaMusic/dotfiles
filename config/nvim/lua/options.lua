@@ -16,6 +16,7 @@ op.expandtab = true
 op.autoindent = true
 
 -- ui
+op.title = false
 op.laststatus = 0
 op.ruler = false
 
