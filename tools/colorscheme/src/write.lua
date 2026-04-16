@@ -113,6 +113,94 @@ local function write_rofi(p)
   f:close()
 end
 
+local function write_fcitx5(p)
+  local path = os.getenv("HOME") .. "/.local/share/fcitx5/themes/auto-gen/theme.conf"
+  os.execute("mkdir -p " .. path:match("(.*/)"))
+  local f = assert(io.open(path, "w"))
+
+  local asset_theme = p.dark_mode and "default-dark" or "default"
+  local asset_root = "/usr/share/fcitx5/themes/" .. asset_theme
+  local normal_color = p.fg
+  local highlight_candidate_color = p.accent_fg
+  local panel_highlight_bg = p.accent
+  local panel_highlight = p.bg_active
+  local menu_highlight = p.bg_active
+  local separator = p.bg_border
+
+  f:write("[Metadata]\n")
+  f:write("Name=Auto Gen\n")
+  f:write("Version=1\n")
+  f:write("Author=wallpaper gen.lua\n")
+  f:write("Description=Auto generated theme\n")
+  f:write("ScaleWithDPI=True\n\n")
+
+  f:write("[InputPanel]\n")
+  f:write(string.format("NormalColor=%s\n", normal_color))
+  f:write(string.format("HighlightCandidateColor=%s\n", highlight_candidate_color))
+  f:write(string.format("HighlightColor=%s\n", highlight_candidate_color))
+  f:write(string.format("HighlightBackgroundColor=%s\n", panel_highlight_bg))
+  f:write("PageButtonAlignment=Last Candidate\n\n")
+
+  f:write("[InputPanel/TextMargin]\nLeft=5\nRight=5\nTop=5\nBottom=5\n\n")
+  f:write("[InputPanel/ContentMargin]\nLeft=2\nRight=2\nTop=2\nBottom=2\n\n")
+
+  f:write("[InputPanel/Background]\n")
+  f:write(string.format("Color=%s\n", p.bg))
+  f:write(string.format("BorderColor=%s\n", p.bg_border))
+  f:write("BorderWidth=2\n\n")
+
+  f:write("[InputPanel/Background/Margin]\nLeft=2\nRight=2\nTop=2\nBottom=2\n\n")
+
+  f:write("[InputPanel/Highlight]\n")
+  f:write(string.format("Color=%s\n\n", panel_highlight))
+
+  f:write("[InputPanel/Highlight/Margin]\nLeft=5\nRight=5\nTop=5\nBottom=5\n\n")
+
+  f:write("[InputPanel/PrevPage]\n")
+  f:write(string.format("Image=%s/prev.png\n\n", asset_root))
+  f:write("[InputPanel/PrevPage/ClickMargin]\nLeft=5\nRight=5\nTop=4\nBottom=4\n\n")
+
+  f:write("[InputPanel/NextPage]\n")
+  f:write(string.format("Image=%s/next.png\n\n", asset_root))
+  f:write("[InputPanel/NextPage/ClickMargin]\nLeft=5\nRight=5\nTop=4\nBottom=4\n\n")
+
+  f:write("[Menu]\n")
+  f:write(string.format("NormalColor=%s\n", normal_color))
+  f:write(string.format("HighlightCandidateColor=%s\n\n", highlight_candidate_color))
+
+  f:write("[Menu/Background]\n")
+  f:write(string.format("Color=%s\n", p.bg))
+  f:write(string.format("BorderColor=%s\n", p.bg_border))
+  f:write("BorderWidth=2\n\n")
+
+  f:write("[Menu/Background/Margin]\nLeft=2\nRight=2\nTop=2\nBottom=2\n\n")
+  f:write("[Menu/ContentMargin]\nLeft=2\nRight=2\nTop=2\nBottom=2\n\n")
+
+  f:write("[Menu/CheckBox]\n")
+  f:write(string.format("Image=%s/radio.png\n\n", asset_root))
+  f:write("[Menu/SubMenu]\n")
+  f:write(string.format("Image=%s/arrow.png\n\n", asset_root))
+
+  f:write("[Menu/Highlight]\n")
+  f:write(string.format("Color=%s\n\n", menu_highlight))
+
+  f:write("[Menu/Highlight/Margin]\nLeft=5\nRight=5\nTop=5\nBottom=5\n\n")
+
+  f:write("[Menu/Separator]\n")
+  f:write(string.format("Color=%s\n\n", separator))
+
+  f:write("[Menu/TextMargin]\nLeft=5\nRight=5\nTop=5\nBottom=5\n\n")
+
+  f:write("[AccentColorField]\n")
+  f:write("0=Input Panel Border\n")
+  f:write("1=Input Panel Highlight Candidate Background\n")
+  f:write("2=Input Panel Highlight\n")
+  f:write("3=Menu Border\n")
+  f:write("4=Menu Separator\n")
+  f:write("5=Menu Selected Item Background\n")
+  f:close()
+end
+
 local function write_nvim(p)
   local syntax_keys = {
     "keyword",
@@ -172,6 +260,7 @@ function M.apply(p)
   write_kitty(p)
   write_cava(p)
   write_rofi(p)
+  write_fcitx5(p)
   write_nvim(p)
 
   -- Dunst
@@ -179,6 +268,7 @@ function M.apply(p)
   local dunst_cont = string.format("[fullscreen]\n  background = %q\n  foreground = %q\n", p.bg, p.fg)
   upsert_block(dunst_path, dunst_cont, "#")
   os.execute("dunstctl reload")
+  os.execute("pkill fcitx5; fcitx5 -d")
 end
 
 return M

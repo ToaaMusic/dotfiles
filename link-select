@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_TARGET_DIR="$DOTFILES_DIR/config"
+HOME_TARGET_DIR="$DOTFILES_DIR/home"
+CONFIG_DIR="$HOME/.config"
+
+mkdir -p "$CONFIG_DIR"
+
+C_CYAN='\e[36m'
+C_GREEN='\e[32m'
+C_DIM='\e[2m'
+C_BOLD='\e[1m'
+C_BLUE='\e[34m'
+C_RESET='\e[0m'
+
+items=()
+for dir in "$CONFIG_TARGET_DIR"/*/; do
+  [ -d "$dir" ] || continue
+  name="$(basename "$dir")"
+  items+=("config|$name|$dir")
+done
+
+for file in "$HOME_TARGET_DIR"/.*; do
+  name="$(basename "$file")"
+  [[ "$name" == "." || "$name" == ".." ]] && continue
+  items+=("home|$name|$file")
+done
+
+items+=("share|fcitx5-auto-gen-theme|$HOME/.local/share/fcitx5/themes/auto-gen")
+
+num_items=${#items[@]}
+[ $num_items -eq 0 ] && echo "No items found to link." && exit 0
+
+selected=()
+for ((i=0; i<num_items; i++)); do selected+=(false); done
+cursor=0
+
+cleanup() {
+  tput cnorm # 显示光标
+  stty echo  # 恢复回显
+}
+trap cleanup EXIT
+tput civis
+stty -echo
+
+render() {
+  # 向上移动到起始行
+  if [ "$1" -ne 0 ]; then
+    tput cuu "$num_items"
+  fi
+
+  for i in "${!items[@]}"; do
+    IFS='|' read -r type name path <<< "${items[$i]}"
+    
+    # 指针
+    if [ "$i" -eq "$cursor" ]; then
+      ptr="${C_CYAN}❯${C_RESET} "
+    else
+      ptr="  "
+    fi
+    
+    # 状态
+    if [ "${selected[$i]}" = true ]; then
+      box="${C_GREEN}[✔]${C_RESET} "
+      label="${C_BOLD}${type}/${name}${C_RESET}"
+    else
+      box="[ ] "
+      label="${C_DIM}${type}/${name}${C_RESET}"
+    fi
+    
+    tput el # 清理行
+    echo -e "${ptr}${box}${label}"
+  done
+}
+
+echo -e "${C_BLUE}?${C_RESET} ${C_BOLD}Select configurations to link:${C_RESET}"
+echo -e "${C_DIM}(Space: Toggle, a: All, i: Invert, Enter: Apply)${C_RESET}"
+
+render 0
+
+while true; do
+  # 使用 IFS= 确保空格不被过滤
+  if ! IFS= read -rsn1 key; then
+    break
+  fi
+  
+  case "$key" in
+    # 处理转义序列 (方向键)
+    $'\x1b')
+      read -rsn2 -t 0.01 next_key
+      if [[ "$next_key" == "[A" ]]; then # Up
+        cursor=$(( (cursor - 1 + num_items) % num_items ))
+      elif [[ "$next_key" == "[B" ]]; then # Down
+        cursor=$(( (cursor + 1) % num_items ))
+      fi
+      ;;
+    # 空格键 (必须匹配其字面值)
+    " ")
+      if [ "${selected[$cursor]}" = true ]; then
+        selected[$cursor]=false
+      else
+        selected[$cursor]=true
+      fi
+      ;;
+    # 全选
+    "a")
+      all_on=true
+      for s in "${selected[@]}"; do [[ "$s" == false ]] && all_on=false && break; done
+      for ((i=0; i<num_items; i++)); do selected[$i]=$([ "$all_on" == true ] && echo false || echo true); done
+      ;;
+    # 反选
+    "i")
+      for ((i=0; i<num_items; i++)); do 
+        [ "${selected[$i]}" = true ] && selected[$i]=false || selected[$i]=true
+      done
+      ;;
+    # 回车键 (Enter)
+    $'\n'|""|$'\r')
+      break
+      ;;
+  esac
+  render 1
+done
+
+# 恢复终端
+cleanup
+trap - EXIT
+echo -e "\n${C_GREEN}✔${C_RESET} Applying selection...\n"
+
+any=false
+for i in "${!items[@]}"; do
+  if [ "${selected[$i]}" = true ]; then
+    any=true
+    IFS='|' read -r type name path <<< "${items[$i]}"
+
+    if [ "$type" == "config" ]; then
+      target="$CONFIG_DIR/$name"
+    elif [ "$type" == "share" ]; then
+      target="$HOME/.config/fcitx5/themes/auto-gen"
+    else
+      target="$HOME/$name"
+    fi
+
+    if [[ -L "$target" ]]; then
+      read -rp "$name already exists as a symlink. Override? [y/N] " answer
+      [[ "$answer" =~ ^[Yy] ]] || { echo "Skipping $name"; continue; }
+      rm -f "$target"
+    elif [[ -e "$target" ]]; then
+      read -rp "$name already exists. Override? [y/N] " answer
+      [[ "$answer" =~ ^[Yy] ]] || { echo "Skipping $name"; continue; }
+      rm -rf "$target"
+    fi
+
+    ln -s "$path" "$target"
+    echo -e "  ${C_GREEN}+${C_RESET} Linked ${type}/${name}"
+  fi
+done
+
+if [ "$any" = false ]; then
+  echo "No items selected."
+else
+  echo -e "\n${C_BOLD}${C_GREEN}All tasks completed successfully!${C_RESET}"
+fi
