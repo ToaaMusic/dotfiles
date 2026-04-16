@@ -24,6 +24,11 @@ function repos() {
   cd ~/repos/
 }
 
+# transparent cava
+function cavat() {
+  kitty --override "background_opacity=0" cava
+}
+
 alias yazi=y
 alias zed=zeditor
 alias oc=opencode
