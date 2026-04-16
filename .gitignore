@@ -1,10 +1,18 @@
+#cache
+config/fcitx5/conf/cached_layouts
+
 # auto generated files
 g.*
 *.g.*
+config/fcitx5/themes/auto-gen/theme.conf
 
-# unready components
-fcitx5/
+# unready
+config/fcitx5/conf/
+config/fcitx5/config
+config/fcitx5/profile
+ebrain-ai/
 
 # personal files
 others/
 TODO.md
+add

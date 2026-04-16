@@ -82,6 +82,24 @@ for file in "$HOME_TARGET_DIR"/.*; do
   echo "Linked home/$name"
 done
 
+fcitx_theme_source="$HOME/.local/share/fcitx5/themes/auto-gen"
+fcitx_theme_target="$HOME/.config/fcitx5/themes/auto-gen"
+
+if [[ -e "$fcitx_theme_source" ]]; then
+  if [[ -L "$fcitx_theme_target" ]]; then
+    read -rp "fcitx5 auto-gen theme already exists as a symlink. Override? [y/N] " answer
+    [[ "$answer" =~ ^[Yy] ]] && rm -f "$fcitx_theme_target" || echo "Skipping fcitx5 auto-gen theme"
+  elif [[ -e "$fcitx_theme_target" ]]; then
+    read -rp "fcitx5 auto-gen theme already exists. Override? [y/N] " answer
+    [[ "$answer" =~ ^[Yy] ]] && rm -rf "$fcitx_theme_target" || echo "Skipping fcitx5 auto-gen theme"
+  fi
+
+  if [[ ! -e "$fcitx_theme_target" ]]; then
+    ln -s "$fcitx_theme_source" "$fcitx_theme_target"
+    echo "Linked fcitx5 auto-gen theme"
+  fi
+fi
+
 echo "Generating Rofi desktop entry..."
 
 DESKTOP_ENTRY_DIR="$HOME/.local/share/applications"
