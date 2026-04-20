@@ -1,36 +1,32 @@
 # My Arch Linux Configuration
 
-This repository contains my personal configuration for Arch Linux and some tools written by lua script.
+这个仓库包含了我的Arch系统配置和一些我用lua写的小工具。
 
+## 成分
 
-## Components
-
-| Component | Description | Official Doc | Repository Folder |
+| 成分 | 描述 | 官方Docs/Wiki | 仓库位置 |
 |---|---|---|---|
-| **hyprland** | Wayland compositor | https://wiki.hyprland.org/ | [hypr](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr) |
-| **fastfetch** | System info fetcher | https://github.com/fastfetch-cli/fastfetch | [fastfetch](https://github.com/ToaaMusic/dotfiles/tree/main/config/fastfetch) |
-| **waybar** | Status bar | https://github.com/Alexays/Waybar/wiki | [waybar](https://github.com/ToaaMusic/dotfiles/tree/main/config/waybar) |
-| **rofi** | App launcher | https://github.com/davatorium/rofi | [rofi](https://github.com/ToaaMusic/dotfiles/tree/main/config/rofi) |
-| **kitty** | Terminal | https://sw.kovidgoyal.net/kitty/ | [kitty](https://github.com/ToaaMusic/dotfiles/tree/main/config/kitty) |
-| **yazi** | Tui file manager | https://yazi-rs.github.io/ | [yazi](https://github.com/ToaaMusic/dotfiles/tree/main/config/yazi) |
-| **dunst** | Notification | https://dunst-project.org/ | [dunst](https://github.com/ToaaMusic/dotfiles/tree/main/config/dunst) |
-| **cava** | Tui audio visualizer | https://github.com/karlstav/cava | [cava](https://github.com/ToaaMusic/dotfiles/tree/main/config/cava) |
+| **hyprland** | Wayland 窗口合成器 | https://wiki.hyprland.org/ | [hypr](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr) |
+| **fastfetch** | 系统信息获取器 | https://github.com/fastfetch-cli/fastfetch | [fastfetch](https://github.com/ToaaMusic/dotfiles/tree/main/config/fastfetch) |
+| **waybar** | 状态栏 | https://github.com/Alexays/Waybar/wiki | [waybar](https://github.com/ToaaMusic/dotfiles/tree/main/config/waybar) |
+| **rofi** | App 启动器 | https://github.com/davatorium/rofi | [rofi](https://github.com/ToaaMusic/dotfiles/tree/main/config/rofi) |
+| **kitty** | 终端模拟器 | https://sw.kovidgoyal.net/kitty/ | [kitty](https://github.com/ToaaMusic/dotfiles/tree/main/config/kitty) |
+| **yazi** | Tui 文件管理器 | https://yazi-rs.github.io/ | [yazi](https://github.com/ToaaMusic/dotfiles/tree/main/config/yazi) |
+| **dunst** | 通知 | https://dunst-project.org/ | [dunst](https://github.com/ToaaMusic/dotfiles/tree/main/config/dunst) |
+| **cava** | 音频可视化 | https://github.com/karlstav/cava | [cava](https://github.com/ToaaMusic/dotfiles/tree/main/config/cava) |
 
-
-
-## Installation
-To copy my configurations, clone the repository to a safe location you like, for example `~/repos`, and copy the files in `~/repos/dotfiles/config/*` to `~/.config/*`. **Make sure to back up any existing configuration files before overwriting them.**
+## 安装
+克隆本仓库到你喜欢的任何位置，然后执行 `link`。
 
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
 cd dotfiles
-# Copy files to ~/.config/* or run:
-./link.sh
+./link
 ```
 
-`link.sh` is a script that creates symbolic links from the repository to the appropriate configuration directories.
+`link` 脚本会将各配置文件链接到对应位置。
 
-Like this:
+如图:
 
 ```bash
 ~/.config  symlink to  ~/repos/dotfiles/config
@@ -41,14 +37,12 @@ Like this:
 └── ...                      └── ...
 ```
 
-## Dependencies
-- `hyprpaper` <- wallpaper.
-- `mpvpaper` <- Dynamic wallpaper. (optional)
-- `lua` ~ Tool language. (IMPORTANT)
-- `grim`, `slurp`, `wl-copy` <- Screenshot, Selection, and copy to clipboard
-- `ffmpeg` ~ img transportor.
-
-After installing the key components, if you want the full experience or just lazy to customize everything, you can simply install them all.
+## 依赖
+- `hyprpaper` <- 壁纸.
+- `mpvpaper` <- 动态壁纸. (可选)
+- `lua` ~ 脚本语言. (重要)
+- `grim`, `slurp`, `wl-copy` <- 截屏，选区，与粘贴板
+- `ffmpeg` ~ 媒体工具.
 
 ```bash
 sudo pacman -S kitty hyprland hyprpaper waybar fastfetch rofi dunst cava yazi
@@ -58,15 +52,15 @@ sudo pacman -S kitty hyprland hyprpaper waybar fastfetch rofi dunst cava yazi
 sudo pacman -S musicfox grim slurp wl-copy mpvpaper lua ffmpeg
 ```
 
-## Usage
+## 使用
 
-### Shortcuts
+### 快捷键
 
-See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr/) for more.
+更多细节见 [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr/)
 
-#### Default
+#### 默认
 
-| Shortcut           | Action                                   |
+| 快捷键              | 作用                                     |
 |--------------------|------------------------------------------|
 | `ALT + C`          | Close active window                      |
 | `ALT + M`          | Exit hyprland                            |
@@ -77,9 +71,9 @@ See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/c
 | `F11`              | Toggle fullsceen                         |
 |``||
 
-#### Custom
+#### 自定义
 
-| Shortcut           | Action                                   |
+| 快捷键              | 作用                                     |
 |--------------------|------------------------------------------|
 | `ALT + F`          | Open File Manager (yazi)                 |
 | `ALT + Z`          | Open musicfox                            |
@@ -94,7 +88,7 @@ See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/c
 | `PrtSc`            | Grab screen to clipboard                 |
 |``||    
 
-### Tools
+### 工具
 
 See [tools/](https://github.com/ToaaMusic/dotfiles/tree/main/tools/) for more.
 
