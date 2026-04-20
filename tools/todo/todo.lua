@@ -1,25 +1,17 @@
 local M = {}
 
-local function get_home_dir()
-  return os.getenv("HOME") or "."
-end
+--paths
+local home = os.getenv("HOME")
+local DATA_PATH = home .. "/.local/share/toaam-dotfiles/todo/"
+local TODAY_FILE = DATA_PATH .. "today.md"
+local ARCHIVE_PATH = DATA_PATH .. "archive/"
+local STATE_FILE = DATA_PATH .. "state.lua"
 
-local function get_data_path()
-  local xdg_data_home = os.getenv("XDG_DATA_HOME")
-  if xdg_data_home and xdg_data_home ~= "" then
-    return xdg_data_home .. "/toaam-dotfiles/todo/"
-  end
-  return get_home_dir() .. "/.local/share/toaam-dotfiles/todo/"
-end
+-- helpers
 
 local function ensure_dir(path)
   os.execute(string.format('mkdir -p "%s"', path))
 end
-
-local DATA_PATH = get_data_path()
-local TODAY_FILE = DATA_PATH .. "today.md"
-local ARCHIVE_PATH = DATA_PATH .. "archive/"
-local STATE_FILE = DATA_PATH .. "state.lua"
 
 local function get_date(format)
   return os.date(format or "%Y-%m-%d")
@@ -64,6 +56,8 @@ local function write_file(path, lines)
     f:close()
   end
 end
+
+-- commands
 
 function M.add(task)
   if not task or task == "" then
@@ -184,7 +178,8 @@ function M.sync()
   end
 end
 
--- CLI Entry Point
+-- entry
+
 local args = {...}
 local command = table.remove(args, 1)
 
