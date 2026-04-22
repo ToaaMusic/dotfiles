@@ -201,7 +201,7 @@
 
 # generated
 [fullscreen]
-  background = "#4C4444"
-  foreground = "#E4DCDC"
+  background = "#34344C"
+  foreground = "#ccd0d9"
 
 # generated end

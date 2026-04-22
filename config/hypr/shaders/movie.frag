@@ -27,7 +27,7 @@ void main() {
     // noise
     float noise = fract(sin(dot(v_texcoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
     float grain = (noise - 0.5) * 0.03;
-    color.rgb += grain * (1.0 - lum * 0.7);
+    //color.rgb += grain * (1.0 - lum * 0.7);
 
     // vignette
     float dist = distance(v_texcoord, vec2(0.5));
