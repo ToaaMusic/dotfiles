@@ -51,6 +51,13 @@ local function quick_lift(hex, bg, ratio, step)
 end
 
 -- [[ Writers ]]
+local function write_hypr(p)
+  local path = os.getenv("HOME") .. "/.config/hypr/hyprmain/colors.g.conf"
+  local f = assert(io.open(path, "w"))
+  f:write(string.format("$active_border_color = rgba(%sff)\n", p.accent:sub(2)))
+  f:write(string.format("$inactive_border_color = 0xff%s\n", p.bg_border:sub(2)))
+  f:close()
+end
 
 local function write_waybar(p)
   local path = os.getenv("HOME") .. "/.config/waybar/colors.g.css"
@@ -76,12 +83,34 @@ local function write_kitty(p)
   f:write(string.format("url_color %s\nactive_border_color %s\ninactive_border_color %s\nbell_border_color %s\n", p.accent_strong, p.accent_strong, p.bg_border, p.accents[2]))
   f:write("wayland_titlebar_color system\n")
   f:write(string.format("active_tab_foreground %s\nactive_tab_background %s\n", p.accent_fg, p.accent))
-  f:write(string.format("inactive_tab_foreground %s\ninactive_tab_background %s\ntab_bar_background %s\n", p.fg_muted, p.bg_elevated, p.bg_hover))
+  f:write(string.format("inactive_tab_foreground %s\ninactive_tab_background %s\ntab_bar_background %s\n", p.fg_muted, p.bg_elevated, p.bg))
   f:write(string.format("mark1_foreground %s\nmark1_background %s\nmark2_foreground %s\nmark2_background %s\nmark3_foreground %s\nmark3_background %s\n\n", p.accent_fg, p.accent, p.accent_fg, p.accents[2], p.accent_fg, p.accents[3]))
   for i = 0, 7 do
     f:write(string.format("color%d %s\n", i, p.kitty_normal[i + 1]))
     f:write(string.format("color%d %s\n", i + 8, p.kitty_bright[i + 1]))
   end
+  local active_template = string.format(
+    "{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
+    "_" .. p.accent_fg:sub(2),   -- _ffffff
+    "_" .. p.bg:sub(2),          -- _04141C
+    "_" .. p.accent:sub(2),      -- _5f757b
+    "_" .. p.accent_fg:sub(2),   -- _ffffff
+    "_" .. p.accent_fg:sub(2),   -- _ffffff
+    "_" .. p.bg:sub(2)           -- _04141C
+  )
+
+-- 非活动标签模板
+  local inactive_template = string.format(
+    "{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
+    "_" .. p.fg_muted:sub(2),    -- _a0a8ac
+    "_" .. p.bg:sub(2),          -- _04141C
+    "_" .. p.bg_elevated:sub(2), -- _14242b
+    "_" .. p.fg_muted:sub(2),    -- _a0a8ac
+    "_" .. p.fg_muted:sub(2),    -- _a0a8ac
+    "_" .. p.bg:sub(2)           -- _04141C
+  )
+  f:write(string.format("active_tab_title_template %q\n", active_template))
+  f:write(string.format("tab_title_template %q\n", inactive_template))
   f:close()
 end
 
@@ -256,6 +285,7 @@ function M.preview(p)
 end
 
 function M.apply(p)
+  write_hypr(p)
   write_waybar(p)
   write_kitty(p)
   write_cava(p)
