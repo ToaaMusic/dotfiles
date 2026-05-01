@@ -21,3 +21,10 @@ op.laststatus = 0
 op.ruler = false
 
 op.clipboard = "unnamedplus"
+
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+vim.wo.foldenable = true
+vim.wo.foldlevel = 99
+vim.wo.foldnestmax = 5

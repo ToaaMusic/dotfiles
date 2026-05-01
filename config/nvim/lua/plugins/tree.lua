@@ -11,7 +11,7 @@ return {
     ---@module 'neo-tree'
     ---@type neotree.Config
     opts = {
-      close_if_last_window = false,
+      close_if_last_window = true,
       popup_border_style = "NC",
       clipboard = {
         sync = "none",   -- 不同 Neovim 实例之间不共享剪贴板 or "global"/"universal"
