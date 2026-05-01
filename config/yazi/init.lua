@@ -1,3 +1,6 @@
+require("no-status"):setup()
+require("folder-rules"):setup()
+
 -- ~/.config/yazi/init.lua
 function Linemode:custom_linemode()
 	local size = self._file:size()
