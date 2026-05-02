@@ -17,3 +17,8 @@ fi
 
 export EDITOR='nvim'
 export GUI_EDITOR='zeditor'
+
+# dotnet
+export DOTNET_ROOT=/usr/share/dotnet
+export PATH="$PATH:$HOME/.dotnet/tools"
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
