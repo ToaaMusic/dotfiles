@@ -7,10 +7,13 @@ return {
 	opts = {
 		formatters_by_ft = {
 			javascript = { "prettier" },
+			javascriptreact = { "prettier" },
 			typescript = { "prettier" },
+			typescriptreact = { "prettier" },
 			json = { "prettier" },
 			html = { "prettier" },
 			css = { "prettier" },
+			vue = { "prettier" },
 			markdown = { "prettier" },
 			lua = { "stylua" },
 			yaml = { "prettier" }, -- Or "yamlfmt" / "yamllint" if installed
