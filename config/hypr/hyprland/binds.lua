@@ -3,7 +3,10 @@
 
 return function(V)
   local mainMod = "ALT"
-  local cmdPath = "~/.config/hypr/scripts"
+  local cmdPath = "$HOME/.config/hypr/cmds/"
+
+  --test
+  hl.bind(mainMod .. " + T",   hl.dsp.exec_cmd("notify-send $TOAAM_DOTFILES"))
 
   -- basic
   hl.bind(mainMod .. " + Q",   hl.dsp.exec_cmd(V.terminal))
@@ -16,15 +19,13 @@ return function(V)
   hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd(V.menu))
   hl.bind(mainMod .. " + F",   hl.dsp.exec_cmd(V.terminal .. " " .. V.fileManager))
   hl.bind(mainMod .. " + Z",   hl.dsp.exec_cmd(V.terminal .. " " .. V.music))
-  hl.bind(mainMod .. " + E",   hl.dsp.exec_cmd("microsoft-edge-stable"))
+  hl.bind(mainMod .. " + B",   hl.dsp.exec_cmd(V.browser))
 
   -- commands (scripts)
-  hl.bind(mainMod .. " + W",           hl.dsp.exec_cmd("bash " .. cmdPath .. "/random-wallpaper.sh"))
-  hl.bind(mainMod .. " + R",           hl.dsp.exec_cmd(cmdPath .. "/refresh.sh"))
-  hl.bind(mainMod .. " + H",           hl.dsp.exec_cmd("bash " .. cmdPath .. "/toggle-waybar-layout.sh"))
-  hl.bind(mainMod .. " + SHIFT + W",   hl.dsp.exec_cmd(cmdPath .. "/dywallpaper.sh"))
-  hl.bind(mainMod .. " + B",           hl.dsp.exec_cmd(cmdPath .. "/gen-color.sh"))
-  hl.bind(mainMod .. " + SHIFT + B",   hl.dsp.exec_cmd(cmdPath .. "/gen-color-part.sh"))
+  hl.bind(mainMod .. " + W",           hl.dsp.exec_cmd(cmdPath .. "random-wallpaper.sh"))
+  hl.bind(mainMod .. " + R",           hl.dsp.exec_cmd(cmdPath .. "refresh.sh"))
+  hl.bind(mainMod .. " + H",           hl.dsp.exec_cmd(cmdPath .. "toggle-waybar-layout.sh"))
+  hl.bind(mainMod .. " + SHIFT + W",   hl.dsp.exec_cmd(cmdPath .. "dywallpaper.sh"))
   hl.bind("Print",                     hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
 
   -- window management

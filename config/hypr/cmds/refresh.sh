@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 
 pkill waybar
-
-waybar & 
-
 pkill hyprpaper
-pkill mpvpaper
 
+waybar &
 hyprpaper &
-
-
-# hyprctl dispatch reload
