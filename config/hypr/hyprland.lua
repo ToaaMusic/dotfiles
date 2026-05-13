@@ -1,19 +1,14 @@
--- Hyprland Lua configuration
--- Converted from hyprlang config, Hyprland >= 0.55.0
--- https://wiki.hypr.land/Configuring/Start/
+-- Hyprland 0.55.0 Lua configuration
 --
--- See hyprland_default.lua for the official default config reference
+-- https://wiki.hypr.land
 
--- Load sub-modules (variables / my programs)
--- Side-effect modules
-require("env")
-require("rules")
+-- require
+require("hyprland.env")
+require("hyprland.rules")
+-- require("hyprland.plugins")
+local V = require("hyprland.vars")
 
--- Values module
-local V = require("vars")
-
--- Load color overrides if generated
-local colors_file = os.getenv("HOME") .. "/.config/hypr/colors.g.lua"
+local colors_file = os.getenv("HOME") .. "/.config/hypr/hyprland/colors.g.lua"
 local colors_file_check = io.open(colors_file)
 if colors_file_check then
 	colors_file_check:close()
@@ -22,30 +17,26 @@ if colors_file_check then
 	V.inactive_border_color = colors.inactive_border_color or V.inactive_border_color
 end
 
----------------------
----- MONITORS -------
----------------------
+local load_binds = require("hyprland.binds")
+local load_autostart = require("hyprland.autostart")
 
--- See https://wiki.hypr.land/Configuring/Basics/Monitors/
+load_binds(V)
+load_autostart(V)
+
+-- Monitors 
 hl.monitor({
 	output = "eDP-1",
 	mode = "1920x1080@60",
 	position = "1920x0",
-	scale = 1,
 })
 hl.monitor({
 	output = "HDMI-A-1",
 	mode = "1920x1080@120",
 	position = "0x0",
-	scale = 1,
 	mirror = "eDP-1",
 })
 
-----------------------
----- LOOK AND FEEL ----
-----------------------
-
--- https://wiki.hypr.land/Configuring/Basics/Variables/
+-- config
 hl.config({
 	general = {
 		gaps_in = 2,
@@ -53,7 +44,6 @@ hl.config({
 
 		border_size = 2,
 
-		-- https://wiki.hypr.land/0.54.0/Configuring/Variables for info about colors
 		col = {
 			active_border = { colors = { V.active_border_color, V.active_border_color }, angle = 45 },
 			inactive_border = V.inactive_border_color,
@@ -61,7 +51,6 @@ hl.config({
 
 		resize_on_border = false,
 
-		-- https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/
 		allow_tearing = false,
 
 		layout = "dwindle",
@@ -112,14 +101,14 @@ hl.config({
 	},
 })
 
--- Curves (mirroring your old hyprlang config exactly)
+-- Curves
 hl.curve("easeOutQuint", { type = "bezier", points = { { 0.23, 1 }, { 0.32, 1 } } })
 hl.curve("easeInOutCubic", { type = "bezier", points = { { 0.65, 0.05 }, { 0.36, 1 } } })
 hl.curve("linear", { type = "bezier", points = { { 0, 0 }, { 1, 1 } } })
 hl.curve("almostLinear", { type = "bezier", points = { { 0.5, 0.5 }, { 0.75, 1 } } })
 hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
 
--- Animations (mirroring your old hyprlang config)
+-- Animations
 hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
 hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
 hl.animation({
@@ -175,10 +164,7 @@ hl.config({
 	},
 })
 
-----------------
-----  MISC  ----
-----------------
-
+-- Misc
 hl.config({
 	misc = {
 		force_default_wallpaper = -1,
@@ -187,10 +173,7 @@ hl.config({
 	},
 })
 
-----------------
----- INPUT  ----
-----------------
-
+-- Input
 -- https://wiki.hypr.land/Configuring/Basics/Variables/#input
 hl.config({
 	input = {
@@ -216,7 +199,7 @@ hl.gesture({
 	action = "workspace",
 })
 
--- Per-device configs
+-- Devices
 -- https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/
 hl.device({
 	name = "epic-mouse-v1",
@@ -237,18 +220,4 @@ hl.device({
 	name = "compx-2.4g-wireless-receiver-consumer-control",
 })
 
---------------------------
----- LOAD BINDS & AUTOSTART ----
---------------------------
 
--- Load binds
-local binds_mod = require("binds")
-binds_mod(V)
-
--- Load autostart
-local autostart_mod = require("autostart")
-autostart_mod(V)
-
--- Plugins (commented out by default, same as old config)
--- Uncomment to enable:
--- require("plugins")

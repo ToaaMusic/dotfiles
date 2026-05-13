@@ -1,5 +1,6 @@
 #cache
 config/fcitx5/conf/cached_layouts
+/.cache
 
 # auto generated files
 g.*
@@ -16,3 +17,5 @@ ebrain-ai/
 others/
 TODO.md
 add
+
+/config.lua
