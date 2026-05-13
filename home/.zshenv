@@ -15,6 +15,9 @@ if [ -z "$TOAAM_DOTFILES" ] || [ ! -d "$TOAAM_DOTFILES" ]; then
     unset _src _dir
 fi
 
+source $HOME/secrets.sh
+export PATH="$PATH:$HOME/Apps/mine"
+
 export EDITOR='nvim'
 export GUI_EDITOR='zeditor'
 
