@@ -41,7 +41,7 @@ local function read_file(path)
   if not f then return {} end
   local lines = {}
   for line in f:lines() do
-    if line ~= "" then table.insert(lines, line) end
+    table.insert(lines, line)
   end
   f:close()
   return lines
@@ -74,7 +74,59 @@ function M.add(task)
   end
 end
 
-function M.ls()
+function M.ls(filter)
+  if filter == "done" then
+    local any = false
+
+    -- today
+    local lines = read_file(TODAY_FILE)
+    local today_printed = false
+    for _, line in ipairs(lines) do
+      if line:find("%[x%]") then
+        if not today_printed then
+          print("=== Today ===")
+          today_printed = true
+          any = true
+        end
+        print(line)
+      end
+    end
+
+    -- archive months, newest first
+    local months = {}
+    local f = io.popen(string.format('ls -1 "%s" 2>/dev/null', ARCHIVE_PATH))
+    if f then
+      for file in f:lines() do
+        if file:match("%.md$") then
+          months[#months + 1] = file:gsub("%.md$", "")
+        end
+      end
+      f:close()
+    end
+    table.sort(months, function(a, b) return a > b end)
+
+    for _, month in ipairs(months) do
+      local archive_file = ARCHIVE_PATH .. month .. ".md"
+      local archive_lines = read_file(archive_file)
+      local first = true
+      for _, line in ipairs(archive_lines) do
+        if line:find("%[x%]") then
+          if first then
+            print(string.format("\n=== %s ===", month))
+            first = false
+          end
+          print(line)
+          any = true
+        end
+      end
+    end
+
+    if not any then
+      print("No completed tasks found.")
+    end
+    return
+  end
+
   local lines = read_file(TODAY_FILE)
   if #lines == 0 then
     print("No tasks for today!")
@@ -86,7 +138,7 @@ function M.ls()
   end
 end
 
-function M.done(id)
+function M.done(id, percentage)
   id = tonumber(id)
   local lines = read_file(TODAY_FILE)
   if not id or id < 1 or id > #lines then
@@ -99,13 +151,40 @@ function M.done(id)
     print("Task already marked as done.")
     return
   end
+  -- 处理完成度参数
+  local completion_text = ""
+  if percentage then
+    -- 确保是数字且在 0-100 范围内
+    percentage = tonumber(percentage)
+    if percentage and percentage >= 0 and percentage <= 100 then
+      completion_text = string.format(" (completion: %d%%)", percentage)
+    else
+      print("Warning: Invalid percentage, using 100%")
+      completion_text = " (completion: 100%)"
+    end
+  end
 
-  lines[id] = line:gsub("%[ %]", "[x]") .. string.format(" (completed: %s)", get_date())
+  lines[id] = line:gsub("%[ %]", "[x]") ..
+              string.format(" (completed: %s)", get_date()) ..
+              completion_text
   write_file(TODAY_FILE, lines)
   print("Marked as done: " .. lines[id])
 end
 
-function M.archive_tasks()
+function M.rm(id)
+  id = tonumber(id)
+  local lines = read_file(TODAY_FILE)
+  if not id or id < 1 or id > #lines then
+    print("Invalid task ID!")
+    return
+  end
+
+  local removed = table.remove(lines, id)
+  write_file(TODAY_FILE, lines)
+  print("Deleted: " .. removed)
+end
+
+function M.archive()
   local lines = read_file(TODAY_FILE)
   local today_remaining = {}
   local archived_count = 0
@@ -165,7 +244,7 @@ function M.sync()
         io.write("\nArchive these completed tasks now? [Y/n]: ")
         local answer = io.read()
         if answer == "" or answer:lower() == "y" then
-          M.archive_tasks()
+          M.archive()
         else
           print("Skipping archival. They will remain in today.md.")
         end
@@ -191,13 +270,16 @@ M.sync()
 if command == "add" then
   M.add(table.concat(args, " "))
 elseif command == "ls" then
-  M.ls()
+  M.ls(args[1])
 elseif command == "done" then
-  M.done(args[1])
-elseif command == "archive" then
-  M.archive_tasks()
+  M.done(args[1], args[2])
+elseif command == "rm" then
+  M.rm(args[1])
+elseif command == "arch" then
+  M.archive()
 else
-  print("Available commands: add, ls, done, archive")
+  print("Available commands: add, ls, done, rm, arch\n\nIf you mean ls: \n")
+  M.ls()
 end
 
 return M
