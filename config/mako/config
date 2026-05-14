@@ -1,0 +1,31 @@
+# Default timeout
+default-timeout=8000
+
+# Position
+anchor=top-right
+margin=24,24
+
+# Style
+font="Maple Mono SC NF 11"
+width=300
+border-size=0
+border-radius=8
+padding=16
+
+# Layer
+layer=overlay
+
+# History
+max-history=100
+max-visible=10
+
+# Sort
+sort=-time
+
+# Mouse
+on-button-left=dismiss
+on-button-right=dismiss-all
+on-touch=dismiss
+
+# Include auto-generated colors
+include=~/.config/mako/g.colors

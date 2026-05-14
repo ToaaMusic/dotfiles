@@ -1,30 +1,31 @@
 # My Arch Linux Configuration
 
+[简体中文](./README.zh-CN.md)
+
 This repository contains my personal configuration for Arch Linux and some tools written by lua script.
 
-
-## Components
+## ✨ Components
 
 | Component | Description | Official Doc | Repository Folder |
 |---|---|---|---|
 | **hyprland** | Wayland compositor | https://wiki.hyprland.org/ | [hypr](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr) |
+| **nvim** | Text editor | https://neovim.io/ | [nvim](https://github.com/ToaaMusic/dotfiles/tree/main/config/nvim) |
 | **fastfetch** | System info fetcher | https://github.com/fastfetch-cli/fastfetch | [fastfetch](https://github.com/ToaaMusic/dotfiles/tree/main/config/fastfetch) |
 | **waybar** | Status bar | https://github.com/Alexays/Waybar/wiki | [waybar](https://github.com/ToaaMusic/dotfiles/tree/main/config/waybar) |
 | **rofi** | App launcher | https://github.com/davatorium/rofi | [rofi](https://github.com/ToaaMusic/dotfiles/tree/main/config/rofi) |
 | **kitty** | Terminal | https://sw.kovidgoyal.net/kitty/ | [kitty](https://github.com/ToaaMusic/dotfiles/tree/main/config/kitty) |
 | **yazi** | Tui file manager | https://yazi-rs.github.io/ | [yazi](https://github.com/ToaaMusic/dotfiles/tree/main/config/yazi) |
-| **dunst** | Notification | https://dunst-project.org/ | [dunst](https://github.com/ToaaMusic/dotfiles/tree/main/config/dunst) |
+| **mako** | Notification | https://github.com/emersion/mako | [mako](https://github.com/ToaaMusic/dotfiles/tree/main/config/mako) |
 | **cava** | Tui audio visualizer | https://github.com/karlstav/cava | [cava](https://github.com/ToaaMusic/dotfiles/tree/main/config/cava) |
 
 
 
-## Installation
-To copy my configurations, clone the repository to a safe location you like, for example `~/repos`, and copy the files in `~/repos/dotfiles/config/*` to `~/.config/*`. **Make sure to back up any existing configuration files before overwriting them.**
+## 📦 Installation
+To apply my configurations, clone the repository to a safe location you like, for example `~/repos`, and run `./link`. **Make sure to back up any existing configuration files before overwriting them.**
 
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
 cd dotfiles
-# Copy files to ~/.config/* or run:
 ./link.sh
 ```
 
@@ -41,17 +42,19 @@ Like this:
 └── ...                      └── ...
 ```
 
+By the way, [.zshenv](https://github.com/ToaaMusic/dotfiles/tree/main/home/.zshenv) and [hypr/hyprland/env.lua](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr/hyprland/env.lua) will set $HOME/repos/dotfiles/ as TOAAM_DOTFILES. **And don't forget to rerun the `./link` after moving this repo**
+
 ## Dependencies
-- `hyprpaper` <- wallpaper.
-- `mpvpaper` <- Dynamic wallpaper. (optional)
-- `lua` ~ Tool language. (IMPORTANT)
-- `grim`, `slurp`, `wl-copy` <- Screenshot, Selection, and copy to clipboard
-- `ffmpeg` ~ img transportor.
+- `hyprpaper`: Wallpaper.
+- `mpvpaper`: Dynamic wallpaper. (optional)
+- `lua`: Tool language. (IMPORTANT)
+- `grim`, `slurp`, `wl-copy`: Screenshot, Selection, and copy to clipboard
+- `ffmpeg`: Img tool.
 
 After installing the key components, if you want the full experience or just lazy to customize everything, you can simply install them all.
 
 ```bash
-sudo pacman -S kitty hyprland hyprpaper waybar fastfetch rofi dunst cava yazi
+sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper
 ```
 
 ```bash
@@ -68,31 +71,24 @@ See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/c
 
 | Shortcut           | Action                                   |
 |--------------------|------------------------------------------|
-| `ALT + C`          | Close active window                      |
-| `ALT + M`          | Exit hyprland                            |
-| `ALT + V`          | Toggle floating mode for                 |
 | `ALT + Q`          | Open Terminal                            |
-| `ALT + 1~9`        | Switch workspace                         |
-| `ALT + SHIFT + 1~9`| Move window to target workspace          |
-| `F11`              | Toggle fullsceen                         |
-|``||
+| `ALT + C`          | Close active window                      |
+| `ALT + V`          | Toggle floating mode                     |
+| `ALT + M`          | Exit Hyprland                            |
+| `ALT + 1~0`        | Switch workspace 1~10                    |
+| `ALT + SHIFT + 1~0`| Move window to workspace 1~10            |
 
 #### Custom
 
 | Shortcut           | Action                                   |
 |--------------------|------------------------------------------|
-| `ALT + F`          | Open File Manager (yazi)                 |
-| `ALT + Z`          | Open musicfox                            |
-| `ALT + A`          | Open rofi                                |
-| `ALT + E`          | Open edge                                |
-| `ALT + W`          | Set a random wallpaper                   |
-| `ALT + SHIFT + W`  | Set a random Dynimic wallpaper           |
-| `ALT + R`          | Refresh display                          |
-| `ALT + H`          | Toggle bar layout                        |
-| `ALT + B`          | Generate and apply colors from fullscreen|
-| `ALT + SHIFT + B`  | ~ from a screen selection                |
-| `PrtSc`            | Grab screen to clipboard                 |
-|``||    
+| `ALT + F`          | Open File Manager (Yazi)                 |
+| `ALT + Z`          | Open Music Player (Musicfox)             |
+| `ALT + W`          | Set a random Wallpaper                   |
+| `ALT + SHIFT + W`  | Set a random Dynamic Wallpaper           |
+| `ALT + R`          | Refresh display / Waybar                 |
+| `ALT + H`          | Toggle Waybar layout                     |
+| `Print`            | Grab screen selection to clipboard       |
 
 ### Tools
 

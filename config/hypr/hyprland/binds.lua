@@ -14,6 +14,7 @@ return function(V)
   hl.bind(mainMod .. " + V",   hl.dsp.window.float({ action = "toggle" }))
   hl.bind(mainMod .. " + M",   hl.dsp.exec_cmd("hyprctl dispatch exit"))
   hl.bind(mainMod .. " + P",   hl.dsp.window.pseudo())
+  hl.bind(mainMod .. " + J",   hl.dsp.layout("togglesplit"))    -- dwindle only
 
   -- apps
   hl.bind(mainMod .. " + TAB", hl.dsp.exec_cmd(V.menu))

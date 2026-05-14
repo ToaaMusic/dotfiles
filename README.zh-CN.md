@@ -7,12 +7,13 @@
 | 成分 | 描述 | 官方Docs/Wiki | 仓库位置 |
 |---|---|---|---|
 | **hyprland** | Wayland 窗口合成器 | https://wiki.hyprland.org/ | [hypr](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr) |
+| **nvim** | 文本编辑器 | https://neovim.io/ | [nvim](https://github.com/ToaaMusic/dotfiles/tree/main/config/nvim) |
 | **fastfetch** | 系统信息获取器 | https://github.com/fastfetch-cli/fastfetch | [fastfetch](https://github.com/ToaaMusic/dotfiles/tree/main/config/fastfetch) |
 | **waybar** | 状态栏 | https://github.com/Alexays/Waybar/wiki | [waybar](https://github.com/ToaaMusic/dotfiles/tree/main/config/waybar) |
 | **rofi** | App 启动器 | https://github.com/davatorium/rofi | [rofi](https://github.com/ToaaMusic/dotfiles/tree/main/config/rofi) |
 | **kitty** | 终端模拟器 | https://sw.kovidgoyal.net/kitty/ | [kitty](https://github.com/ToaaMusic/dotfiles/tree/main/config/kitty) |
 | **yazi** | Tui 文件管理器 | https://yazi-rs.github.io/ | [yazi](https://github.com/ToaaMusic/dotfiles/tree/main/config/yazi) |
-| **dunst** | 通知 | https://dunst-project.org/ | [dunst](https://github.com/ToaaMusic/dotfiles/tree/main/config/dunst) |
+| **mako** | 通知 | https://github.com/emersion/mako | [mako](https://github.com/ToaaMusic/dotfiles/tree/main/config/mako) |
 | **cava** | 音频可视化 | https://github.com/karlstav/cava | [cava](https://github.com/ToaaMusic/dotfiles/tree/main/config/cava) |
 
 ## 安装
@@ -45,7 +46,7 @@ cd dotfiles
 - `ffmpeg` ~ 媒体工具.
 
 ```bash
-sudo pacman -S kitty hyprland hyprpaper waybar fastfetch rofi dunst cava yazi
+sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper
 ```
 
 ```bash
@@ -62,31 +63,24 @@ sudo pacman -S musicfox grim slurp wl-copy mpvpaper lua ffmpeg
 
 | 快捷键              | 作用                                     |
 |--------------------|------------------------------------------|
-| `ALT + C`          | Close active window                      |
-| `ALT + M`          | Exit hyprland                            |
-| `ALT + V`          | Toggle floating mode for                 |
 | `ALT + Q`          | Open Terminal                            |
-| `ALT + 1~9`        | Switch workspace                         |
-| `ALT + SHIFT + 1~9`| Move window to target workspace          |
-| `F11`              | Toggle fullsceen                         |
-|``||
+| `ALT + C`          | Close active window                      |
+| `ALT + V`          | Toggle floating mode                     |
+| `ALT + M`          | Exit Hyprland                            |
+| `ALT + 1~0`        | Switch workspace 1~10                    |
+| `ALT + SHIFT + 1~0`| Move window to workspace 1~10            |
 
 #### 自定义
 
 | 快捷键              | 作用                                     |
 |--------------------|------------------------------------------|
-| `ALT + F`          | Open File Manager (yazi)                 |
-| `ALT + Z`          | Open musicfox                            |
-| `ALT + A`          | Open rofi                                |
-| `ALT + E`          | Open edge                                |
-| `ALT + W`          | Set a random wallpaper                   |
-| `ALT + SHIFT + W`  | Set a random Dynimic wallpaper           |
-| `ALT + R`          | Refresh display                          |
-| `ALT + H`          | Toggle bar layout                        |
-| `ALT + B`          | Generate and apply colors from fullscreen|
-| `ALT + SHIFT + B`  | ~ from a screen selection                |
-| `PrtSc`            | Grab screen to clipboard                 |
-|``||    
+| `ALT + F`          | Open File Manager (Yazi)                 |
+| `ALT + Z`          | Open Music Player (Musicfox)             |
+| `ALT + W`          | Set a random Wallpaper                   |
+| `ALT + SHIFT + W`  | Set a random Dynamic Wallpaper           |
+| `ALT + R`          | Refresh display / Waybar                 |
+| `ALT + H`          | Toggle Waybar layout                     |
+| `Print`            | Grab screen selection to clipboard       |
 
 ### 工具
 
