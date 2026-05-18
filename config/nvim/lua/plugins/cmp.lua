@@ -34,8 +34,11 @@ return {
 
 			-- (Default) Only show the documentation popup when manually triggered
 			completion = {
+				menu = {
+					auto_show = false,
+				},
 				documentation = { auto_show = false },
-				ghost_text = { enabled = true },
+				ghost_text = { enabled = true, show_without_menu = true },
 				trigger = { prefetch_on_insert = false },
 			},
 
@@ -92,7 +95,7 @@ return {
 					keymap = {
 						next = "<C-l>",
 						prev = "<C-h>",
-						accept = "<Tab>",
+						accept = "<C-y>",
 						accept_line = "<S-Tab>",
 						dismiss = "<C-e>",
 					},

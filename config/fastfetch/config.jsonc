@@ -138,19 +138,22 @@
     //   "times": 0
     // },
     {
-      "type": "os",
-      "key": "OS",
-      "keyIcon": ""
+      "type": "kernel",
+      "key": "KR",
+      "keyIcon": ""
     },
+
+    // {
+    //   "type": "os",
+    //   "key": "OS",
+    //   "keyIcon": ""
+    // },
+
     // {
     //   "type": "host",
     //   "keyIcon": "󰌢"
     // },
-    // {
-    //   "type": "kernel",
-    //   "key": "KR",
-    //   "keyIcon": ""
-    // },
+    
     // {
     //   "type": "uptime",
     //   "keyIcon": ""
