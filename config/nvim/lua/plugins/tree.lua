@@ -39,6 +39,7 @@ return {
 
       filesystem = {
         bind_to_cwd = false,
+        hijack_netrw_behavior = "open_current",
         follow_current_file = {
           enabled = true,
         },

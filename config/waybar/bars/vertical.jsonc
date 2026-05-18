@@ -10,7 +10,6 @@
   ],
   "modules-center": [
     "mpris"
-    //"clock"
   ],
   "modules-right": [
     "pulseaudio",

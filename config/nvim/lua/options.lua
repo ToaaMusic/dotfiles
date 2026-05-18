@@ -28,3 +28,9 @@ vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.wo.foldenable = true
 vim.wo.foldlevel = 99
 vim.wo.foldnestmax = 5
+
+op.foldmarker = "#region,#endregion"
+
+-- disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1

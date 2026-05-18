@@ -4,7 +4,7 @@
 
 This repository contains my personal configuration for Arch Linux and some tools written by lua script.
 
-## ✨ Components
+## Components
 
 | Component | Description | Official Doc | Repository Folder |
 |---|---|---|---|
@@ -20,7 +20,7 @@ This repository contains my personal configuration for Arch Linux and some tools
 
 
 
-## 📦 Installation
+## Installation
 To apply my configurations, clone the repository to a safe location you like, for example `~/repos`, and run `./link`. **Make sure to back up any existing configuration files before overwriting them.**
 
 ```bash

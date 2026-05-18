@@ -26,12 +26,16 @@ end
 
 -- cursor
 env("XCURSOR_SIZE", "24")
-env("HYPRCURSOR_SIZE", "24")
 env("XCURSOR_THEME", "Imouto")
+
+env("HYPRCURSOR_SIZE", "24")
 
 -- nvidia
 env("LIBVA_DRIVER_NAME", "nvidia")
 env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+
+env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+env("NVD_BACKEND", "direct")
 
 -- qt
 env("QT_QPA_PLATFORMTHEME", "qt6ct")

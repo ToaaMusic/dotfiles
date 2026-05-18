@@ -1,0 +1,5 @@
+{
+  "workspace": {
+    "library": ["$TOAAM_DOTFILES/scripts/"]
+  }
+}

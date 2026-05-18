@@ -23,15 +23,16 @@ local load_autostart = require("hyprland.autostart")
 load_binds(V)
 load_autostart(V)
 
--- Monitors 
+-- Monitors
+hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 hl.monitor({
 	output = "eDP-1",
 	mode = "1920x1080@60",
-	position = "1920x0",
+	position = "0x0",
 })
 hl.monitor({
 	output = "HDMI-A-1",
-	mode = "1920x1080@120",
+	mode = "1920x1080@165",
 	position = "0x0",
 	mirror = "eDP-1",
 })
@@ -170,6 +171,7 @@ hl.config({
 		force_default_wallpaper = -1,
 		disable_hyprland_logo = true,
 		disable_splash_rendering = true,
+    -- middle_click_paste = false,
 	},
 })
 
@@ -219,5 +221,4 @@ hl.device({
 hl.device({
 	name = "compx-2.4g-wireless-receiver-consumer-control",
 })
-
 
