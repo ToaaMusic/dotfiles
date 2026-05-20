@@ -9,6 +9,9 @@ op.cursorlineopt = "number"
 op.formatoptions:remove({ "c", "r", "o" })
 op.iskeyword:append("-")
 
+vim.opt.termguicolors = true
+vim.opt.fillchars:append({ eob = " " })
+
 -- tab
 op.tabstop = 2
 op.shiftwidth = 2

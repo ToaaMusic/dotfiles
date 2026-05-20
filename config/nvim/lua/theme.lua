@@ -1,53 +1,50 @@
-vim.opt.termguicolors = true
-vim.opt.fillchars:append({ eob = " " })
-
 local colors = require("colors.g")
 local hl = vim.api.nvim_set_hl
 local syntax = vim.tbl_extend("force", {
-  keyword = colors.accent,
-  keyword_flow = colors.accent,
-  keyword_return = colors.accent_strong,
-  string = colors.accents[2],
-  number = colors.accents[3],
-  type = colors.accents[4],
-  func = colors.accent_strong,
-  func_call = colors.accent_strong,
-  variable = colors.fg_hover,
-  constant = colors.accents[5],
-  macro = colors.accents[6],
-  builtin = colors.accents[1],
-  property = colors.fg_hover,
-  parameter = colors.fg_hover,
-  operator = colors.accent_soft,
-  punctuation = colors.fg_muted,
-  namespace = colors.accents[4],
+	keyword = colors.accent,
+	keyword_flow = colors.accent,
+	keyword_return = colors.accent_strong,
+	string = colors.accents[2],
+	number = colors.accents[3],
+	type = colors.accents[4],
+	func = colors.accent_strong,
+	func_call = colors.accent_strong,
+	variable = colors.fg_hover,
+	constant = colors.accents[5],
+	macro = colors.accents[6],
+	builtin = colors.accents[1],
+	property = colors.fg_hover,
+	parameter = colors.fg_hover,
+	operator = colors.accent_soft,
+	punctuation = colors.fg_muted,
+	namespace = colors.accents[4],
 }, colors.syntax or {})
 
 local function apply_group_map(map)
-  for group, spec in pairs(map) do
-    local value = spec
-    if type(spec) == "string" then
-      value = { fg = spec }
-    end
-    hl(0, group, value)
-  end
+	for group, spec in pairs(map) do
+		local value = spec
+		if type(spec) == "string" then
+			value = { fg = spec }
+		end
+		hl(0, group, value)
+	end
 end
 
 local bg_groups = {
-  "Normal",
-  "NormalNC",
-  "SignColumn",
-  "EndOfBuffer",
-  "MsgArea",
-  "FloatBorder",
-  "NormalFloat",
+	"Normal",
+	"NormalNC",
+	"SignColumn",
+	"EndOfBuffer",
+	"MsgArea",
+	"FloatBorder",
+	"NormalFloat",
 }
 
 local function set_bg_transparent()
-    for _, group in ipairs(bg_groups) do
-        hl(0, group, { bg = "none" })
-    end
-    hl(0, "EndOfBuffer", { fg = "NONE", bg = "NONE" })
+	for _, group in ipairs(bg_groups) do
+		hl(0, group, { bg = "none" })
+	end
+	hl(0, "EndOfBuffer", { fg = "NONE", bg = "NONE" })
 end
 
 -- run
@@ -320,3 +317,4 @@ hl(0, "MatchParen",              { bg = colors.bg_hover, bold = true })
 hl(0, "Todo",                    { bg = colors.accent_soft, fg = colors.bg, bold = true })
 
 set_bg_transparent()
+
