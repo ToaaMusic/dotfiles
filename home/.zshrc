@@ -10,7 +10,6 @@ setopt share_history
 setopt inc_append_history
 setopt append_history
 
-# 同步yazi输出的路径
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	command yazi "$@" --cwd-file="$tmp"
@@ -46,10 +45,15 @@ function dotnet() {
     fi
 }
 
-# todo tool
+# my cli tools
 function todo() {
-    local script="$TOAAM_DOTFILES/tools/todo/todo.lua"
-    lua "$script" "$@"
+  local script="$TOAAM_DOTFILES/tools/todo/todo.lua"
+  lua "$script" "$@"
+}
+
+function ro() {
+  local script="$TOAAM_DOTFILES/tools/router/router.lua"
+  lua "$script" "$@"
 }
 
 # open dotfiles project

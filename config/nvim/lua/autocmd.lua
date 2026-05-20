@@ -21,3 +21,20 @@ autocmd("BufWinEnter", {
     pcall(vim.cmd, "loadview")
   end,
 })
+
+local theme_reload = augroup("ThemeReload", { clear = true })
+autocmd("BufWritePost", {
+  group = theme_reload,
+  pattern = vim.fn.stdpath("config") .. "/lua/colors/g.lua",
+  callback = function()
+    package.loaded["colors.g"] = nil
+    local theme_file = vim.fn.stdpath("config") .. "/lua/theme.lua"
+    local ok, err = pcall(dofile, theme_file)
+    if ok then
+      vim.notify("✅ Theme reloaded!", vim.log.levels.INFO)
+      vim.cmd("redraw!")
+    else
+      vim.notify("❌ Theme reload failed: " .. tostring(err), vim.log.levels.ERROR)
+    end
+  end,
+})
