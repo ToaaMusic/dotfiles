@@ -1,6 +1,4 @@
+@import "styles/default.css";
 @import "styles/default-colors.css";
 @import "colors.g.css";
 @import "styles/horizontal.css";
-*{
-    font-family: Maple Mono NF CN;
-}
