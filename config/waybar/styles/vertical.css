@@ -111,7 +111,7 @@ tooltip label {
   color: @a1;
 }
 #clock {
-  color: #D2C3D5;
+  color: #d2c3d5;
 }
 #idle_inhibitor {
   color: rgb(221, 182, 242);
@@ -151,9 +151,9 @@ tooltip label {
   font-family: "Hack Nerd Font";
 }
 @keyframes blink-update {
-	to {
-		background-color: dodgerblue;
-	}
+  to {
+    background-color: dodgerblue;
+  }
 }
 
 @keyframes blink_red {
@@ -171,3 +171,4 @@ tooltip label {
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
+

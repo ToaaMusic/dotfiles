@@ -1,163 +1,86 @@
 {
   "layer": "bottom",
   "position": "top",
+  "name": "horizontal",
   "reload_style_on_change": true,
-  "modules-left": [
-    "hyprland/workspaces",
-    "temperature",
-    "memory",
-    "cpu"
-  ],
-  "modules-center": [
-    "mpris"
-  ],
-  "modules-right": [
-    "pulseaudio",
-    "battery"
-  ],
+  "modules-left": ["temperature", "memory", "cpu"],
+  "modules-center": ["mpris"],
+  "modules-right": ["pulseaudio", "battery"],
   //left
   "hyprland/workspaces": {
     "format": "{icon}",
     "format-icons": {
       "default": "",
-      "active": ""
+      "active": "",
     },
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1"
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
   },
   "temperature": {
     "interval": 1,
     "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
     "critical-threshold": 80,
-    "on-click" : "btop]]]]",
-    //"on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type temp",
+    "on-click": "btop",
     "tooltip": true,
-    "format": " {temperatureC}°C"
+    "format": " {temperatureC}°C",
   },
+  "memory": {
+    "interval": 1,
+    "format": "󰍛 {}%",
+    "format-alt": "󰍛 {used}/{total} GiB",
+    "states": {
+      "warning": 85,
+    },
+  },
+  "cpu": {
+    "interval": 1,
+    "format": "󰻠 {usage}%",
+    "format-alt": "󰻠 {avg_frequency} GHz",
+  },
+  //middle
   "mpris": {
     //"player": "musicfox",
     "dynamic-order": ["artist", "title"],
     "format": "{player_icon} {dynamic}",
     "format-paused": "{status_icon} {dynamic}",
     "status-icons": {
-      "paused": ""
+      "paused": "",
     },
     "player-icons": {
-      "default": ""
-    }
+      "default": "",
+    },
   },
-//   "cava": {
-// //      "cava_config": "$XDG_CONFIG_HOME/cava/config",
-//       "framerate": 60,
-//       "autosens": 1,
-//       "bars": 150,
-//       "method": "pipewire",
-//       "source": "auto",
-//       "bar_delimiter": 0,
-//       "format-icons" : ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ]
-//   },
+  "cava": {
+    "cava_config": "$HOME/.config/cava/waybar_raw.conf",
+    "input_delay": 2,
+    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    "actions": {
+      "on-click-right": "mode",
+    },
+  },
+  //right
   "pulseaudio": {
     "scroll-step": 1,
     "format": "{icon} {volume}%",
     "format-muted": "󰖁 Muted",
     "format-icons": {
-      "default": [
-        "",
-        "",
-        ""
-      ]
+      "default": ["", "", ""],
     },
     "on-click-right": "pavucontrol",
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "tooltip": false
+    "tooltip": false,
   },
   "battery": {
     "interval": 10,
     "states": {
       "warning": 20,
-      "critical": 10
+      "critical": 10,
     },
     "format": "{icon} {capacity}%",
-    "format-icons": [
-      "󰁺",
-      "󰁻",
-      "󰁼",
-      "󰁽",
-      "󰁾",
-      "󰁿",
-      "󰂀",
-      "󰂁",
-      "󰂂",
-      "󰁹"
-    ],
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
     "format-full": "",
     "format-charging": "󰂄 {capacity}%",
-    "tooltip": false
+    "tooltip": false,
   },
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "",
-      "deactivated": ""
-    },
-    "tooltip": false
-  },
-  "backlight": {
-    "device": "intel_backlight",
-    "on-scroll-up": "light -A 5",
-    "on-scroll-down": "light -U 5",
-    "format": "{icon} {percent}%",
-    "format-icons": [
-      "󰃝",
-      "󰃞",
-      "󰃟",
-      "󰃠"
-    ]
-  },
-  "clock": {
-    "format": "<span color='#bf616a'> </span>{:%a %b %d}",
-    "format-alt": "<span color='#bf616a'> </span>{:%I:%M %p}",
-    "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>"
-  },
-  "memory": {
-    "interval": 1,
-    "format": "󰍛 {}%",
-    "format-alt": "󰍛 {used}/{total} GiB",
-    // "on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type proc",
-    "states": {
-      "warning": 85
-    }
-  },
-  "cpu": {
-    "interval": 1,
-    "format": "󰻠 {usage}%",
-    "format-alt": "󰻠 {avg_frequency} GHz"
-    // "on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type cpu",
-  },
-  "mpd": {
-    "max-length": 25,
-    "format": " {title}",
-    "format-paused": " {title}",
-    "format-stopped": "",
-    "format-disconnected": "",
-    "on-click": "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm ncmpcpp ",
-    "on-scroll-up": "mpc --quiet prev",
-    "on-scroll-down": "mpc --quiet next",
-    "smooth-scrolling-threshold": 5,
-    "tooltip-format": "{title} - {artist} ({elapsedTime:%M:%S}/{totalTime:%H:%M:%S})"
-  },
-  "network": {
-    "format-disconnected": "󰯡 Disconnected",
-    "format-ethernet": "󰀂 {ifname} ({ipaddr})",
-    "format-linked": "󰖪 {essid} (No IP)",
-    "format-wifi": "󰖩 {essid}",
-    "interval": 1,
-    "on-click": "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type net",
-    "tooltip": false
-  },
-  "tray": {
-    "icon-size": 15,
-    "spacing": 5
-  }
 }

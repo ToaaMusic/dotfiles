@@ -2,53 +2,40 @@
   "layer": "bottom",
   "position": "right",
   "reload_style_on_change": true,
-  "modules-left": [
-    "hyprland/workspaces",
-    "temperature",
-    "memory",
-    "cpu"
-  ],
-  "modules-center": [
-    "mpris"
-  ],
-  "modules-right": [
-    "pulseaudio",
-    "battery"
-  ],
-  //left
+  "modules-left": ["temperature", "memory", "cpu"],
+  "modules-center": ["mpris"],
+  "modules-right": ["pulseaudio", "battery"],
+  //top
   "hyprland/workspaces": {
     "format": "{icon}",
     "format-icons": {
       "default": "",
-      "active": ""
+      "active": "",
     },
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1"
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
   },
   "temperature": {
     "interval": 1,
     "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
     "critical-threshold": 80,
-    //"on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type temp",
     "tooltip": true,
-    "format": "" // {temperatureC}°C
+    "format": "", // {temperatureC}°C
   },
   "memory": {
     "font-size": 8,
     "interval": 1,
     "format": "󰍛", // {}%
     "format-alt": "󰍛", // {used}/{total} GiB
-    // "on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type proc",
     "states": {
-      "warning": 85
-    }
+      "warning": 85,
+    },
   },
   "cpu": {
     "interval": 1,
     "format": "󰻠", // {usage}%
-    "format-alt": "󰻠" // {avg_frequency} GHz
-    // "on-click" : "wezterm --config-file ~/.config/wezterm/float.lua start --class floatwezterm btm -e --default_widget_type cpu",
+    "format-alt": "󰻠", // {avg_frequency} GHz
   },
   //center
   "mpris": {
@@ -59,50 +46,35 @@
     "format": "{player_icon}",
     "format-paused": "{status_icon}",
     "status-icons": {
-      "paused": ""
+      "paused": "",
     },
     "player-icons": {
-      "default": ""
-    }
+      "default": "",
+    },
   },
-  //right
+  //bottom
   "pulseaudio": {
     "scroll-step": 1,
     "format": "{icon}",
     "format-muted": "󰖁",
     "format-icons": {
-      "default": [
-        "",
-        "",
-        ""
-      ]
+      "default": ["", "", ""],
     },
     "on-click-right": "pavucontrol",
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "tooltip": true,
-    "tooltip-format": "{volume}%"
+    "tooltip-format": "{volume}%",
   },
   "battery": {
     "interval": 10,
     "states": {
       "warning": 20,
-      "critical": 10
+      "critical": 10,
     },
     "format": "{icon}",
-    "format-icons": [
-      "󰁺",
-      "󰁻",
-      "󰁼",
-      "󰁽",
-      "󰁾",
-      "󰁿",
-      "󰂀",
-      "󰂁",
-      "󰂂",
-      "󰁹"
-    ],
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
     "format-full": "{icon}",
     "format-charging": "󰂄 {capacity}%",
-    "tooltip": true
-  }
+    "tooltip": true,
+  },
 }
