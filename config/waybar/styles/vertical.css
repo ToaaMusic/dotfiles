@@ -92,26 +92,26 @@ tooltip label {
   color: rgb(26, 24, 38);
 }
 #mpris.playing {
-  color: @a1;
+  color: @fg-hover;
 }
 #mpris.paused {
   color: @fg;
 }
 /* colors */
 #temperature {
-  color: @a1;
+  color: @fg;
 }
 #memory {
-  color: @a2;
+  color: @fg;
 }
 #cpu {
-  color: @a3;
+  color: @fg;
 }
 #pulseaudio {
-  color: @a1;
+  color: @fg;
 }
 #clock {
-  color: #d2c3d5;
+  color: @fg;
 }
 #idle_inhibitor {
   color: rgb(221, 182, 242);

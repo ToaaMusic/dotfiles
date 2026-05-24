@@ -3,31 +3,28 @@
 * {
   bg:               #282738;
   fg:               #E5B9C6;
-
   bg-lighter:       #353446;
-
   a1:               #E5B9C6;
   a6:               #E5B9C6;
-
   background-color:   @bg;
   text-color:         @fg;
-  font: "JetBrainsMono Bold 10";
+  font: "Maple Mono NF CN Bold 12";
 }
 
 // !!! DO NOT remove this or put it before "*{}" 
-// unless you want rofi ignore the color scheme generator
+// unless you want rofi to ignore the color generator from wallpaper
 @import "~/.config/rofi/colors.g.rasi" 
 
 
 window {
   background-color: @bg;
   border-color: @a6;
-  border:       1.5px;
-  border-radius: 8px;
-  width: 666px;
+  border:       2px;
+  border-radius: 12px;
+  width: 600px;
 }
 
-// --------------- optional ---------------- //
+// --------- optional sub content ---------- //
 
 mainbox {
   children: [message,inputbar,listview];
@@ -55,8 +52,6 @@ textbox {
     blink:                       true;
     markup:                      true;
     size:                        400em;
-    font: "JetBrainsMono Bold 15";
-
 }
 error-message {
     padding:                     12px;
@@ -88,9 +83,9 @@ entry {
 
 listview {
   columns: 1;
-  lines:   6;
+  lines:   5;
   spacing: 10px;
-  //scrollbar:    true;
+  scrollbar:    false;
   padding: 12px;
   border:       0;
 }
@@ -167,39 +162,19 @@ element-text.selected.normal {
     background-color: @a1;
     border-color: @a1;
     text-color:       @bg;
-    font: "JetBrains Mono Medium";
 }
 element-text.selected.urgent {
     background-color: @a1;
     border-color: @a1;
     text-color:       @bg;
-    font: "JetBrains Mono Medium";
 }
 element-text.selected.active {
     background-color: @a1;
     border-color: @a1;
     text-color:       @bg;
-    font: "JetBrains Mono Medium";
 }
 mode-switcher {
     border:  0px;
     spacing: 0px;
     expand: true;
 }
-/* button {
-    text-color: #E5B9C6;
-    border:       0px 0px 5px ;
-    border-color: #282738;
-    border-radius:    10px 10px 0 0;
-    background-color: #282738;
-    horizontal-align: 0.5;
-}
-button selected.normal {
-    text-color: #E5B9C6;
-    margin: 0px;
-    padding: 0px;
-    border:     5px 5px 5px 5px ;
-    border-color: #282738;
-    border-radius:    10px 10px 10px 10px;
-    background-color: #353446;
-} */

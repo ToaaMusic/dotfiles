@@ -1,14 +1,12 @@
 configuration {
 
-    // Timeout from user input.
+    modes:"drun,run,filebrowser";
+
     timeout {
-        // The delay after inactivity to execute action.
-        delay: 5;
-        // The action to execute once the delay expires.
+        delay: 0;
         action: "kb-cancel";
     }
 
-    // File browser mode.
     filebrowser {
         sorting-method:    "name";
         directories-first: true;
@@ -16,5 +14,3 @@ configuration {
 }
 
 @theme "default.rasi"
-
-// About theme see https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown
