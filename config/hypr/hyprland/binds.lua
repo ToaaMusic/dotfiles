@@ -23,10 +23,10 @@ return function(V)
   hl.bind(mainMod .. " + B",   hl.dsp.exec_cmd(V.browser))
 
   -- commands (scripts)
-  hl.bind(mainMod .. " + W",           hl.dsp.exec_cmd(cmdPath .. "random-wallpaper.sh"))
+  hl.bind(mainMod .. " + W",           hl.dsp.exec_cmd(cmdPath .. "wall.sh"))
+  hl.bind(mainMod .. " + SHIFT + W",   hl.dsp.exec_cmd(cmdPath .. "wall-gui.sh"))
   hl.bind(mainMod .. " + R",           hl.dsp.exec_cmd(cmdPath .. "refresh.sh"))
   hl.bind(mainMod .. " + H",           hl.dsp.exec_cmd(cmdPath .. "toggle-waybar-layout.sh"))
-  hl.bind(mainMod .. " + SHIFT + W",   hl.dsp.exec_cmd(cmdPath .. "dywallpaper.sh"))
   hl.bind("Print",                     hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
 
   -- window management

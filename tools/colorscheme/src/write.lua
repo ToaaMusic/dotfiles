@@ -179,17 +179,25 @@ local function write_rofi(p)
 * {
     bg: %s;
     fg: %s;
+    bg-elevated: %s;
     bg-lighter: %s;
     bg-active: %s;
     border: %s;
+    fg-muted: %s;
+    fg-subtle: %s;
+    fg-hover: %s;
     accent: %s;
     accent-fg: %s;
 ]],
 		p.bg,
 		p.fg,
+    p.bg_elevated,
 		p.bg_hover,
 		p.bg_active,
 		p.bg_border,
+    p.fg_muted,
+    p.fg_subtle,
+    p.fg_hover,
 		p.accent,
 		p.accent_fg
 	))

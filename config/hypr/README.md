@@ -32,7 +32,7 @@ See [Hyprland's official documentation](https://wiki.hyprland.org/) for more.
 | `ALT + Z`                  | Open Music Player (Musicfox)             |
 | `ALT + B`                  | Open Web Browser                         |
 | `ALT + W`                  | Set a random Wallpaper                   |
-| `ALT + SHIFT + W`          | Set a random Dynamic Wallpaper           |
+| `ALT + SHIFT + W`          | Open Wallpaper gui selection             |
 | `ALT + R`                  | Refresh display / Waybar                 |
 | `ALT + H`                  | Toggle Waybar layout                     |
 | `ALT + [ / ]`              | Previous / Next Track                    |

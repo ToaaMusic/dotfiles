@@ -13,10 +13,16 @@ if ! mkdir "$LOCKDIR" 2>/dev/null; then
 fi
 trap 'rm -rf "$LOCKDIR"' EXIT
 
-# random wallpaper
+# $1 or random wallpaper
 WALLDIR="$HOME/Pictures/wallpapers/current"
-WALL=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.jpeg' \) | shuf -n 1)
 
+if [ -n "$1" ]; then
+  WALL=$1
+else
+  WALL=$(find "$WALLDIR" -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.jpeg' \) | shuf -n 1)
+fi
+
+# set
 hyprctl hyprpaper wallpaper ",$WALL"
 
 # gen color
@@ -26,7 +32,7 @@ ffmpeg -v error -i "$WALL" -f image2pipe -vcodec ppm - | lua "$GEN_LUA"
 # cache
 KV_FILE="$TOAAM_DOTFILES/.cache"
 kv="$TOAAM_DOTFILES/scripts/kv.sh"
-
 $kv $KV_FILE wallpaper $WALL
 
+# notify
 notify-send "Wallpaper Changed" "$(basename "$WALL")" -i "$WALL"
