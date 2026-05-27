@@ -84,7 +84,7 @@ hl.config({
 			enabled = true,
 			size = 6,
 			passes = 3,
-			xray = true,
+			xray = false,
 			noise = 0.13,
 			contrast = 0.8916,
 			brightness = 0.8172,

@@ -94,6 +94,7 @@ hl.window_rule({ match = { title = "^(.*)(wants to save)$" }, center = true })
 hl.window_rule({ match = { title = "^(.*)(wants to save)$" }, float = true })
 hl.window_rule({ match = { title = "^(.*)(wants to open)$" }, center = true })
 hl.window_rule({ match = { title = "^(.*)(wants to open)$" }, float = true })
+hl.window_rule({ match = { class = "^(one.alynx.showmethekey)$" }, float = true, no_blur = true, border_size = 0 })
 hl.window_rule({ match = { class = "^(org.pulseaudio.pavucontrol)$" }, float = true })
 hl.window_rule({ match = { class = "^(org.pulseaudio.pavucontrol)$" }, center = true })
 hl.window_rule({
