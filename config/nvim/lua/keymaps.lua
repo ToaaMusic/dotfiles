@@ -4,6 +4,8 @@ vim.g.maplocalleader = "\\"
 
 -- override defaults
 km.set("i", "jk", "<Esc>")
+km.set("n", "<leader>ca", vim.lsp.buf.code_action) -- "gra"
+km.set("n", "<leader>rn", vim.lsp.buf.rename) -- "grn"
 
 -- neo-tree
 km.set("n", "<leader>e", ":Neotree toggle<CR>")

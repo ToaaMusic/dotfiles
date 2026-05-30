@@ -1,5 +1,7 @@
 {
   "workspace": {
+    "runtime.version": "LuaJIT",
+    "diagnostics.globals": ["vim"],
     "library": ["/usr/share/nvim/runtime", "~/.local/share/nvim/lazy"]
   }
 }

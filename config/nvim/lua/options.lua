@@ -7,7 +7,7 @@ op.cursorline = true
 op.cursorlineopt = "number"
 
 op.formatoptions:remove({ "c", "r", "o" })
-op.iskeyword:append("-")
+op.iskeyword:append("-", "_")
 
 vim.opt.termguicolors = true
 vim.opt.fillchars:append({ eob = " " })
