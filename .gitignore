@@ -7,6 +7,9 @@ g.*
 *.g.*
 config/fcitx5/themes/auto-gen/theme.conf
 
+# ide
+.nvim/
+
 # unready
 config/fcitx5/conf/
 config/fcitx5/config

@@ -7,7 +7,7 @@
 ---@type vim.lsp.Config
 return {
 	cmd = function(dispatchers, config)
-		local cmd = vim.fn.expand("~/.dotnet/tools/csharp-ls")
+		local cmd = "csharp-ls"
 		return vim.lsp.rpc.start({ cmd }, dispatchers, {
 			-- csharp-ls attempt to locate sln, slnx or csproj files from cwd, so set cwd to root directory.
 			-- If cmd_cwd is provided, use it instead.

@@ -148,9 +148,9 @@ return {
 		---@param command table{ title: string, command: string, arguments: any[] }
 		vim.lsp.commands["rust-analyzer.runSingle"] = function(command)
 			local r = command.arguments[1]
-			local cmd = { "cargo", unpack(r.args.cargoArgs) }
+			local cmd = { "cargo", table.unpack(r.args.cargoArgs) }
 			if r.args.executableArgs and #r.args.executableArgs > 0 then
-				vim.list_extend(cmd, { "--", unpack(r.args.executableArgs) })
+				vim.list_extend(cmd, { "--", table.unpack(r.args.executableArgs) })
 			end
 
 			local proc = vim.system(cmd, { cwd = r.args.cwd })
