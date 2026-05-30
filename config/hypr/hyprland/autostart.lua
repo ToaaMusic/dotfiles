@@ -1,12 +1,13 @@
 -- AUTOSTART
 -- See https://wiki.hypr.land/Configuring/Basics/Autostart/
 
-return function(V)
-	hl.on("hyprland.start", function()
-		-- hl.exec_cmd("waybar")
-		hl.exec_cmd("fcitx5 --replace -d")
-		hl.exec_cmd(V.browser)
-		hl.exec_cmd("$TOAAM_DOTFILES/scripts/start-hyprpaper.sh")
-    hl.exec_cmd("hyprctl setcursor Imouto 28")
-	end)
-end
+local v = require("vars")
+local run = hl.exec_cmd
+
+hl.on("hyprland.start", function()
+	-- run("waybar")
+	run("fcitx5 --replace -d")
+	run(v.browser)
+	run("$TOAAM_DOTFILES/scripts/start-hyprpaper.sh")
+	run("hyprctl setcursor Imouto 28")
+end)

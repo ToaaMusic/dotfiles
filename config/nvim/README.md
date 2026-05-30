@@ -6,11 +6,65 @@
 
 ## 频率最高
 
-- 
+### go to...
+
+- G: line N (default: the last one)
+- gg: line N (default: 1)
+
+- gm: middle of the screen line
+- gM: middle of the line
+- |: column N of the line (default 1)
+
+- gd: local declaration of identifier
+- gD: global declaration of identifier
+
+- w: N words forward
+- b: N words backward
+- e: forward to the end of the Nth word
+- ge: backward to the end of the Nth word
+
+- ): N sentences forward
+- (: N sentences backward
+- }: N paragraphs forward
+- {: N paragraphs backward
+- ]]: N sections forward, at start of section
+- [[: N sections backward, at start of section
+- [#: N times back to unclosed "#if" or "#else"
+- ]#: N times forward to unclosed "#else" or "#endif"
+
+### insert
+
+- i: insert
+- a: append
+- A: append at the end of the line
+- o: new line below then insert
+- O: new line above then insert
+
+### edit
+
+- x: delete N char
+- d: delete
+- dd: delete N lines
+- r: replace
+- c: change
+
+- y: yank (into a register, cmd :reg to show)
+- yy: yank N lines
+- p: put
+
+- u: undo
+- ctrl-r: redo
+
+### search
+
+- /: (format: /{pattern}[/[offset]]<CR>) search forward for the Nth occurrence of {pattern}
+- ?: (format: ?{pattern}[?[offset]]<CR>) search backward for the Nth occurrence of {pattern}
+- n: repeat last search
+- N: repeat last search, in opposite direction
 
 ## 自定义
 
-- jk: INSERT 模式下对应 <Esc>
+- jk: same as i_<Esc>
 
 ## 原生
 

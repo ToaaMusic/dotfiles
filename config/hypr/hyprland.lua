@@ -3,39 +3,17 @@
 -- https://wiki.hypr.land
 
 -- require
-require("hyprland.env")
-require("hyprland.rules")
--- require("hyprland.plugins")
-local V = require("hyprland.vars")
+local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
+package.path = script_dir .. "hyprland/?.lua;" .. package.path
 
-local colors_file = os.getenv("HOME") .. "/.config/hypr/hyprland/colors.g.lua"
-local colors_file_check = io.open(colors_file)
-if colors_file_check then
-	colors_file_check:close()
-	local colors = dofile(colors_file)
-	V.active_border_color = colors.active_border_color or V.active_border_color
-	V.inactive_border_color = colors.inactive_border_color or V.inactive_border_color
-end
-
-local load_binds = require("hyprland.binds")
-local load_autostart = require("hyprland.autostart")
-
-load_binds(V)
-load_autostart(V)
-
--- Monitors
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
-hl.monitor({
-	output = "eDP-1",
-	mode = "1920x1080@60",
-	position = "0x0",
-})
-hl.monitor({
-	output = "HDMI-A-1",
-	mode = "1920x1080@165",
-	position = "0x0",
-	mirror = "eDP-1",
-})
+require("env")
+require("rules")
+local v = require("vars")
+local c = require("colors")
+require("binds")
+require("autostart")
+require("monitors")
+require("devices")
 
 -- config
 hl.config({
@@ -46,8 +24,8 @@ hl.config({
 		border_size = 2,
 
 		col = {
-			active_border = { colors = { V.active_border_color, V.active_border_color }, angle = 45 },
-			inactive_border = V.inactive_border_color,
+			active_border = { colors = { c.active_border_color, c.active_border_color }, angle = 45 },
+			inactive_border = v.inactive_border_color,
 		},
 
 		resize_on_border = false,
@@ -110,35 +88,24 @@ hl.curve("almostLinear", { type = "bezier", points = { { 0.5, 0.5 }, { 0.75, 1 }
 hl.curve("quick", { type = "bezier", points = { { 0.15, 0 }, { 0.1, 1 } } })
 
 -- Animations
-hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
-hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
-hl.animation({
-	leaf = "windows",
-	enabled = true,
-	speed = 4.79,
-	bezier = "easeOutQuint",
-	style = "slidefadevert 87%",
-})
-hl.animation({ leaf = "windowsIn", enabled = true, speed = 4.1, bezier = "easeOutQuint", style = "popin 87%" })
-hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
-hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeOut", enabled = true, speed = 1.46, bezier = "almostLinear" })
-hl.animation({ leaf = "fade", enabled = true, speed = 3.03, bezier = "quick" })
-hl.animation({ leaf = "layers", enabled = true, speed = 3.81, bezier = "easeOutQuint" })
-hl.animation({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQuint", style = "fade" })
-hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
-hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
-hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
-hl.animation({
-	leaf = "workspaces",
-	enabled = true,
-	speed = 2,
-	bezier = "easeInOutCubic",
-	style = "slidefadevert top 100%",
-})
-hl.animation({ leaf = "workspacesIn", enabled = true, speed = 2, bezier = "easeInOutCubic", style = "slide" })
-hl.animation({ leaf = "workspacesOut", enabled = true, speed = 2, bezier = "easeInOutCubic", style = "slide" })
-hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" })
+local anim = hl.animation
+anim({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
+anim({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
+anim({ leaf = "windows", enabled = true, speed = 4.79, bezier = "easeOutQuint", style = "slidefadevert 87%" })
+anim({ leaf = "windowsIn", enabled = true, speed = 4.1, bezier = "easeOutQuint", style = "popin 87%" })
+anim({ leaf = "windowsOut", enabled = true, speed = 1.49, bezier = "linear", style = "popin 87%" })
+anim({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
+anim({ leaf = "fadeOut", enabled = true, speed = 1.46, bezier = "almostLinear" })
+anim({ leaf = "fade", enabled = true, speed = 3.03, bezier = "quick" })
+anim({ leaf = "layers", enabled = true, speed = 3.81, bezier = "easeOutQuint" })
+anim({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQuint", style = "fade" })
+anim({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
+anim({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
+anim({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
+anim({ leaf = "workspaces", enabled = true, speed = 2, bezier = "easeInOutCubic", style = "slidefadevert top 100%" })
+anim({ leaf = "workspacesIn", enabled = true, speed = 2, bezier = "easeInOutCubic", style = "slide" })
+anim({ leaf = "workspacesOut", enabled = true, speed = 2, bezier = "easeInOutCubic", style = "slide" })
+anim({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" })
 
 -- Layouts
 -- https://wiki.hypr.land/Configuring/Layouts/
@@ -171,7 +138,7 @@ hl.config({
 		force_default_wallpaper = -1,
 		disable_hyprland_logo = true,
 		disable_splash_rendering = true,
-    -- middle_click_paste = false,
+		-- middle_click_paste = false,
 	},
 })
 
@@ -200,25 +167,3 @@ hl.gesture({
 	direction = "horizontal",
 	action = "workspace",
 })
-
--- Devices
--- https://wiki.hypr.land/Configuring/Advanced-and-Cool/Devices/
-hl.device({
-	name = "epic-mouse-v1",
-	sensitivity = -0.5,
-})
-
-hl.device({
-	name = "compx-2.4g-wireless-receiver",
-	repeat_delay = 250,
-	repeat_rate = 40,
-})
-
-hl.device({
-	name = "compx-2.4g-wireless-receiver-keyboard",
-})
-
-hl.device({
-	name = "compx-2.4g-wireless-receiver-consumer-control",
-})
-
