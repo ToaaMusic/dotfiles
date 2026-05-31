@@ -22,17 +22,22 @@ return {
 	-- 	},
 	-- },
 
-	-- 注意：这里设置的是全局引用
-	-- 非全局不推荐在这里写而是使用 .luarc.json
-	-- 但是如果项目存在 .luarc.json, 这里将不会被加载
+	settings = {
+		Lua = {
 
-	-- settings = {
-	-- 	Lua = {
-	-- 		workspace = {
-	-- 			library = {
-	-- 				vim.env.VIMRUNTIME,
-	-- 			},
-	-- 		},
-	-- 	},
-	-- },
+			-- format = {
+			-- 	enable = true,
+			-- 	alignContinuousAssignStatement = true,
+			-- 	alignContinuousRectTableField = true,
+			-- },
+
+			-- workspace = {
+			-- !!：This is global for all nvim instances
+			-- if you are not always in nvim dev folder, use .luarc.json instead
+			-- 			library = {
+			-- 				vim.env.VIMRUNTIME,
+			-- 			},
+			-- 		},
+		},
+	},
 }

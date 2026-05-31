@@ -11,6 +11,8 @@ return {
 	-- 		-- log_level = 'debug',
 	-- 	},
 	-- },
+
+	-- https://github.com/folke/snacks.nvim
 	{
 		"folke/snacks.nvim",
 		priority = 1000,
@@ -24,7 +26,30 @@ return {
 			input = { enabled = true },
 			picker = { enabled = true },
 			scroll = { enabled = true },
-			indent = { enabled = true },
+			indent = {
+				enabled = true,
+				only_scope = false,
+				only_current = true,
+				---@param buf number
+				---@param win number
+				---@diagnostic disable-next-line: unused-local
+				filter = function(buf, win)
+					return vim.g.snacks_indent ~= false
+						and vim.b[buf].snacks_indent ~= false
+						and vim.bo[buf].buftype == ""
+						and vim.bo[buf].filetype ~= "markdown"
+				end,
+				chunk = {
+					enabled = true,
+					char = {
+						corner_top = "┌",
+						corner_bottom = "└",
+						horizontal = "─",
+						vertical = "│",
+						arrow = ">",
+					},
+				},
+			},
 			dashboard = { enabled = true },
 		},
 	},
