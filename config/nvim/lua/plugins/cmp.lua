@@ -6,6 +6,7 @@ return {
 			"saghen/blink.lib",
 			-- optional: provides snippets for the snippet source
 			"rafamadriz/friendly-snippets",
+			{ "nvim-mini/mini.icons", version = false },
 		},
 		build = function()
 			-- build the fuzzy matcher, wait up to 60 seconds
@@ -16,42 +17,82 @@ return {
 		---@module 'blink.cmp'
 		---@type blink.cmp.Config
 		opts = {
-			-- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-			-- 'super-tab' for mappings similar to vscode (tab to accept)
-			-- 'enter' for enter to accept
-			-- 'none' for no mappings
-			--
-			-- All presets have the following mappings:
-			-- C-space: Open menu or open docs if already open
-			-- C-n/C-p or Up/Down: Select next/previous item
-			-- C-e: Hide menu
-			-- C-k: Toggle signature help (if signature.enabled = true)
-			--
-			-- See :h blink-cmp-config-keymap for defining your own keymap
-			keymap = {
-				preset = "default",
+
+			-- press K to see details
+			keymap = { preset = "default" },
+
+			signature = {
+				trigger = {
+					show_on_accept = true,
+					show_on_accept_on_trigger_character = true,
+				},
+				window = { show_documentation = true, border = "rounded" },
+				enabled = true,
 			},
 
 			-- (Default) Only show the documentation popup when manually triggered
 			completion = {
+				accept = {},
+				list = {
+					selection = {
+						preselect = true,
+						auto_insert = false,
+					},
+				},
 				menu = {
 					auto_show = false,
+					border = "rounded",
+					draw = {
+						components = {
+							kind_icon = {
+								text = function(ctx)
+									local kind_icon, _, _ = require("mini.icons").get("lsp", ctx.kind)
+									return kind_icon
+								end,
+								-- (optional) use highlights from mini.icons
+								highlight = function(ctx)
+									local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+									return hl
+								end,
+							},
+							kind = {
+								-- (optional) use highlights from mini.icons
+								highlight = function(ctx)
+									local _, hl, _ = require("mini.icons").get("lsp", ctx.kind)
+									return hl
+								end,
+							},
+						},
+					},
 				},
-				documentation = { auto_show = false },
-				ghost_text = { enabled = true, show_without_menu = true },
+				documentation = {
+					auto_show = true,
+					window = {
+						border = "rounded",
+					},
+				},
+				ghost_text = {
+					enabled = true,
+					show_without_menu = true,
+				},
 				trigger = { prefetch_on_insert = false },
 			},
 
 			-- (Default) list of enabled providers defined so that you can extend it
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
-				default = { "lsp", "path", "snippets", "buffer" },
+				default = {
+					"lsp",
+					"path",
+					"snippets",
+					-- "buffer",
+				},
 			},
 
 			-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
 			-- You may use a lua implementation instead by using `implementation = "lua"`
 			-- See the fuzzy documentation for more information
-			fuzzy = { implementation = "lua" },
+			fuzzy = { implementation = "prefer_rust_with_warning" },
 		},
 	},
 
@@ -64,18 +105,11 @@ return {
 		},
 		config = function()
 			require("minuet").setup({
-
-				cmp = {
-					enable_auto_complete = false,
-				},
-				blink = {
-					enable_auto_complete = false,
-				},
-
+				cmp = { enable_auto_complete = false },
+				blink = { enable_auto_complete = false },
 				request_timeout = 3,
 				throttle = 1000,
 				debounce = 400,
-
 				provider = "openai_fim_compatible",
 				provider_options = {
 					openai_fim_compatible = {
@@ -87,9 +121,6 @@ return {
 						},
 					},
 				},
-
-				-- 行内幽灵提示
-				--
 				virtualtext = {
 					auto_trigger_ft = {},
 					keymap = {

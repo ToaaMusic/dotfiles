@@ -1,6 +1,5 @@
 -- https://github.com/numtostr/comment.nvim
 return {
-    'numToStr/Comment.nvim',
-    opts = {
-    }
+	"numToStr/Comment.nvim",
+	opts = {},
 }
