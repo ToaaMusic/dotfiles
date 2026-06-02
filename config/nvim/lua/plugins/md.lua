@@ -40,7 +40,7 @@ return {
       -- left_pad = 2,
       -- right_pad = 2,
       conceal_delimiters = false,
-			language = false,
+			language = true,
 		},
 
 		-- " - " list
