@@ -101,5 +101,5 @@ bind(
 	hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
 	{ locked = true, repeating = true }
 )
-bind(mainMod .. " + Return", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+bind(mainMod .. " + SHIFT + Return", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd("pavucontrol"))
