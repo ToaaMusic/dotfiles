@@ -53,6 +53,43 @@ return {
 			dashboard = { enabled = true },
 		},
 	},
+  -- https://github.com/Wansmer/symbol-usage.nvim
+	{
+		"Wansmer/symbol-usage.nvim",
+		event = "LspAttach",
+
+		---@type UserOpts
+		opts = {
+			vt_position = "end_of_line",
+			filetypes = {},
+			log = {},
+			kinds = {
+				vim.lsp.protocol.SymbolKind.Method,
+				vim.lsp.protocol.SymbolKind.Class,
+				vim.lsp.protocol.SymbolKind.Interface,
+			},
+			references = { enabled = true },
+			implementation = { enabled = true },
+			definition = { enabled = false },
+			text_format = function(symbol)
+				local res = {}
+
+				if symbol.references then
+					table.insert(res, symbol.references .. " ref")
+				end
+
+				if symbol.implementation then
+					table.insert(res, symbol.implementation .. " impl")
+				end
+
+				return table.concat(res, " | ")
+			end,
+		},
+		-- config = function()
+		-- 	require("symbol-usage").setup({ vt_position = "end_of_line" })
+		-- end,
+	},
+	-- https://github.com/GustavEikaas/easy-dotnet.nvim
 	{
 		"GustavEikaas/easy-dotnet.nvim",
 		-- 'nvim-telescope/telescope.nvim' or 'ibhagwan/fzf-lua' or 'folke/snacks.nvim'
@@ -78,6 +115,7 @@ return {
 				projx_lsp = {
 					enabled = true,
 				},
+				---@type easy-dotnet.LspOpts
 				lsp = {
 					enabled = true, -- Enable builtin roslyn lsp
 					set_fold_expr = false,
@@ -95,7 +133,14 @@ return {
 							request_timeout = 5000,
 						},
 					},
-					config = {},
+					config = {
+						_configs = {},
+						settings = {
+							["csharp|code_lens"] = {
+								dotnet_enable_references_code_lens = false,
+							},
+						},
+					},
 				},
 				debugger = {
 					-- Path to custom coreclr DAP adapter
