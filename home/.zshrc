@@ -80,3 +80,33 @@ alias oc=opencode
 alias sd=shutdown
 alias dn=dotnet
 alias ectl=/home/ToaaM/repos/ebrain-ai/.build/ctl/EbrainEngine.Ctl
+
+# prefix
+_CURRENT_PREFIX=""
+pre() {
+    if [[ $# -gt 0 ]]; then
+        _CURRENT_PREFIX="$*"
+        [[ "$_CURRENT_PREFIX" != *" " ]] && _CURRENT_PREFIX+=" "
+        
+        function accept-line() {
+            # 检查是否是要排除的命令（pre 本身）
+            local first_word="${BUFFER%% *}"
+            if [[ -n "$_CURRENT_PREFIX" && -n "$BUFFER" && "$first_word" != "pre" ]]; then
+                BUFFER="${_CURRENT_PREFIX}${BUFFER}"
+            fi
+            zle .accept-line
+        }
+        zle -N accept-line
+        echo "✓ 前缀已设置: '$_CURRENT_PREFIX'"
+        
+    elif [[ -n "$_CURRENT_PREFIX" ]]; then
+        unset _CURRENT_PREFIX
+        function accept-line() { zle .accept-line; }
+        zle -N accept-line
+        echo "✓ 前缀已取消"
+        
+    else
+        echo "错误: 没有设置任何前缀" >&2
+        return 1
+    fi
+}
