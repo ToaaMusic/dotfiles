@@ -10,6 +10,7 @@ bind(mainMod .. " + T", hl.dsp.exec_cmd("notify-send $TOAAM_DOTFILES"))
 
 -- basic
 bind(mainMod .. " + Q", hl.dsp.exec_cmd(v.terminal))
+bind(mainMod .. " + SHIFT + Q", hl.dsp.exec_cmd("kitten quick-access-terminal"))
 bind(mainMod .. " + C", hl.dsp.window.close())
 bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 bind(mainMod .. " + M", hl.dsp.exec_cmd("hyprctl dispatch exit"))
