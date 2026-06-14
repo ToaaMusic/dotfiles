@@ -53,42 +53,39 @@ return {
 			dashboard = { enabled = true },
 		},
 	},
-  -- https://github.com/Wansmer/symbol-usage.nvim
-	{
-		"Wansmer/symbol-usage.nvim",
-		event = "LspAttach",
-
-		---@type UserOpts
-		opts = {
-			vt_position = "end_of_line",
-			filetypes = {},
-			log = {},
-			kinds = {
-				vim.lsp.protocol.SymbolKind.Method,
-				vim.lsp.protocol.SymbolKind.Class,
-				vim.lsp.protocol.SymbolKind.Interface,
-			},
-			references = { enabled = true },
-			implementation = { enabled = true },
-			definition = { enabled = false },
-			text_format = function(symbol)
-				local res = {}
-
-				if symbol.references then
-					table.insert(res, symbol.references .. " ref")
-				end
-
-				if symbol.implementation then
-					table.insert(res, symbol.implementation .. " impl")
-				end
-
-				return table.concat(res, " | ")
-			end,
-		},
-		-- config = function()
-		-- 	require("symbol-usage").setup({ vt_position = "end_of_line" })
-		-- end,
-	},
+	-- https://github.com/Wansmer/symbol-usage.nvim
+	-- {
+	-- 	"Wansmer/symbol-usage.nvim",
+	-- 	event = "LspAttach",
+	--
+	-- 	---@type UserOpts
+	-- 	opts = {
+	-- 		vt_position = "end_of_line",
+	-- 		filetypes = {},
+	-- 		log = {},
+	-- 		kinds = {
+	-- 			vim.lsp.protocol.SymbolKind.Method,
+	-- 			vim.lsp.protocol.SymbolKind.Class,
+	-- 			vim.lsp.protocol.SymbolKind.Interface,
+	-- 		},
+	-- 		references = { enabled = true },
+	-- 		implementation = { enabled = true },
+	-- 		definition = { enabled = false },
+	-- 		text_format = function(symbol)
+	-- 			local res = {}
+	--
+	-- 			if symbol.references then
+	-- 				table.insert(res, symbol.references .. " ref")
+	-- 			end
+	--
+	-- 			if symbol.implementation then
+	-- 				table.insert(res, symbol.implementation .. " impl")
+	-- 			end
+	--
+	-- 			return table.concat(res, " | ")
+	-- 		end,
+	-- 	},
+	-- },
 	-- https://github.com/GustavEikaas/easy-dotnet.nvim
 	{
 		"GustavEikaas/easy-dotnet.nvim",
@@ -118,11 +115,15 @@ return {
 				---@type easy-dotnet.LspOpts
 				lsp = {
 					enabled = true, -- Enable builtin roslyn lsp
-					set_fold_expr = false,
-					preload_roslyn = true, -- Start loading roslyn before any buffer is opened
+					set_fold_expr = true, -- enable fold
+					preload_roslyn = false, -- Start loading roslyn before any buffer is opened
 					roslynator_enabled = true, -- Automatically enable roslynator analyzer
 					easy_dotnet_analyzer_enabled = true, -- Enable roslyn analyzer from easy-dotnet-server
-					auto_refresh_codelens = true,
+					easy_dotnet_extension_enabled = true, -- Needs to be true for enhanced_rename and create_type_from_usage
+					enhanced_rename = false, -- auto rename file when renaming class
+					create_type_from_usage = true, -- code action for creating class from unresolved symbol in a separate file
+					restart_roslyn_on_branch_change = true, -- Restart Roslyn when Git HEAD changes
+					auto_refresh_codelens = false,
 					suggest_updates = true, -- Periodically suggest roslyn-language-server updates
 					analyzer_assemblies = {}, -- Any additional roslyn analyzers you might use like SonarAnalyzer.CSharp
 					razor = {
@@ -137,15 +138,20 @@ return {
 						_configs = {},
 						settings = {
 							["csharp|code_lens"] = {
-								dotnet_enable_references_code_lens = false,
+								dotnet_enable_references_code_lens = true,
 							},
 						},
 					},
 				},
 				debugger = {
 					-- Path to custom coreclr DAP adapter
-					-- easy-dotnet-server falls back to its own netcoredbg binary if bin_path is nil
+					-- When set, this fully overrides `engine`; easy-dotnet-server uses this binary as-is.
+					-- When nil, easy-dotnet-server falls back to its own bundled debugger selected by `engine`.
 					bin_path = nil,
+					-- Which bundled debugger to use when `bin_path` is nil.
+					--   "netcoredbg" (default) — Samsung netcoredbg
+					--   "dncdbg"               — viewizard/dncdbg (a fork of netcoredbg with a richer set of features)
+					engine = "netcoredbg",
 					console = "integratedTerminal", -- Controls where the target app runs: "integratedTerminal" (Neovim buffer) or "externalTerminal" (OS window)
 					apply_value_converters = true,
 					auto_register_dap = true,
@@ -186,7 +192,7 @@ return {
 						peek_stack_trace_from_buffer = { lhs = "<leader>p", desc = "peek stack trace from buffer" },
 						debug_test_from_buffer = { lhs = "<leader>d", desc = "run test from buffer" },
 						debug_test = { lhs = "<leader>d", desc = "debug test" },
-						go_to_file = { lhs = "g", desc = "go to file" },
+						go_to_file = { lhs = "<leader>g", desc = "go to file" },
 						run_all = { lhs = "<leader>R", desc = "run all tests" },
 						run = { lhs = "<leader>r", desc = "run test" },
 						peek_stacktrace = { lhs = "<leader>p", desc = "peek stacktrace of failed test" },
@@ -215,6 +221,7 @@ return {
 					},
 				},
 				server = {
+					use_visual_studio = false, -- Set true for .NET Framework support on Windows
 					---@type nil | "Off" | "Critical" | "Error" | "Warning" | "Information" | "Verbose" | "All"
 					log_level = nil,
 				},
@@ -228,7 +235,9 @@ return {
 					--Set this to false if you have configured lualine to avoid double logging
 					handler = function(start_event)
 						local spinner = require("easy-dotnet.ui-modules.spinner").new()
-						spinner:start_spinner(start_event.job.name)
+						spinner:start_spinner(function()
+							return start_event.job.name
+						end)
 						---@param finished_event JobEvent
 						return function(finished_event)
 							spinner:stop_spinner(finished_event.result.msg, finished_event.result.level)
@@ -256,6 +265,8 @@ return {
 			vim.keymap.set("n", "<C-p>", function()
 				dotnet.run_project()
 			end)
+
+			vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run, { desc = "Run CodeLens" })
 		end,
 	},
 }
