@@ -5,6 +5,7 @@ vim.lsp.enable({
 	"clangd",
 	"ts_ls",
 	"vue",
+  "glsl"
 })
 
 ---@type vim.diagnostic.Opts
