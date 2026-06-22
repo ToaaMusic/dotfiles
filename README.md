@@ -20,30 +20,38 @@ This repository contains my personal configuration for Arch Linux and some tools
 
 ## Installation
 
-To apply my configurations, clone the repository to a safe location you like, for example `~/repos`, and run `./link`. **Make sure to back up any existing configuration files before overwriting them.**
+To apply my configurations, clone the repository to a safe location you like, for example `~/repos`, and run `./link` ("select" param is recommended).
+
+> [!IMPORTANT]
+> Make sure to back up any existing configuration files before overwriting them. ./link will also check and ask for overwriting or not.
 
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
 cd dotfiles
-./link
+./link select
 ```
 
-## About [link](./link)
+### About [link](./link)
 
-**Before running `./link`, please check out the content of it.**
+**Before running `./link`, please check out the content of it and run `./link -h` for help.**
 
 Simply, it is a script that creates symlinks from the subconfigs in my dotfiles repo to your appropriate configuration directories (`$HOME/*` and `$HOME/.config/*`).
 
 Like this:
 
 ```bash
-~/.config              ~/repos/dotfiles/config
-├── hypr   --------->  ├── hypr
-├── waybar --------->  ├── waybar
-├── rofi   --------->  ├── rofi
-├── kitty  --------->  ├── kitty
-└── ...                │   └── ...
-                       └── ...
+~/                            ~/repos/dotfiles/
+├── .config/                  ├── config/
+│   ├── hypr    --------->    │   ├── hypr
+│   ├── waybar  --------->    │   ├── waybar
+│   ├── rofi    --------->    │   ├── rofi
+│   ├── kitty   --------->    │   ├── kitty
+│   └── ...     --------->    │   └── ...
+│                             │
+│                             ├── home/
+├── .zshrc      --------->    │   ├── .zshrc
+├── .zshenv     --------->    │   ├── .zshenv
+└── ...                       └── ...
 ```
 
 > [!NOTE]
@@ -51,13 +59,13 @@ Like this:
 
 ## Uninstallation
 
-Just remove this repo you cloned and override those links with your own configs.
+Just remove this repo you cloned and overwrite those linked configs with your own.
 
 ## Dependencies
 
 It's up to you.
 
-After installing the key components, if you want the full experience or just lazy to customize everything, you can simply install them all.
+After installing the key components to apply, if you want the full experience or just lazy to customize everything, you can simply install the deps all.
 
 ```bash
 sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper
