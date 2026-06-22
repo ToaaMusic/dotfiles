@@ -1,111 +1,129 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOTFILES_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_TARGET_DIR="$DOTFILES_DIR/config"
-HOME_TARGET_DIR="$DOTFILES_DIR/home"
-CONFIG_DIR="$HOME/.config"
+readonly dotfiles_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly dotfiles_config_dir="$dotfiles_dir/config"
+readonly dotfiles_home_dir="$dotfiles_dir/home"
+readonly dot_config_dir="$HOME/.config"
+readonly desktop_entry_dir="$HOME/.local/share/applications"
 
-mkdir -p "$CONFIG_DIR"
+mkdir -p "$dot_config_dir" "$desktop_entry_dir"
 
-for dir in "$CONFIG_TARGET_DIR"/*/; do
-  name="$(basename "$dir")"
-  target="$CONFIG_DIR/$name"
+# get the name of the parent directory
+# params:
+#   $1 - path
+parentname() {
+  local path="$1"
+  local clean_path="${path%/}" # trim "/"
+  local parent_path=$(dirname "$clean_path")
+  basename "$parent_path"
+}
 
-  if [[ -L "$target" ]]; then
-    # Existing symlink
-    read -rp "$name already exists as a symlink. Override? [y/N] " answer
-    case "$answer" in
-      [Yy]*)
-        rm -f "$target"
-        ;;
-      *)
-        echo "Skipping $name"
-        continue
-        ;;
-    esac
-  elif [[ -d "$target" ]]; then
-    # Existing directory
-    if [[ "$(ls -A "$target")" ]]; then
-      read -rp "$name already exists and is a non-empty directory. Override? [y/N] " answer
-      case "$answer" in
-        [Yy]*)
-          rm -rf "$target"
-          ;;
-        *)
-          echo "Skipping $name"
-          continue
-          ;;
-      esac
+# list all component paths
+# globals:
+#   dotfiles_config_dir - dotfiles config directory
+#   dotfiles_home_dir   - dotfiles home directory
+echo_path_list() {
+  for dir in "$dotfiles_config_dir"/*; do
+    echo "$dir"
+  done
+  for file in "$dotfiles_home_dir"/.*; do
+    echo "$file"
+  done
+}
+
+# check path type
+# params:
+#   $1 - path to check
+# returns:
+#   echo type: "symlink"|"file"|"non-empty directory"|"empty directory"|""
+echo_path_type() {
+  local path="$1"
+  if [[ -L "$path" ]]; then
+    echo "symlink"
+  elif [[ -f "$path" ]]; then
+    echo "file"
+  elif [[ -d "$path" ]]; then
+    if [[ "$(ls -A "$path" 2>/dev/null)" ]]; then
+      echo "non-empty directory"
     else
-      # Empty directory
-      rm -rf "$target"
+      echo "empty directory"
     fi
-  elif [[ -e "$target" ]]; then
-    # Existing file
-    read -rp "$name already exists as a file. Override? [y/N] " answer
-    case "$answer" in
-      [Yy]*)
-        rm -f "$target"
-        ;;
-      *)
-        echo "Skipping $name"
-        continue
-        ;;
-    esac
+  else
+    echo ""
   fi
+}
 
-  ln -s "$dir" "$target"
-  echo "Linked $name"
-done
-
-for file in "$HOME_TARGET_DIR"/.*; do
-  name="$(basename "$file")"
-
-  # 跳过 . 和 ..
-  [[ "$name" == "." || "$name" == ".." ]] && continue
-
-  target="$HOME/$name"
-
-  if [[ -L "$target" ]]; then
-    read -rp "$name already exists as a symlink. Override? [y/N] " answer
-    [[ "$answer" =~ ^[Yy] ]] || { echo "Skipping $name"; continue; }
-    rm -f "$target"
-
-  elif [[ -e "$target" ]]; then
-    read -rp "$name already exists. Override? [y/N] " answer
-    [[ "$answer" =~ ^[Yy] ]] || { echo "Skipping $name"; continue; }
-    rm -rf "$target"
+# ask for removing existing path
+# params:
+#   $1 - path to remove
+#   $2 - force remove or not
+# returns:
+#   0  - removed successfully
+#   1  - skipped or failed
+ask_rm() {
+  local path="$1"
+  local force="${2:-false}"
+  local path_type="$(echo_path_type "$path")"
+  local name="$(basename "$path")"
+  if [[ -z "$path_type" ]]; then
+    return 0
   fi
-
-  ln -s "$file" "$target"
-  echo "Linked home/$name"
-done
-
-fcitx_theme_source="$HOME/.local/share/fcitx5/themes/auto-gen"
-fcitx_theme_target="$HOME/.config/fcitx5/themes/auto-gen"
-
-if [[ -e "$fcitx_theme_source" ]]; then
-  if [[ -L "$fcitx_theme_target" ]]; then
-    read -rp "fcitx5 auto-gen theme already exists as a symlink. Override? [y/N] " answer
-    [[ "$answer" =~ ^[Yy] ]] && rm -f "$fcitx_theme_target" || echo "Skipping fcitx5 auto-gen theme"
-  elif [[ -e "$fcitx_theme_target" ]]; then
-    read -rp "fcitx5 auto-gen theme already exists. Override? [y/N] " answer
-    [[ "$answer" =~ ^[Yy] ]] && rm -rf "$fcitx_theme_target" || echo "Skipping fcitx5 auto-gen theme"
+  if [[ "$force" == "true" ]] || [[ $path_type == "empty directory" ]]; then
+    if rm -rf "$path" 2>/dev/null; then
+      echo "✓ Removed existing $path_type: $name"
+      return 0
+    else
+      return 1
+    fi
   fi
+  read -rp "$name already exists as a $path_type. Override? [y/N] " answer
+  case "$answer" in
+  [Yy]*)
+    if rm -rf "$path" 2>/dev/null; then
+      echo "✓ Removed existing $path_type: $name"
+      return 0
+    else
+      echo "✗ Failed to remove $name (permission denied?), skipping" >&2
+      return 1
+    fi
+    ;;
+  *)
+    echo "→ Skipping $name"
+    return 1
+    ;;
+  esac
+}
 
-  if [[ ! -e "$fcitx_theme_target" ]]; then
-    ln -s "$fcitx_theme_source" "$fcitx_theme_target"
-    echo "Linked fcitx5 auto-gen theme"
+# link a single source path to its target
+# params:
+#   $1 - source path (must be under config/ or home/)
+# globals:
+#   dot_config_dir - $HOME/.config/
+link_item() {
+  local src="$1"
+  local name
+  name="$(basename "$src")"
+  local parent_name
+  parent_name="$(parentname "$src")"
+  local target
+  if [[ "$parent_name" == "config" ]]; then
+    target="$dot_config_dir/$name"
+  else
+    target="$HOME/$name"
   fi
-fi
+  ask_rm "$target" || return
+  ln -s "$src" "$target"
+  echo "Linked $name -> $target"
+}
 
-echo "Generating Rofi desktop entry..."
+# create toaam-dotfiles.desktop file
+# globals:
+#   desktop_entry_dir - $HOME/.local/share/applications
+create_desktop_entry() {
+  mkdir -p "$desktop_entry_dir"
 
-DESKTOP_ENTRY_DIR="$HOME/.local/share/applications"
-mkdir -p "$DESKTOP_ENTRY_DIR"
-
-cat > "$DESKTOP_ENTRY_DIR/toaam-dotfiles.desktop" <<'EOF'
+  cat >"$desktop_entry_dir/toaam-dotfiles.desktop" <<'EOF'
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -118,4 +136,179 @@ Categories=Development;TextEditor;
 Keywords=dotfiles;config;zed;
 EOF
 
-chmod +x "$DESKTOP_ENTRY_DIR/toaam-dotfiles.desktop"
+  chmod +x "$desktop_entry_dir/toaam-dotfiles.desktop"
+  echo "Generated desktop entry"
+}
+
+# main linker
+main_link() {
+  for src in $(echo_path_list); do
+    link_item "$src"
+  done
+  create_desktop_entry
+}
+
+# interactive selector with checkbox-style UI
+main_link_select() {
+  local items=()
+  local items_display=()
+  local selected=()
+  local cursor=0
+
+  for dir in "$dotfiles_config_dir"/*; do
+    [[ -d "$dir" ]] || continue
+    items+=("$dir")
+    items_display+=("config/$(basename "$dir")")
+  done
+
+  for file in "$dotfiles_home_dir"/.*; do
+    local name
+    name="$(basename "$file")"
+    [[ "$name" == "." || "$name" == ".." ]] && continue
+    items+=("$file")
+    items_display+=("home/$name")
+  done
+
+  local num_items=${#items[@]}
+  if [[ $num_items -eq 0 ]]; then
+    echo "No items found to link."
+    return
+  fi
+
+  for ((i = 0; i < num_items; i++)); do
+    selected+=(false)
+  done
+
+  cleanup_tui() {
+    tput cnorm
+  }
+  trap cleanup_tui EXIT
+  tput civis
+
+  while true; do
+    clear
+    echo -e "\e[1;36m?\e[0m \e[1mSelect configurations to link:\e[0m"
+    echo -e "\e[90m(Space: Toggle, a: All, i: Invert, Enter: Apply)\e[0m"
+    echo
+
+    local i
+    for i in "${!items[@]}"; do
+      local ptr
+      if [[ "$i" -eq "$cursor" ]]; then
+        ptr="\e[1;36m>\e[0m"
+      else
+        ptr=" "
+      fi
+      if [[ "${selected[$i]}" == true ]]; then
+        echo -e " $ptr [\e[1;32m✔\e[0m] \e[1m${items_display[$i]}\e[0m"
+      else
+        echo -e " $ptr [ ] \e[90m${items_display[$i]}\e[0m"
+      fi
+    done
+
+    echo
+
+    local key
+    IFS= read -rsn1 key
+    if [[ "$key" == $'\x1b' ]]; then
+      IFS= read -rsn2 key
+      case "$key" in
+      "[A") cursor=$(((cursor - 1 + num_items) % num_items)) ;;
+      "[B") cursor=$(((cursor + 1) % num_items)) ;;
+      esac
+    elif [[ "$key" == " " ]]; then
+      if [[ "${selected[$cursor]}" == true ]]; then
+        selected[$cursor]=false
+      else
+        selected[$cursor]=true
+      fi
+    elif [[ "$key" == "a" ]]; then
+      local all_on=true
+      local s
+      for s in "${selected[@]}"; do [[ "$s" == false ]] && all_on=false && break; done
+      local j
+      for ((j = 0; j < num_items; j++)); do
+        if [[ "$all_on" == true ]]; then selected[$j]=false; else selected[$j]=true; fi
+      done
+    elif [[ "$key" == "i" ]]; then
+      local j
+      for ((j = 0; j < num_items; j++)); do
+        if [[ "${selected[$j]}" == true ]]; then selected[$j]=false; else selected[$j]=true; fi
+      done
+    elif [[ "$key" == "" ]]; then
+      break
+    fi
+  done
+
+  cleanup_tui
+  trap - EXIT
+  clear
+
+  local any=false
+  local i
+  for i in "${!items[@]}"; do
+    if [[ "${selected[$i]}" != true ]]; then
+      continue
+    fi
+    any=true
+    link_item "${items[$i]}"
+  done
+
+  if [[ "$any" == false ]]; then
+    echo "No items selected."
+  else
+    echo -e "\n\e[1;32mAll tasks completed successfully!\e[0m"
+  fi
+}
+
+# show help menu
+show_usage() {
+  cat <<'EOF'
+Usage: ./link [COMMAND]
+
+Dotfiles linker script - creates symbolic links for configuration files.
+
+Commands:
+  (no args)   Default: link all configs, home files, and generate desktop entry
+  select      Interactive selector (checkbox-style UI) to pick items to link
+  ls          List all component paths that would be linked
+  import      Import mode (reserved for future use)
+  help        Show this help message
+
+Examples:
+  ./link              # Link all dotfiles to ~/.config and ~/
+  ./link select       # Choose which dotfiles to link interactively
+  ./link ls           # Preview all source paths
+  ./link help         # Display this help
+
+Options:
+  All commands run with 'set -euo pipefail' for strict error handling.
+  Existing files/directories will prompt for confirmation before override.
+
+Report issues at: [https://github.com/ToaaMusic/dotfiles]
+EOF
+}
+
+# main
+case "${1:-}" in
+import)
+  :
+  ;;
+select)
+  main_link_select
+  ;;
+ls)
+  echo_path_list
+  ;;
+help | -h | --help)
+  show_usage
+  ;;
+"")
+  main_link
+  ;;
+*)
+  echo "Error: Unknown command '$1'" >&2
+  echo "Run './link help' for usage information." >&2
+  exit 1
+  ;;
+esac
