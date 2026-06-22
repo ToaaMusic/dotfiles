@@ -6,17 +6,17 @@ This repository contains my personal configuration for Arch Linux and some tools
 
 ## Components
 
-| Component     | Description          | Official Doc                               | Repository Folder                                                             |
-| ------------- | -------------------- | ------------------------------------------ | ----------------------------------------------------------------------------- |
-| **hyprland**  | Wayland compositor   | https://wiki.hyprland.org/                 | [hypr](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr)           |
-| **nvim**      | Text editor          | https://neovim.io/                         | [nvim](https://github.com/ToaaMusic/dotfiles/tree/main/config/nvim)           |
-| **fastfetch** | System info fetcher  | https://github.com/fastfetch-cli/fastfetch | [fastfetch](https://github.com/ToaaMusic/dotfiles/tree/main/config/fastfetch) |
-| **waybar**    | Status bar           | https://github.com/Alexays/Waybar/wiki     | [waybar](https://github.com/ToaaMusic/dotfiles/tree/main/config/waybar)       |
-| **rofi**      | App launcher         | https://github.com/davatorium/rofi         | [rofi](https://github.com/ToaaMusic/dotfiles/tree/main/config/rofi)           |
-| **kitty**     | Terminal             | https://sw.kovidgoyal.net/kitty/           | [kitty](https://github.com/ToaaMusic/dotfiles/tree/main/config/kitty)         |
-| **yazi**      | Tui file manager     | https://yazi-rs.github.io/                 | [yazi](https://github.com/ToaaMusic/dotfiles/tree/main/config/yazi)           |
-| **mako**      | Notification         | https://github.com/emersion/mako           | [mako](https://github.com/ToaaMusic/dotfiles/tree/main/config/mako)           |
-| **cava**      | Tui audio visualizer | https://github.com/karlstav/cava           | [cava](https://github.com/ToaaMusic/dotfiles/tree/main/config/cava)           |
+| Component     | Description          | Official Doc                               | Repository Folder               |
+| ------------- | -------------------- | ------------------------------------------ | ------------------------------- |
+| **hyprland**  | Wayland compositor   | https://wiki.hyprland.org/                 | [hypr](./config/hypr)           |
+| **nvim**      | Text editor          | https://neovim.io/                         | [nvim](./config/nvim)           |
+| **fastfetch** | System info fetcher  | https://github.com/fastfetch-cli/fastfetch | [fastfetch](./config/fastfetch) |
+| **waybar**    | Status bar           | https://github.com/Alexays/Waybar/wiki     | [waybar](./config/waybar)       |
+| **rofi**      | App launcher         | https://github.com/davatorium/rofi         | [rofi](./config/rofi)           |
+| **kitty**     | Terminal             | https://sw.kovidgoyal.net/kitty/           | [kitty](./config/kitty)         |
+| **yazi**      | Tui file manager     | https://yazi-rs.github.io/                 | [yazi](./config/yazi)           |
+| **mako**      | Notification         | https://github.com/emersion/mako           | [mako](./config/mako)           |
+| **cava**      | Tui audio visualizer | https://github.com/karlstav/cava           | [cava](./config/cava)           |
 
 ## Installation
 
@@ -25,30 +25,37 @@ To apply my configurations, clone the repository to a safe location you like, fo
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
 cd dotfiles
-./link.sh
+./link
 ```
 
-`link.sh` is a script that creates symbolic links from the repository to the appropriate configuration directories.
+## About [link](./link)
+
+**Before running `./link`, please check out the content of it.**
+
+Simply, it is a script that creates symlinks from the subconfigs in my dotfiles repo to your appropriate configuration directories (`$HOME/*` and `$HOME/.config/*`).
 
 Like this:
 
 ```bash
-~/.config  symlink to  ~/repos/dotfiles/config
+~/.config              ~/repos/dotfiles/config
 ├── hypr   --------->  ├── hypr
 ├── waybar --------->  ├── waybar
 ├── rofi   --------->  ├── rofi
 ├── kitty  --------->  ├── kitty
-└── ...                      └── ...
+└── ...                │   └── ...
+                       └── ...
 ```
 
-By the way, [.zshenv](https://github.com/ToaaMusic/dotfiles/tree/main/home/.zshenv) and [hypr/hyprland/env.lua](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr/hyprland/env.lua) will set $HOME/repos/dotfiles/ as TOAAM_DOTFILES. **And don't forget to rerun the `./link` after moving this repo**
+> [!NOTE]
+> Don't forget to rerun the `./link` after moving this repo. So that [.zshenv](./home/.zshenv) and [hypr/hyprland/env.lua](./config/hypr/hyprland/env.lua) will auto set the linked repo dir as $TOAAM_DOTFILES, which is the only env var required for running my tool scripts and locating some resources.
+
+## Uninstallation
+
+Just remove this repo you cloned and override those links with your own configs.
 
 ## Dependencies
 
-- `hyprpaper`: Wallpaper.
-- `lua`: Tool language. (IMPORTANT)
-- `grim`, `slurp`, `wl-copy`: Screenshot, Selection, and copy to clipboard
-- `ffmpeg`: Img tool.
+It's up to you.
 
 After installing the key components, if you want the full experience or just lazy to customize everything, you can simply install them all.
 
@@ -57,14 +64,18 @@ sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpa
 ```
 
 ```bash
-sudo pacman -S musicfox grim slurp wl-copy lua ffmpeg
+sudo pacman -S lua grim slurp wl-copy ffmpeg
 ```
+
+- `lua`: for running my tools. (IMPORTANT)
+- `hyprpaper`: for showing wallpaper.
+- `grim`, `slurp`, `wl-copy`, `ffmpeg`: Screenshot, Selection, and copy to clipboard. for using color generation tool.
 
 ## Usage
 
 ### Shortcuts
 
-See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/config/hypr/) for more.
+See markdown in [config/hypr/](./config/hypr/) for more.
 
 #### Default
 
@@ -91,7 +102,7 @@ See markdown in [config/hypr/](https://github.com/ToaaMusic/dotfiles/tree/main/c
 
 ### Tools
 
-[tools/](https://github.com/ToaaMusic/dotfiles/tree/main/tools/)
+[tools/](./tools/)
 
 - **colorscheme/**
 
