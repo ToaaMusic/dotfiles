@@ -2,6 +2,8 @@
 
 这个仓库包含了我的Arch系统配置和一些我用lua写的小工具。
 
+![screenshot](https://enhiucyodopknrbdtswy.supabase.co/storage/v1/object/public/projects/screenshot.png)
+
 ## 成分
 
 | 成分          | 描述               | 官方Docs/Wiki                              | 仓库位置                        |

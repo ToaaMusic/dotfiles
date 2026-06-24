@@ -2,7 +2,9 @@
 
 [简体中文](./README.zh-CN.md)
 
-This repository contains my personal configuration for Arch Linux and some tools written by lua script.
+This repository contains my personal configuration for Arch Linux and some tools written in lua.
+
+![screenshot](https://enhiucyodopknrbdtswy.supabase.co/storage/v1/object/public/projects/screenshot.png)
 
 ## Components
 
@@ -55,7 +57,7 @@ Like this:
 ```
 
 > [!NOTE]
-> Don't forget to rerun the `./link` after moving this repo. So that [.zshenv](./home/.zshenv) and [hypr/hyprland/env.lua](./config/hypr/hyprland/env.lua) will auto set the linked repo dir as $TOAAM_DOTFILES, which is the only env var required for running my tool scripts and locating some resources.
+> Don't forget to rerun the `./link` after moving this repo. So that [.zshenv](./home/.zshenv) and [hypr/hyprland/env.lua](./config/hypr/hyprland/env.lua) can set the linked repo dir as $TOAAM_DOTFILES, which is the only env var required for running my tool scripts and locating some resources.
 
 ## Uninstallation
 
