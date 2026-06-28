@@ -22,7 +22,7 @@ This repository contains my personal configuration for Arch Linux and some tools
 
 ## Installation
 
-To apply my configurations, clone the repository to a safe location you like, for example `~/repos`, and run `./link` ("select" param is recommended).
+To apply my configurations, clone the repository to a safe location you like, for example `~/repos`, and run `./link` ("-s" or "--select" option is recommended).
 
 > [!IMPORTANT]
 > Make sure to back up any existing configuration files before overwriting them. ./link will also check and ask for overwriting or not.
@@ -30,7 +30,7 @@ To apply my configurations, clone the repository to a safe location you like, fo
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
 cd dotfiles
-./link select
+./link -s
 ```
 
 ### About [link](./link)

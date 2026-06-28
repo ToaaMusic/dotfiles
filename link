@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-readonly dotfiles_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-readonly dotfiles_config_dir="$dotfiles_dir/config"
-readonly dotfiles_home_dir="$dotfiles_dir/home"
+readonly dotfiles_repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readonly dotfiles_config_dir="$dotfiles_repo_dir/config"
+readonly dotfiles_home_dir="$dotfiles_repo_dir/home"
 readonly dot_config_dir="$HOME/.config"
 readonly desktop_entry_dir="$HOME/.local/share/applications"
+
+# opts
+run_mode="link"
+force_bool=false
+select_bool=false
 
 mkdir -p "$dot_config_dir" "$desktop_entry_dir"
 
@@ -100,6 +105,7 @@ ask_rm() {
 #   $1 - source path (must be under config/ or home/)
 # globals:
 #   dot_config_dir - $HOME/.config/
+#   force_bool     - global force flag
 link_item() {
   local src="$1"
   local name
@@ -112,7 +118,7 @@ link_item() {
   else
     target="$HOME/$name"
   fi
-  ask_rm "$target" || return
+  ask_rm "$target" "$force_bool" || return
   ln -s "$src" "$target"
   echo "Linked $name -> $target"
 }
@@ -264,51 +270,81 @@ main_link_select() {
 # show help menu
 show_usage() {
   cat <<'EOF'
-Usage: ./link [COMMAND]
+Usage: ./link [command] [options]
 
 Dotfiles linker script - creates symbolic links for configuration files.
 
 Commands:
-  (no args)   Default: link all configs, home files, and generate desktop entry
-  select      Interactive selector (checkbox-style UI) to pick items to link
-  ls          List all component paths that would be linked
-  import      Import mode (reserved for future use)
-  help        Show this help message
-
-Examples:
-  ./link              # Link all dotfiles to ~/.config and ~/
-  ./link select       # Choose which dotfiles to link interactively
-  ./link ls           # Preview all source paths
-  ./link help         # Display this help
+  (no args)      # Default: link all configs, home files, and generate desktop entry
+  ls             # List all component paths that would be linked (Ignore all opts)
 
 Options:
-  All commands run with 'set -euo pipefail' for strict error handling.
-  Existing files/directories will prompt for confirmation before override.
+  -f, --force    # Force overwrite without confirmation
+  -s, --select   # Interactive selector mode (checkbox-style UI)
+  -h, --help     # Show this help message 
+
+Examples:
+  ./link         # Link without selecting by default
+  ./link ls      # Echo all source paths
+  ./link ls -h   # each commands allows -h or --help for help
 
 Report issues at: [https://github.com/ToaaMusic/dotfiles]
 EOF
 }
 
+cmd_ls_help() {
+  cat <<'EOF'
+Usage: ./link ls
+
+List all component paths that would be linked (Ignore all opts)
+
+Options:
+  -h, --help       # Show this help message
+
+Examples:
+  ./link ls | fzf  # filter by fzf
+EOF
+}
+
 # main
+temp=$(getopt -o fsh --long force,select,help -n "$0" -- "$@") || {
+  show_usage
+  exit 1
+}
+eval set -- "$temp"
+
+while true; do
+  case "$1" in
+  -f | --force) force_bool=true && shift ;;
+  -s | --select) select_bool=true && shift ;;
+  -h | --help) run_mode="help" && shift ;;
+  --) shift && break ;;
+  *) break ;;
+  esac
+done
+
 case "${1:-}" in
-import)
-  :
-  ;;
-select)
-  main_link_select
-  ;;
-ls)
+ls) # sub cmds
+  if [[ $run_mode == "help" ]]; then
+    cmd_ls_help
+    exit 0
+  fi
   echo_path_list
   ;;
-help | -h | --help)
-  show_usage
-  ;;
-"")
-  main_link
+"") # main cmd
+  if [[ $run_mode == "help" ]]; then
+    show_usage
+    exit 0
+  fi
+  if [[ $select_bool == "true" ]]; then
+    main_link_select
+  else
+    main_link
+  fi
   ;;
 *)
   echo "Error: Unknown command '$1'" >&2
-  echo "Run './link help' for usage information." >&2
+  echo "Run './link -h' for usage information." >&2
   exit 1
   ;;
 esac
