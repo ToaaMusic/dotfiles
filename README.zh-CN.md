@@ -20,7 +20,7 @@
 
 ## 安装
 
-克隆本仓库到你喜欢的任何位置（例如 `~/repos`），然后执行 `./link`（建议带 `select` 参数选择性安装）。
+克隆本仓库到你喜欢的任何位置（例如 `~/repos`），然后执行 `./link`（建议带 `-s` 参数选择性安装）。
 
 > [!IMPORTANT]
 > 请务必备份已有的配置文件，以防被覆盖。同时 ./link 也会检查并询问是否覆盖。
@@ -28,7 +28,7 @@
 ```bash
 git clone https://github.com/ToaaMusic/dotfiles.git
 cd dotfiles
-./link select
+./link -s
 ```
 
 ### 关于 [link](./link)
