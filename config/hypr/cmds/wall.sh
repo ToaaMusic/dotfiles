@@ -2,14 +2,17 @@
 
 LOCKDIR="/tmp/random-wallpaper.lock"
 if ! mkdir "$LOCKDIR" 2>/dev/null; then
-	# stale lock from kill -9? check if any wallpaper script is actually running
-	if ! pgrep -f "random-wallpaper\.sh" | grep -qv "$$"; then
-		rm -rf "$LOCKDIR"
-		mkdir "$LOCKDIR" || { notify-send "Wallpaper" "Failed to acquire lock" -t 2000; exit 0; }
-	else
-		notify-send "Wallpaper" "Already changing, please wait" -t 2000
-		exit 0
-	fi
+  # stale lock from kill -9? check if any wallpaper script is actually running
+  if ! pgrep -f "random-wallpaper\.sh" | grep -qv "$$"; then
+    rm -rf "$LOCKDIR"
+    mkdir "$LOCKDIR" || {
+      notify-send "Wallpaper" "Failed to acquire lock" -t 2000
+      exit 0
+    }
+  else
+    notify-send "Wallpaper" "Already changing, please wait" -t 2000
+    exit 0
+  fi
 fi
 trap 'rm -rf "$LOCKDIR"' EXIT
 

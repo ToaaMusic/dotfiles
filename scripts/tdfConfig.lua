@@ -25,7 +25,7 @@ local default_config = {
 	shell = "zsh",
 	color_auto_gen = {
 		enable = true,
-    notify = true,
+		notify = true,
 		day_mode = "auto",
 	},
 }
