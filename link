@@ -425,8 +425,8 @@ main() {
     exit 1
     ;;
   esac
-
 }
+
 # if not source
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   main "$@"
