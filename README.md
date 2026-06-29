@@ -4,6 +4,8 @@
 
 This repository contains my personal configuration for Arch Linux and some tools written in lua.
 
+See [TODO.md](./TODO.md) for planned features
+
 ![screenshot](https://enhiucyodopknrbdtswy.supabase.co/storage/v1/object/public/projects/screenshot.png)
 
 ## Components

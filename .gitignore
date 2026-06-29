@@ -1,5 +1,5 @@
 #cache
-config/fcitx5/conf/cached_layouts
+# config/fcitx5/conf/cached_layouts
 /.cache
 
 # auto generated files
@@ -8,18 +8,12 @@ g.*
 config/fcitx5/themes/auto-gen/theme.conf
 
 # ide
-.nvim/
 
 # unready
-config/fcitx5/conf/
-config/fcitx5/config
-config/fcitx5/profile
+fcitx5/
 ebrain-ai/
 tools/router/
+/config.lua
 
 # personal files
 others/
-TODO.md
-add
-
-/config.lua

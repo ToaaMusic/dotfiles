@@ -2,6 +2,8 @@
 
 这个仓库包含了我的Arch系统配置和一些我用lua写的小工具。
 
+你可以查看 [TODO.md](./TODO.md) 获取改动计划
+
 ![screenshot](https://enhiucyodopknrbdtswy.supabase.co/storage/v1/object/public/projects/screenshot.png)
 
 ## 成分
