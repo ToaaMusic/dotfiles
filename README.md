@@ -61,7 +61,7 @@ Like this:
 
 ## Uninstallation
 
-Just remove this repo you cloned and overwrite those linked configs with your own.
+Run `./link clean` to remove the linked configs or overwrite those linked configs with your own then just remove this repo you cloned.
 
 ## Dependencies
 
