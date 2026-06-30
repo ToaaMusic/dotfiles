@@ -13,7 +13,10 @@ config/fcitx5/themes/auto-gen/theme.conf
 fcitx5/
 ebrain-ai/
 tools/router/
+tdf-gui.lua
 /config.lua
+hyprlock.conf
+
 
 # personal files
 others/

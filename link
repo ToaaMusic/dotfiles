@@ -88,25 +88,25 @@ ask_rm() {
   fi
   if [[ "$force" == "true" ]] || [[ $path_type == "empty directory" ]]; then
     if rm -rf "$path" 2>/dev/null; then
-      echo "✓ Removed existing $path_type: $name"
+      echo "✓ Removed $path_type: $name"
       return 0
     else
       return 1
     fi
   fi
-  read -rp "$name already exists as a $path_type. Override? [y/N] " answer
+  read -rp "$name exists as a $path_type. Override? [y/N] " answer
   case "$answer" in
   [Yy]*)
     if rm -rf "$path" 2>/dev/null; then
       echo "✓ Removed existing $path_type: $name"
       return 0
     else
-      echo "✗ Failed to remove $name (permission denied?), skipping" >&2
+      echo "✗ Failed to rm $name (permission denied?), skipping" >&2
       return 1
     fi
     ;;
   *)
-    echo "→ Skipping $name"
+    echo "→ Skipped $name"
     return 1
     ;;
   esac
@@ -167,27 +167,12 @@ main_link() {
 }
 
 # interactive selector with checkbox-style UI
-main_link_select() {
-  local items=()
-  local items_display=()
+show_select() {
+  local items=("$@")
   local selected=()
   local cursor=0
-
-  for dir in "$dotfiles_config_dir"/*; do
-    [[ -d "$dir" ]] || continue
-    items+=("$dir")
-    items_display+=("config/$(basename "$dir")")
-  done
-
-  for file in "$dotfiles_home_dir"/.*; do
-    local name
-    name="$(basename "$file")"
-    [[ "$name" == "." || "$name" == ".." ]] && continue
-    items+=("$file")
-    items_display+=("home/$name")
-  done
-
   local num_items=${#items[@]}
+
   if [[ $num_items -eq 0 ]]; then
     echo "No items found to link."
     return
@@ -206,9 +191,10 @@ main_link_select() {
   while true; do
     clear
     echo -e "\e[1;36m?\e[0m \e[1mSelect configurations to link:\e[0m"
-    echo -e "\e[90m(Space: Toggle, a: All, i: Invert, Enter: Apply)\e[0m"
+    echo -e "\e[90m(Space: Toggle, a: All, i: Invert, q: Quit, Enter: Apply)\e[0m"
     echo
 
+    # render items
     local i
     for i in "${!items[@]}"; do
       local ptr
@@ -218,49 +204,72 @@ main_link_select() {
         ptr=" "
       fi
       if [[ "${selected[$i]}" == true ]]; then
-        echo -e " $ptr [\e[1;32m✔\e[0m] \e[1m${items_display[$i]}\e[0m"
+        echo -e " $ptr [\e[1;32m✔\e[0m] \e[1m${items[$i]}\e[0m"
       else
-        echo -e " $ptr [ ] \e[90m${items_display[$i]}\e[0m"
+        echo -e " $ptr [ ] \e[90m${items[$i]}\e[0m"
       fi
     done
 
     echo
 
+    # handle input key
     local key
     IFS= read -rsn1 key
-    if [[ "$key" == $'\x1b' ]]; then
+    case "$key" in
+    $'\x1b')
       IFS= read -rsn2 key
       case "$key" in
       "[A") cursor=$(((cursor - 1 + num_items) % num_items)) ;;
       "[B") cursor=$(((cursor + 1) % num_items)) ;;
       esac
-    elif [[ "$key" == " " ]]; then
+      ;;
+    " ")
       if [[ "${selected[$cursor]}" == true ]]; then
         selected[$cursor]=false
       else
         selected[$cursor]=true
       fi
-    elif [[ "$key" == "a" ]]; then
+      ;;
+    "a")
       local all_on=true
       local s
-      for s in "${selected[@]}"; do [[ "$s" == false ]] && all_on=false && break; done
+      for s in "${selected[@]}"; do
+        [[ "$s" == false ]] && all_on=false && break
+      done
       local j
       for ((j = 0; j < num_items; j++)); do
-        if [[ "$all_on" == true ]]; then selected[$j]=false; else selected[$j]=true; fi
+        if [[ "$all_on" == true ]]; then
+          selected[$j]=false
+        else
+          selected[$j]=true
+        fi
       done
-    elif [[ "$key" == "i" ]]; then
+      ;;
+    "i")
       local j
       for ((j = 0; j < num_items; j++)); do
-        if [[ "${selected[$j]}" == true ]]; then selected[$j]=false; else selected[$j]=true; fi
+        if [[ "${selected[$j]}" == true ]]; then
+          selected[$j]=false
+        else
+          selected[$j]=true
+        fi
       done
-    elif [[ "$key" == "" ]]; then
+      ;;
+    "q")
+      echo "Cancelled."
+      exit 0
+      ;;
+    "")
       break
-    fi
+      ;;
+    *)
+      ;;
+    esac
   done
 
   cleanup_tui
   trap - EXIT
-  clear
+  # clear
 
   local any=false
   local i
@@ -275,7 +284,7 @@ main_link_select() {
   if [[ "$any" == false ]]; then
     echo "No items selected."
   else
-    echo -e "\n\e[1;32mAll tasks completed successfully!\e[0m"
+    echo -e "\n\e[1;32mDone\e[0m"
   fi
 }
 
@@ -303,6 +312,8 @@ Dotfiles linker script - creates symbolic links for configuration files.
 Commands:
   (no args)      # Default: link all configs, home files, and generate desktop entry
   ls             # List all component paths that would be linked (Ignore all opts)
+  clean          # Remove all symlinks managed by this repo
+  add [path]     # NOT IMPLEMENTED YET: Add a directory or file to this repo
 
 Options:
   -f, --force    # Force overwrite without confirmation
@@ -414,7 +425,7 @@ main() {
       exit 0
     fi
     if [[ $select_bool == "true" ]]; then
-      main_link_select
+      show_select $(echo_path_list)
     else
       main_link
     fi
