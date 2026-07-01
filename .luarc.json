@@ -1,5 +1,6 @@
 {
   "workspace": {
     "library": ["$TOAAM_DOTFILES/scripts/"]
-  }
+  },
+  "runtime.version": "LuaJIT"
 }
