@@ -9,9 +9,9 @@ return {
 			{ "nvim-mini/mini.icons", version = false },
 		},
 		build = function()
-			-- build the fuzzy matcher, wait up to 60 seconds
+			-- build the fuzzy matcher, optionally add a timeout to `pwait(timeout_ms)`
 			-- you can use `gb` in `:Lazy` to rebuild the plugin as needed
-			require("blink.cmp").build():wait(60000)
+			require("blink.cmp").build():pwait()
 		end,
 
 		---@module 'blink.cmp'
