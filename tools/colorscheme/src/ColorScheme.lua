@@ -22,7 +22,25 @@ local logger = require("logger").get_logger()
 local RoleColors = {}
 RoleColors.__index = RoleColors
 
----@class Ansi16
+---@class tdf.Ansi16
+---@field protected new? fun(init: tdf.Ansi16|nil): tdf.Ansi16
+---@field protected from_seed? fun(seed: string): tdf.Ansi16
+---@field Black string
+---@field Red string
+---@field Green string
+---@field Yellow string
+---@field Blue string
+---@field Magenta string
+---@field Cyan string
+---@field White string
+---@field BrightBlack string
+---@field BrightRed string
+---@field BrightGreen string
+---@field BrightYellow string
+---@field BrightBlue string
+---@field BrightMagenta string
+---@field BrightCyan string
+---@field BrightWhite string
 local Ansi16 = {
 	Black         = "#000000",
 	Red           = "#800000",
@@ -89,7 +107,7 @@ SyntaxColors.__index = SyntaxColors
 ---@field accent string -- TODO: brand color
 ---@field bg tdf.BackgroundColors
 ---@field fg tdf.ForegroundColors
----@field ansi16? Ansi16
+---@field ansi16? tdf.Ansi16
 ---@field role? RoleColors
 ---@field candidates string[] -- to be obsoleted
 ---@field accents string[] -- to be obsoleted
@@ -105,6 +123,16 @@ local ColorScheme = {
 ColorScheme.__index = ColorScheme
 
 ---@diagnostic enable: unused-local
+
+function Ansi16.new()
+	return setmetatable({}, Ansi16)
+end
+
+-- function Ansi16.from_seed(seed)
+-- 	local h, s, l = h.hex_to_hsl(seed)
+-- 	local ansi = Ansi16.new()
+-- 	return ansi
+-- end
 
 function ColorScheme.new(init)
 	init = init or {}
