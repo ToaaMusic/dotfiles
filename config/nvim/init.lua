@@ -1,7 +1,7 @@
 require("options")
 require("theme")
 require("theme_watcher")
-require("floatterm")
+-- require("floatterm")
 require("keymaps")
 require("autocmd")
 require("lsp")

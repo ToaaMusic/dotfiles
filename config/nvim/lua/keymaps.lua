@@ -5,7 +5,14 @@ vim.g.maplocalleader = "\\"
 -- override defaults
 km.set("i", "jk", "<Esc>")
 km.set("n", "<leader>ca", vim.lsp.buf.code_action) -- "gra"
-km.set("n", "<leader>rn", vim.lsp.buf.rename) -- "grn"
+km.set("n", "<leader>rn", vim.lsp.buf.rename)      -- "grn"
+
+-- lsp
+km.set('n', '<leader>hi', function()
+	local current = vim.lsp.inlay_hint.is_enabled()
+	vim.lsp.inlay_hint.enable(not current)
+	vim.notify('Inlay Hints: ' .. (not current and 'ON' or 'OFF'))
+end, { desc = 'Toggle Inlay Hints' })
 
 -- neo-tree
 km.set("n", "<leader>e", ":Neotree toggle<CR>")
@@ -51,4 +58,4 @@ km.set("", "<leader>f", function()
 end, { desc = "Format code" })
 
 -- md
-vim.keymap.set("n", "<leader>mr", "<cmd>RenderMarkdown toggle<cr>", { desc = "Toggle Markdown rendering" })
+km.set("n", "<leader>mr", "<cmd>RenderMarkdown toggle<cr>", { desc = "Toggle Markdown rendering" })

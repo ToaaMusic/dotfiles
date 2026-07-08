@@ -9,8 +9,8 @@ op.cursorlineopt = "number"
 op.formatoptions:remove({ "c", "r", "o" })
 op.iskeyword:append("-", "_")
 
-vim.opt.termguicolors = true
-vim.opt.fillchars:append({ eob = " " })
+op.termguicolors = true
+op.fillchars:append({ eob = " " })
 
 -- tab
 op.tabstop = 2
@@ -33,6 +33,8 @@ vim.wo.foldlevel = 99
 vim.wo.foldnestmax = 5
 
 op.foldmarker = "#region,#endregion"
+op.colorcolumn = '120'
+op.expandtab = false
 
 -- disable netrw
 vim.g.loaded_netrw = 1
