@@ -35,9 +35,9 @@ return {
 				---@diagnostic disable-next-line: unused-local
 				filter = function(buf, win)
 					return vim.g.snacks_indent ~= false
-						and vim.b[buf].snacks_indent ~= false
-						and vim.bo[buf].buftype == ""
-						and vim.bo[buf].filetype ~= "markdown"
+							and vim.b[buf].snacks_indent ~= false
+							and vim.bo[buf].buftype == ""
+							and vim.bo[buf].filetype ~= "markdown"
 				end,
 				chunk = {
 					enabled = true,
@@ -54,38 +54,39 @@ return {
 		},
 	},
 	-- https://github.com/Wansmer/symbol-usage.nvim
-	-- {
-	-- 	"Wansmer/symbol-usage.nvim",
-	-- 	event = "LspAttach",
-	--
-	-- 	---@type UserOpts
-	-- 	opts = {
-	-- 		vt_position = "end_of_line",
-	-- 		filetypes = {},
-	-- 		log = {},
-	-- 		kinds = {
-	-- 			vim.lsp.protocol.SymbolKind.Method,
-	-- 			vim.lsp.protocol.SymbolKind.Class,
-	-- 			vim.lsp.protocol.SymbolKind.Interface,
-	-- 		},
-	-- 		references = { enabled = true },
-	-- 		implementation = { enabled = true },
-	-- 		definition = { enabled = false },
-	-- 		text_format = function(symbol)
-	-- 			local res = {}
-	--
-	-- 			if symbol.references then
-	-- 				table.insert(res, symbol.references .. " ref")
-	-- 			end
-	--
-	-- 			if symbol.implementation then
-	-- 				table.insert(res, symbol.implementation .. " impl")
-	-- 			end
-	--
-	-- 			return table.concat(res, " | ")
-	-- 		end,
-	-- 	},
-	-- },
+	{
+		"Wansmer/symbol-usage.nvim",
+		event = "LspAttach",
+
+		---@type UserOpts
+		opts = {
+			vt_position = "end_of_line",
+			filetypes = { "lua" },
+			log = {},
+			kinds = {
+				vim.lsp.protocol.SymbolKind.Function,
+				vim.lsp.protocol.SymbolKind.Method,
+				vim.lsp.protocol.SymbolKind.Class,
+				vim.lsp.protocol.SymbolKind.Interface,
+			},
+			references = { enabled = true },
+			implementation = { enabled = true },
+			definition = { enabled = false },
+			text_format = function(symbol)
+				local res = {}
+
+				if symbol.references then
+					table.insert(res, symbol.references .. " ref")
+				end
+
+				if symbol.implementation then
+					table.insert(res, symbol.implementation .. " impl")
+				end
+
+				return table.concat(res, " | ")
+			end,
+		},
+	},
 	-- https://github.com/GustavEikaas/easy-dotnet.nvim
 	{
 		"GustavEikaas/easy-dotnet.nvim",
@@ -97,7 +98,7 @@ return {
 			-- Options are not required
 			dotnet.setup({
 				managed_terminal = {
-					auto_hide = true, -- auto hides terminal if exit code is 0
+					auto_hide = true,  -- auto hides terminal if exit code is 0
 					auto_hide_delay = 1000, -- delay before auto hiding, 0 = instant
 					mappings = {
 						next_tab = { lhs = "<Tab>", desc = "Next terminal tab" },
@@ -114,18 +115,18 @@ return {
 				},
 				---@type easy-dotnet.LspOpts
 				lsp = {
-					enabled = true, -- Enable builtin roslyn lsp
-					set_fold_expr = true, -- enable fold
-					preload_roslyn = false, -- Start loading roslyn before any buffer is opened
-					roslynator_enabled = true, -- Automatically enable roslynator analyzer
+					enabled = true,                    -- Enable builtin roslyn lsp
+					set_fold_expr = true,              -- enable fold
+					preload_roslyn = false,            -- Start loading roslyn before any buffer is opened
+					roslynator_enabled = true,         -- Automatically enable roslynator analyzer
 					easy_dotnet_analyzer_enabled = true, -- Enable roslyn analyzer from easy-dotnet-server
 					easy_dotnet_extension_enabled = true, -- Needs to be true for enhanced_rename and create_type_from_usage
-					enhanced_rename = false, -- auto rename file when renaming class
-					create_type_from_usage = true, -- code action for creating class from unresolved symbol in a separate file
+					enhanced_rename = false,           -- auto rename file when renaming class
+					create_type_from_usage = true,     -- code action for creating class from unresolved symbol in a separate file
 					restart_roslyn_on_branch_change = true, -- Restart Roslyn when Git HEAD changes
 					auto_refresh_codelens = false,
-					suggest_updates = true, -- Periodically suggest roslyn-language-server updates
-					analyzer_assemblies = {}, -- Any additional roslyn analyzers you might use like SonarAnalyzer.CSharp
+					suggest_updates = true,            -- Periodically suggest roslyn-language-server updates
+					analyzer_assemblies = {},          -- Any additional roslyn analyzers you might use like SonarAnalyzer.CSharp
 					razor = {
 						enabled = true,
 						html = {
