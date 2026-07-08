@@ -6,7 +6,6 @@ local deps = {
 	script_dir .. "src/?.lua;",
 	script_dir .. "tests/?.lua;",
 	tdf_dir .. "/tools/shared/?.lua;",
-	tdf_dir .. "/scripts/?.lua;",
 }
 for _, dep in ipairs(deps) do
 	package.path = dep .. package.path

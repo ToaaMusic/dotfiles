@@ -6,7 +6,6 @@ local tdf_dir = os.getenv("TOAAM_DOTFILES")
 for _, dep in ipairs({
 	script_dir .. "src/?.lua;",
 	tdf_dir .. "/tools/shared/?.lua;",
-	tdf_dir .. "/scripts/?.lua;",
 }) do
 	package.path = dep .. package.path
 end
