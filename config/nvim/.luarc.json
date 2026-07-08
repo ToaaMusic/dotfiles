@@ -2,6 +2,10 @@
   "workspace": {
     "runtime.version": "LuaJIT",
     "diagnostics.globals": ["vim"],
-    "library": ["/usr/share/nvim/runtime", "~/.local/share/nvim/lazy"]
+    "library": [
+      "/usr/share/nvim/runtime",
+      "~/.local/share/nvim/lazy",
+      "$TOAAM_DOTFILES/tools/colorscheme/src/ColorScheme.lua"
+    ]
   }
 }

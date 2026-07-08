@@ -1,9 +1,10 @@
 -- write.lua
-local h = require("helper")
-local s = require("strategy")
-require("colors")
+-- write tdf.ColorScheme to config files
 
----@param p tdf.Colors
+local h = require("color_helper")
+local s = require("strategy")
+
+---@param p tdf.ColorScheme
 local function write_hypr(p)
 	local path = os.getenv("HOME") .. "/.config/hypr/hyprland/colors.g.lua"
 	local f = assert(io.open(path, "w"))
@@ -18,11 +19,11 @@ return {
   inactive_border_color = "%s",
 }
 ]]
-	f:write(content:format(p.accent:sub(2), p.bg_border))
+	f:write(content:format(p.accent:sub(2), p.bg.border))
 	f:close()
 end
 
----@param p tdf.Colors
+---@param p tdf.ColorScheme
 local function write_waybar(p)
 	local path = os.getenv("HOME") .. "/.config/waybar/colors.g.css"
 	local f = assert(io.open(path, "w"))
@@ -46,32 +47,25 @@ local function write_waybar(p)
 @define-color fg-shadow %s;
 
 /* accents */
-@define-color accent %s;
-@define-color accent-soft %s;
-@define-color accent-strong %s;
-@define-color accent-fg %s;
+@define-color a %s;
 
 ]]
 	f:write(
 		content:format(
-			p.bg,
-			p.bg_elevated,
-			p.bg_hover,
-			p.bg_active,
-			p.bg_border,
-			p.bg_shadow,
-			p.fg,
-			p.fg_hover,
-			p.fg_muted,
-			p.fg_subtle,
-			p.fg_shadow,
-			p.accent,
-			p.accent_soft,
-			p.accent_strong,
-			p.accent_fg
+			p.bg.common,
+			p.bg.elevated,
+			p.bg.hover,
+			p.bg.active,
+			p.bg.border,
+			p.bg.shadow,
+			p.fg.common,
+			p.fg.hover,
+			p.fg.muted,
+			p.fg.subtle,
+			p.fg.shadow,
+			p.accent
 		)
 	)
-	f:write(string.format("@define-color a %s;\n", p.accent))
 	for i = 1, 6 do
 		f:write(string.format("@define-color a%d %s;\n", i, p.accents[i]))
 	end
@@ -82,37 +76,38 @@ local function write_waybar(p)
 	-- os.execute("cp " .. path .. " " .. gtk_path)
 end
 
----@param p tdf.Colors
+---@param p tdf.ColorScheme
 local function write_kitty(p)
 	local path = os.getenv("HOME") .. "/.config/kitty/colors.g.conf"
 
 	local active_template = string.format(
 		"{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
-		"_" .. p.accent_fg:sub(2),
-		"_" .. p.bg:sub(2),
 		"_" .. p.accent:sub(2),
-		"_" .. p.accent_fg:sub(2),
-		"_" .. p.accent_fg:sub(2),
-		"_" .. p.bg:sub(2)
+		"_" .. p.bg.common:sub(2),
+		"_" .. p.accent:sub(2),
+		"_" .. p.accent:sub(2),
+		"_" .. p.accent:sub(2),
+		"_" .. p.bg.common:sub(2)
 	)
 	local inactive_template = string.format(
 		"{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
-		"_" .. p.fg_muted:sub(2),
-		"_" .. p.bg:sub(2),
-		"_" .. p.bg_elevated:sub(2),
-		"_" .. p.fg_muted:sub(2),
-		"_" .. p.fg_muted:sub(2),
-		"_" .. p.bg:sub(2)
+		"_" .. p.fg.muted:sub(2),
+		"_" .. p.bg.common:sub(2),
+		"_" .. p.bg.elevated:sub(2),
+		"_" .. p.fg.muted:sub(2),
+		"_" .. p.fg.muted:sub(2),
+		"_" .. p.bg.common:sub(2)
 	)
 
-	local color16 = {}
+	local ansi16 = {}
 	for i = 0, 7 do
-		table.insert(color16, string.format("color%d %s", i, p.ansi_normal[i + 1]))
-		table.insert(color16, string.format("color%d %s", i + 8, p.ansi_bright[i + 1]))
+		table.insert(ansi16, string.format("color%d %s\n", i, p.ansi_normal[i + 1]))
+		table.insert(ansi16, string.format("color%d %s\n", i + 8, p.ansi_bright[i + 1]))
 	end
 
 	local template = [[
 # Generated from wallpaper
+# Do not edit manually!
 
 foreground %s
 background %s
@@ -143,28 +138,28 @@ tab_title_template %q
 ]]
 
 	local content = template:format(
-		p.fg,
-		p.bg,
-		p.accent_fg,
+		p.fg.common,
+		p.bg.common,
+		p.accents[1],
 		p.accent,
-		p.accent_strong,
-		p.accent_fg,
-		p.accent_strong,
-		p.accent_strong,
-		p.bg_border,
+		p.accents[4],
+		p.accents[1],
+		p.accents[4],
+		p.accents[4],
+		p.bg.border,
 		p.accents[2],
-		p.accent_fg,
+		p.accents[1],
 		p.accent,
-		p.fg_muted,
-		p.bg_elevated,
-		p.bg,
-		p.accent_fg,
+		p.fg.muted,
+		p.bg.elevated,
+		p.bg.common,
+		p.accents[1],
 		p.accent,
-		p.accent_fg,
+		p.accents[1],
 		p.accents[2],
-		p.accent_fg,
+		p.accents[1],
 		p.accents[3],
-		table.concat(color16, "\n"),
+		ansi16,
 		active_template,
 		inactive_template
 	)
@@ -174,7 +169,7 @@ tab_title_template %q
 	f:close()
 end
 
----@param p tdf.Colors
+---@param p tdf.ColorScheme
 local function write_rofi(p)
 	local path = os.getenv("HOME") .. "/.config/rofi/colors.g.rasi"
 	local f = assert(io.open(path, "w"))
@@ -194,17 +189,17 @@ local function write_rofi(p)
     accent: %s;
     accent-fg: %s;
 ]],
-			p.bg,
-			p.fg,
-			p.bg_elevated,
-			p.bg_hover,
-			p.bg_active,
-			p.bg_border,
-			p.fg_muted,
-			p.fg_subtle,
-			p.fg_hover,
+			p.bg.common,
+			p.fg.common,
+			p.bg.elevated,
+			p.bg.hover,
+			p.bg.active,
+			p.bg.border,
+			p.fg.muted,
+			p.fg.subtle,
+			p.fg.hover,
 			p.accent,
-			p.accent_fg
+			p.accents[1]
 		)
 	)
 	for i = 1, 6 do
@@ -214,7 +209,7 @@ local function write_rofi(p)
 	f:close()
 end
 
----@param p tdf.Colors
+---@param p tdf.ColorScheme
 local function write_fcitx5(p)
 	local path = os.getenv("HOME") .. "/.local/share/fcitx5/themes/auto-gen/theme.conf"
 	os.execute("mkdir -p " .. path:match("(.*/)"))
@@ -343,32 +338,33 @@ Bottom=5
 ]]
 
 	local content = template:format(
-		p.fg, -- NormalColor
-		p.accent_fg, -- HighlightCandidateColor
-		p.accent_fg, -- HighlightColor
-		p.accent, -- HighlightBackgroundColor
-		p.bg, -- [InputPanel/Background] Color
-		p.bg_border, -- BorderColor
-		p.bg_active, -- [InputPanel/Highlight] Color
+		p.fg.common, -- NormalColor
+		p.accent[1], -- HighlightCandidateColor
+		p.accent[1], -- HighlightColor
+		p.accent,  -- HighlightBackgroundColor
+		p.bg.common, -- [InputPanel/Background] Color
+		p.bg.border, -- BorderColor
+		p.bg.active, -- [InputPanel/Highlight] Color
 		asset_root, -- [InputPanel/PrevPage] Image
 		asset_root, -- [InputPanel/NextPage] Image
-		p.fg, -- [Menu] NormalColor
-		p.accent_fg, -- [Menu] HighlightCandidateColor
-		p.bg, -- [Menu/Background] Color
-		p.bg_border, -- [Menu/Background] BorderColor
+		p.fg.common, -- [Menu] NormalColor
+		p.accent[1], -- [Menu] HighlightCandidateColor
+		p.bg.common, -- [Menu/Background] Color
+		p.bg.border, -- [Menu/Background] BorderColor
 		asset_root, -- [Menu/CheckBox] Image
 		asset_root, -- [Menu/SubMenu] Image
-		p.bg_active, -- [Menu/Highlight] Color
-		p.bg_border -- [Menu/Separator] Color
+		p.bg.active, -- [Menu/Highlight] Color
+		p.bg.border -- [Menu/Separator] Color
 	)
 
 	f:write(content)
 	f:close()
 end
 
----@param p tdf.Colors
+---@param p tdf.ColorScheme
 local function write_nvim(p)
 	local syntax_keys = {
+		"comment",
 		"keyword",
 		"keyword_flow",
 		"keyword_return",
@@ -399,21 +395,22 @@ local function write_nvim(p)
 
 return {
   dark_mode = %s,
-  bg = %q,
-  fg = %q,
-  bg_elevated = %q,
-  bg_hover = %q,
-  bg_active = %q,
-  bg_border = %q,
-  bg_shadow = %q,
-  fg_muted = %q,
-  fg_subtle = %q,
-  fg_hover = %q,
-  fg_shadow = %q,
+	bg = {
+		common = %q,
+  	elevated = %q,
+  	hover = %q,
+  	active = %q,
+  	border = %q,
+  	shadow = %q,
+	},
+  fg = {
+		common = %q,
+  	muted = %q,
+  	subtle = %q,
+  	hover = %q,
+  	shadow = %q,
+	},
   accent = %q,
-  accent_soft = %q,
-  accent_strong = %q,
-  accent_fg = %q,
   accents = {%s},
   syntax = {%s},
   ansi_normal = {%s},
@@ -447,21 +444,18 @@ return {
 
 	local content = template:format(
 		p.dark_mode and "true" or "false",
-		p.bg,
-		p.fg,
-		p.bg_elevated,
-		p.bg_hover,
-		p.bg_active,
-		p.bg_border,
-		p.bg_shadow,
-		p.fg_muted,
-		p.fg_subtle,
-		p.fg_hover,
-		p.fg_shadow,
+		p.bg.common,
+		p.bg.elevated,
+		p.bg.hover,
+		p.bg.active,
+		p.bg.border,
+		p.bg.shadow,
+		p.fg.common,
+		p.fg.muted,
+		p.fg.subtle,
+		p.fg.hover,
+		p.fg.shadow,
 		p.accent,
-		p.accent_soft,
-		p.accent_strong,
-		p.accent_fg,
 		table.concat(accent_lines, "\n"),
 		table.concat(syntax_lines, "\n"),
 		table.concat(ansi_normal_items, ", "),
@@ -474,7 +468,7 @@ return {
 	os.execute("stylua " .. path .. " 2>/dev/null")
 end
 
----@param p tdf.Colors
+---@param p tdf.ColorScheme
 local function write_cava(p)
 	local path = os.getenv("HOME") .. "/.config/cava/themes/colors.g.theme"
 	os.execute("mkdir -p " .. path:match("(.*/)"))
@@ -487,18 +481,18 @@ gradient = 1
 %s
 ]]
 
-	local b = p.dark_mode and s.lift_contrast(h.mix(p.accent, p.fg, 0.60), p.bg, 4.4, 0.14)
-		or s.lift_contrast(h.mix(p.accent, "#ffffff", 0.34), p.bg, 3.6, 0.14)
-	local m = p.dark_mode and s.lift_contrast(h.mix(p.accent, p.accents[2], 0.48), p.bg, 3.2, 0.14)
-		or s.lift_contrast(h.mix(p.accent, p.accents[2], 0.55), p.bg, 3.0, 0.14)
-	local t = p.dark_mode and s.lift_contrast(h.mix(p.accents[2], p.bg, 0.78), p.bg, 1.35, 0.14)
-		or s.lift_contrast(h.mix(p.accents[2], "#000000", 0.58), p.bg, 2.1, 0.14)
+	local b = p.dark_mode and s.ensure_contrast_soft(h.mix(p.accent, p.fg.common, 0.60), p.bg.common, 4.4, 0.14)
+			or s.ensure_contrast_soft(h.mix(p.accent, "#ffffff", 0.34), p.bg.common, 3.6, 0.14)
+	local m = p.dark_mode and s.ensure_contrast_soft(h.mix(p.accent, p.accents[2], 0.48), p.bg.common, 3.2, 0.14)
+			or s.ensure_contrast_soft(h.mix(p.accent, p.accents[2], 0.55), p.bg.common, 3.0, 0.14)
+	local t = p.dark_mode and s.ensure_contrast_soft(h.mix(p.accents[2], p.bg.common, 0.78), p.bg.common, 1.35, 0.14)
+			or s.ensure_contrast_soft(h.mix(p.accents[2], "#000000", 0.58), p.bg.common, 2.1, 0.14)
 
 	local gradient_lines = {}
 	for i = 1, 8 do
 		local ratio = (i - 1) / 7
 		local shade = ratio <= 0.5 and h.mix(b, m, ratio / 0.5) or h.mix(m, t, (ratio - 0.5) / 0.5)
-		local color = s.lift_contrast(shade, p.bg, p.dark_mode and 1.7 or 2.1, 0.12)
+		local color = s.ensure_contrast_soft(shade, p.bg.common, p.dark_mode and 1.7 or 2.1, 0.12)
 		gradient_lines[#gradient_lines + 1] = string.format("gradient_color_%d = '%s'", i, color)
 	end
 
@@ -509,7 +503,7 @@ gradient = 1
 	f:close()
 end
 
----@param p tdf.Colors
+---@param p tdf.ColorScheme
 local function write_mako(p)
 	local path = os.getenv("HOME") .. "/.config/mako/g.colors"
 	os.execute("mkdir -p " .. path:match("(.*/)"))
@@ -520,7 +514,7 @@ background-color=%s
 text-color=%s
 border-color=%s
 ]]
-	local content = template:format(p.bg, p.fg, p.bg_border)
+	local content = template:format(p.bg.common, p.fg.common, p.bg.border)
 	local f = assert(io.open(path, "w"))
 	f:write(content)
 	f:close()
@@ -528,20 +522,37 @@ end
 
 local M = {}
 
----@param p tdf.Colors
-function M.preview(p)
+---@param colors string[] hex string list
+function M.dump_console(colors)
 	local DOT = " "
-	for _, hex in ipairs(p.preview) do
-		local r, g, b = h.to_rgb(hex)
+	for _, hex in ipairs(colors) do
+		local r, g, b = h.hex_to_rgb(hex)
 		io.write(string.format("\27[38;2;%d;%d;%dm%s", r, g, b, DOT))
 	end
 	io.write("\27[0m\n")
-	for _, hex in ipairs(p.preview) do
-		print(hex)
-	end
 end
 
----@param p tdf.Colors
+---@param colors string[] hex string list
+function M.dump_mako(colors, msg)
+	local DOT = " "
+	local formatted = {}
+	for _, hex in ipairs(colors) do
+		local r, g, b = h.hex_to_rgb(hex)
+		table.insert(formatted, string.format(
+			'<span foreground="#%02x%02x%02x">%s</span>',
+			r, g, b, DOT
+		))
+	end
+	local markup = table.concat(formatted, "")
+	local cmd = string.format(
+		"notify-send '%s' '%s'",
+		msg or "Color Preview",
+		markup
+	)
+	os.execute(cmd)
+end
+
+---@param p tdf.ColorScheme
 function M.invoke(p)
 	write_hypr(p)
 	write_waybar(p)
