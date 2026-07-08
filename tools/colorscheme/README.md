@@ -29,7 +29,7 @@ This tool reads a PPM image from stdin, samples dominant colors, builds a unifie
 - `gen.lua`: entrypoint, sampling orchestration, preview, notify, apply writes
 - `src/ppm.lua`: P6 PPM parsing and random pixel access
 - `src/sample.lua`: dominant color sampling and quantization
-- `src/colors.lua`: build the final palette from sampled colors
+- `src/ColorScheme.lua`: ColorScheme class definition
 - `src/write.lua`: write generated theme files for each target program
-- `src/helper.lua`: shared color helpers
+- `src/color_helper.lua`: shared color helpers
 - `src/strategy.lua`: shared theme strategy helpers
