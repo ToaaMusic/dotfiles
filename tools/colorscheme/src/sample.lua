@@ -74,7 +74,7 @@ end
 
 ---Return the most common quantized colors from random samples.
 ---@param img table
----@param opts SampleOptions
+---@param opts SampleOptions|nil
 ---@return string[] hex_colors
 function M.top_colors(img, opts)
 	opts             = opts or SampleOptions_default
