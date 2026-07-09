@@ -522,20 +522,35 @@ end
 
 local M = {}
 
----@param colors string[] hex string list
-function M.dump_console(colors)
+---@param colors string[]|string hex string list
+---@param msg string|nil
+function M.dump_console(colors, msg)
 	local DOT = " "
-	for _, hex in ipairs(colors) do
+	if msg then
+		io.write(msg)
+	end
+	local function dump(hex)
 		local r, g, b = h.hex_to_rgb(hex)
 		io.write(string.format("\27[38;2;%d;%d;%dm%s", r, g, b, DOT))
+	end
+	if type(colors) == "string" then
+		dump(colors)
+	else
+		for _, color in ipairs(colors) do
+			dump(color)
+		end
 	end
 	io.write("\27[0m\n")
 end
 
----@param colors string[] hex string list
+---@param colors string[]|string hex string list
+---@param msg string|nil
 function M.dump_mako(colors, msg)
 	local DOT = " "
 	local formatted = {}
+	if type(colors) == "string" then
+		colors = { colors }
+	end
 	for _, hex in ipairs(colors) do
 		local r, g, b = h.hex_to_rgb(hex)
 		table.insert(formatted, string.format(
