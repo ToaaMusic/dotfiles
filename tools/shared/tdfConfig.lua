@@ -1,4 +1,3 @@
---#region def
 ---@class tdf.Config
 ---@field link? tdf.LinkConfig
 ---@field compositor? string|"hypr"
@@ -29,7 +28,6 @@ local default_config = {
 		day_mode = "auto",
 	},
 }
---#endregion
 
 ---helper: merge table and defaults
 ---@param defaults table

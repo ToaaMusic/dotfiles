@@ -73,6 +73,22 @@ end
 
 -- [[ Collection Utils ]]
 
+--- Generate an array of color strings by interpolating between two hex colors
+---@param color1 string First hex color
+---@param color2 string Second hex color
+---@param length number Number of colors to generate
+---@return string[] Array of hex color strings
+function M.gradient(color1, color2, length)
+	local colors = {}
+
+	for i = 1, length do
+		local ratio = (i - 1) / (length - 1)
+		colors[i] = h.mix(color1, color2, ratio)
+	end
+
+	return colors
+end
+
 ---filter identical colors
 ---@param colors string[] hex color list
 ---@return string[] colors filtered identical hex color list

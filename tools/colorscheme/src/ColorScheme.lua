@@ -18,7 +18,6 @@ local logger = require("logger").get_logger()
 ---@field add string
 ---@field delete string
 ---@field change string
----@field text string
 local RoleColors = {}
 RoleColors.__index = RoleColors
 
@@ -108,7 +107,7 @@ SyntaxColors.__index = SyntaxColors
 ---@field bg tdf.BackgroundColors
 ---@field fg tdf.ForegroundColors
 ---@field ansi16? tdf.Ansi16
----@field role? RoleColors
+---@field role RoleColors
 ---@field candidates string[] -- to be obsoleted
 ---@field accents string[] -- to be obsoleted
 ---@field ansi_normal string[] -- TODO: use ansi16 field instead
@@ -249,28 +248,43 @@ end
 ---@param self tdf.ColorScheme
 ---@return tdf.ColorScheme
 function ColorScheme:build_syntax()
-	local normal = self.ansi_normal
+	local ansin = self.ansi_normal
 	local bg = self.bg.common
 	local fg = self.fg.common
 	self.syntax = {
 		comment        = h.mix(fg, bg, 0.5),
-		keyword        = normal[6],
-		keyword_flow   = s.ensure_contrast_soft(h.mix(normal[4], normal[2], 0.20), bg, 4.4, 0.14),
-		keyword_return = s.ensure_contrast_soft(h.mix(normal[6], normal[2], 0.35), bg, 4.6, 0.14),
-		string         = normal[3],
-		number         = normal[4],
-		type           = normal[5],
-		func           = normal[7],
-		func_call      = s.ensure_contrast_soft(h.mix(normal[7], fg, 0.10), bg, 4.8, 0.14),
+		keyword        = ansin[6],
+		keyword_flow   = s.ensure_contrast_soft(h.mix(ansin[4], ansin[2], 0.20), bg, 4.4, 0.14),
+		keyword_return = s.ensure_contrast_soft(h.mix(ansin[6], ansin[2], 0.35), bg, 4.6, 0.14),
+		string         = ansin[3],
+		number         = ansin[4],
+		type           = ansin[5],
+		func           = ansin[7],
+		func_call      = s.ensure_contrast_soft(h.mix(ansin[7], fg, 0.10), bg, 4.8, 0.14),
 		variable       = self.fg.hover,
-		constant       = s.ensure_contrast_soft(h.mix(normal[4], normal[2], 0.25), bg, 4.2, 0.14),
-		macro          = normal[2],
-		builtin        = s.ensure_contrast_soft(h.mix(normal[2], normal[4], 0.45), bg, 4.4, 0.14),
-		property       = normal[7],
-		parameter      = s.ensure_contrast_soft(h.mix(normal[7], normal[5], 0.38), bg, 4.4, 0.14),
+		constant       = s.ensure_contrast_soft(h.mix(ansin[4], ansin[2], 0.25), bg, 4.2, 0.14),
+		macro          = ansin[2],
+		builtin        = s.ensure_contrast_soft(h.mix(ansin[2], ansin[4], 0.45), bg, 4.4, 0.14),
+		property       = ansin[7],
+		parameter      = s.ensure_contrast_soft(h.mix(ansin[7], ansin[5], 0.38), bg, 4.4, 0.14),
 		operator       = self.fg.subtle,
 		punctuation    = self.fg.subtle,
-		namespace      = s.ensure_contrast_soft(h.mix(normal[5], normal[6], 0.32), bg, 4.4, 0.14),
+		namespace      = s.ensure_contrast_soft(h.mix(ansin[5], ansin[6], 0.32), bg, 4.4, 0.14),
+	}
+	return self
+end
+
+function ColorScheme:build_role()
+	local ansin = self.ansi_normal
+	self.role   = {
+		error   = ansin[2],
+		ok      = ansin[3],
+		warning = ansin[4],
+		info    = ansin[7],
+		hint    = ansin[8],
+		add     = ansin[3],
+		delete  = ansin[2],
+		change  = ansin[5],
 	}
 	return self
 end
@@ -353,6 +367,7 @@ function ColorScheme.from_dominants(dominants, invert_bool)
 
 	-- new instance
 	---@diagnostic disable: assign-type-mismatch
+	---@diagnostic disable-next-line: missing-fields
 	return ColorScheme.new({
 		dark_mode   = dark_mode,
 		bg          = {
@@ -376,7 +391,7 @@ function ColorScheme.from_dominants(dominants, invert_bool)
 		ansi_normal = nil,
 		ansi_bright = nil,
 		syntax      = nil,
-	}):build_ansi16():build_syntax()
+	}):build_ansi16():build_syntax():build_role()
 	---@diagnostic enable: assign-type-mismatch
 end
 

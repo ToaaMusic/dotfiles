@@ -410,6 +410,16 @@ return {
   	hover = %q,
   	shadow = %q,
 	},
+	role = {
+		error = %q,
+		ok = %q,
+		warning = %q,
+		info = %q,
+		hint = %q,
+		add  = %q,
+		delete = %q,
+		change = %q,
+	},
   accent = %q,
   accents = {%s},
   syntax = {%s},
@@ -455,6 +465,14 @@ return {
 		p.fg.subtle,
 		p.fg.hover,
 		p.fg.shadow,
+		p.role.error,
+		p.role.ok,
+		p.role.warning,
+		p.role.info,
+		p.role.hint,
+		p.role.add,
+		p.role.delete,
+		p.role.change,
 		p.accent,
 		table.concat(accent_lines, "\n"),
 		table.concat(syntax_lines, "\n"),
@@ -481,18 +499,8 @@ gradient = 1
 %s
 ]]
 
-	local b = p.dark_mode and s.ensure_contrast_soft(h.mix(p.accent, p.fg.common, 0.60), p.bg.common, 4.4, 0.14)
-			or s.ensure_contrast_soft(h.mix(p.accent, "#ffffff", 0.34), p.bg.common, 3.6, 0.14)
-	local m = p.dark_mode and s.ensure_contrast_soft(h.mix(p.accent, p.accents[2], 0.48), p.bg.common, 3.2, 0.14)
-			or s.ensure_contrast_soft(h.mix(p.accent, p.accents[2], 0.55), p.bg.common, 3.0, 0.14)
-	local t = p.dark_mode and s.ensure_contrast_soft(h.mix(p.accents[2], p.bg.common, 0.78), p.bg.common, 1.35, 0.14)
-			or s.ensure_contrast_soft(h.mix(p.accents[2], "#000000", 0.58), p.bg.common, 2.1, 0.14)
-
 	local gradient_lines = {}
-	for i = 1, 8 do
-		local ratio = (i - 1) / 7
-		local shade = ratio <= 0.5 and h.mix(b, m, ratio / 0.5) or h.mix(m, t, (ratio - 0.5) / 0.5)
-		local color = s.ensure_contrast_soft(shade, p.bg.common, p.dark_mode and 1.7 or 2.1, 0.12)
+	for i, color in ipairs(s.gradient(p.accent, p.accents[2], 8)) do
 		gradient_lines[#gradient_lines + 1] = string.format("gradient_color_%d = '%s'", i, color)
 	end
 

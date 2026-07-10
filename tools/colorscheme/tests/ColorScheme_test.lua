@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-local
 local new_Scheme = require("ColorScheme")
 local write = require("write")
 local ppm = require("ppm")
@@ -23,14 +24,27 @@ return function()
 	-- 	"#b279a3"
 	-- })
 
-	local img = ppm.from_file(tdf_dir .. "/tools/colorscheme/test.ppm")
-	---@diagnostic disable-next-line: param-type-mismatch
-	local doms = sample.top_colors(img)
-	local scheme = new_Scheme(doms)
+	local img, err = ppm.from_file(tdf_dir .. "/tools/colorscheme/test.ppm")
+	if not img then
+		error(err)
+	end
 
-	write.dump_console(doms, "dominants: ")
+	local doms = sample.top_colors(img, {
+		samples = 24000,
+		qbits = 4,
+		topn = 1000,
+		min_luma = 13,
+		max_luma = 242,
+		oversample_factor = 20,
+	})
+	write.dump_console(doms, string.format("dominants (%d): ", #doms))
+
+	---[[
+	local scheme = new_Scheme(doms)
 	write.dump_console(scheme.accent, "brand: ")
 	write.dump_console(scheme.ansi_normal, "ansi_normal: ")
+	write.dump_console(scheme.ansi_bright, "ansi_bright: ")
 	write.dump_console(scheme.accents, "accents: ")
-	write.dump_console(scheme.candidates, "candidates: ")
+	write.dump_console(scheme.candidates, string.format("candidates (%d): ", #scheme.candidates))
+	--]]
 end
