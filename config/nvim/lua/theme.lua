@@ -2,13 +2,12 @@
 -- https://neovim.io/doc/user/syntax/#%3Ahighlight
 
 local set_hl = vim.api.nvim_set_hl
-
 ---@type tdf.ColorScheme
 local colors = require("colors.g")
+local fg = colors.fg
+local bg = colors.bg
 local syntax = colors.syntax
-
--- preset maps
-local bg_fg = { bg = colors.bg.common, fg = colors.fg.common }
+local role = colors.role
 
 ---@param map table<string, vim.api.keyset.highlight>
 ---@param ns_id number|nil
@@ -34,20 +33,6 @@ local function apply_hl_map_fg_only(map, ns_id, enable)
 	end
 end
 
-local function set_bg_transparent()
-	for _, group in ipairs({
-		"Normal",
-		"NormalNC",
-		"SignColumn",
-		"EndOfBuffer",
-		"MsgArea",
-		-- "FloatBorder",
-		"NormalFloat",
-	}) do
-		set_hl(0, group, { bg = "none" })
-	end
-end
-
 -- run
 vim.opt.winborder = "rounded"
 
@@ -56,88 +41,89 @@ vim.opt.winborder = "rounded"
 -- basic
 -- https://neovim.io/doc/user/syntax/#highlight-groups
 apply_hl_map({
-	["ColorColumn"]   = { bg = colors.bg.active }, -- max col len
-	["Conceal"]       = { fg = colors.fg.subtle },
-	["CurSearch"]     = { fg = colors.fg.common, bg = colors.accents[4] },
-	["Cursor"]        = { fg = colors.accent, bg = colors.accent },
-	["lCursor"]       = { fg = colors.accent, bg = colors.accent },
-	["CursorIM"]      = { fg = colors.accent, bg = colors.accent },
-	["CursorColumn"]  = { bg = colors.bg.hover },
-	["CursorLine"]    = { bg = colors.bg.hover },
-	["Diractory"]     = { fg = colors.fg.common },
+	["ColorColumn"]  = { bg = bg.active }, -- max col len
+	["Conceal"]      = { fg = fg.subtle },
+	["CurSearch"]    = { fg = fg.common, bg = colors.accents[4] },
+	["Cursor"]       = { fg = colors.accent, bg = colors.accent },
+	["lCursor"]      = { fg = colors.accent, bg = colors.accent },
+	["CursorIM"]     = { fg = colors.accent, bg = colors.accent },
+	["CursorColumn"] = { bg = bg.hover },
+	["CursorLine"]   = { bg = bg.hover },
+	["Diractory"]    = { fg = fg.common },
 
-	["DiffAdd"]       = { fg = colors.accents[2] },
-	["DiffChange"]    = { fg = colors.accents[4] },
-	["DiffDelete"]    = { fg = colors.accents[1] },
-	["DiffText"]      = { fg = colors.accents[5] },
-	["DiffTextAddTo"] = { fg = colors.accents[2] },
+	-- ["DiffAdd"]      = { fg = colors.accents[2] },
+	-- ["DiffChange"]   = { fg = colors.accents[4] },
+	-- ["DiffDelete"]   = { fg = colors.accents[1] },
+	-- ["DiffText"]     = { fg = colors.accents[5] },
+	-- ["DiffTextAdd"]  = { fg = colors.accents[2] },
 
-	["EndOfBuffer"]   = { fg = "NONE" },
-	["TermCursor"]    = { fg = colors.accent, bg = colors.accent },
+	["EndOfBuffer"]  = { fg = "NONE", bg = "none" },
+	["TermCursor"]   = { fg = colors.accent, bg = colors.accent },
 
-	["OkMsg"]         = { fg = colors.accents[2] },
-	["WarningMsg"]    = { fg = colors.accents[3] },
-	["ErrorMsg"]      = { fg = colors.accents[1] },
-	["StderrMsg"]     = { fg = colors.accents[1] },
-	["StdoutMsg"]     = { fg = colors.accents[2] },
+	["OkMsg"]        = { fg = role.ok },
+	["WarningMsg"]   = { fg = role.warning },
+	["ErrorMsg"]     = { fg = role.error },
+	["StderrMsg"]    = { fg = role.error },
+	["StdoutMsg"]    = { fg = role.ok },
 
-	["WinSeparator"]  = { fg = colors.bg.common },
-	["Folded"]        = { bg = colors.bg.hover, fg = colors.fg.muted },
-	["FoldColumn"]    = { fg = colors.fg.subtle },
-	-- ["SignColumn"] = { fg = "none", bg = "none" },
-	["IncSearch"]     = { bg = colors.accents[4], fg = colors.bg.common },
-	-- ["Substitute"] = { fg = colors.accent, bg = colors.fg.hover },
-	["LineNr"]        = { fg = colors.fg.subtle },
-	-- ["LineNrAbove"] = { fg = colors.fg.subtle, bold = false },
-	-- ["LineNrBelow"] = { fg = colors.fg.subtle, bold = false },
-	["CursorLineNr"]  = { fg = colors.fg.hover, bold = true },
-	-- ["CursorLineFold"] = { fg = colors.fg.subtle, bg = "none" },
-	-- ["CursorLineSign"] = { fg = colors.fg.subtle, bg = "none" },
-	["MatchParen"]    = { bg = colors.bg.hover, bold = true },
-	-- ["ModeMsg"] = { fg = colors.fg.muted },
-	-- ["MsgArea"] = { bg = colors.bg.common},
-	-- ["MsgSeparator"] = { fg = colors.fg.muted },
+	["WinSeparator"] = { fg = bg.common },
+	["Folded"]       = { bg = bg.hover, fg = fg.muted },
+	["FoldColumn"]   = { fg = fg.subtle },
+	["SignColumn"]   = { bg = "none" },
+	["MsgArea"]      = { bg = "none" },
+	["IncSearch"]    = { bg = colors.accents[4], fg = bg.common },
+	-- ["Substitute"] = { fg = colors.accent, bg = fg.hover },
+	["LineNr"]       = { fg = fg.subtle },
+	-- ["LineNrAbove"] = { fg = fg.subtle, bold = false },
+	-- ["LineNrBelow"] = { fg = fg.subtle, bold = false },
+	["CursorLineNr"] = { fg = fg.hover, bold = true },
+	-- ["CursorLineFold"] = { fg = fg.subtle, bg = "none" },
+	-- ["CursorLineSign"] = { fg = fg.subtle, bg = "none" },
+	["MatchParen"]   = { bg = bg.hover, bold = true },
+	-- ["ModeMsg"] = { fg = fg.muted },
+	-- ["MsgArea"] = { bg = bg.common},
+	-- ["MsgSeparator"] = { fg = fg.muted },
 	-- ["MoreMsg"] = { fg = colors.accents[2] },
-	-- ["NonText"] = { fg = colors.fg.subtle },
+	-- ["NonText"] = { fg = fg.subtle },
 
-	["Normal"]        = bg_fg,
-	["NormalFloat"]   = { bg = colors.bg.elevated, fg = colors.fg.common },
-	["FloatBorder"]   = { bg = "none", fg = colors.bg.border, bold = true },
-	-- ["FloatShadow"] = { bg = colors.fg.common},
-	-- ["FloatShadowThrough"] = { bg = colors.fg.common},
-	-- ["FloatTitle"] = { fg = colors.fg.common},
-	-- ["FloatFooter"] = { fg = colors.fg.common},
-	["NormalNC"]      = { bg = colors.bg.common, fg = colors.fg.muted },
+	["Normal"]       = { bg = "none", fg = fg.common },
+	["NormalFloat"]  = { bg = "none", fg = fg.common },
+	["FloatBorder"]  = { bg = "none", fg = bg.border, bold = true },
+	-- ["FloatShadow"] = { bg = fg.common},
+	-- ["FloatShadowThrough"] = { bg = fg.common},
+	-- ["FloatTitle"] = { fg = fg.common},
+	-- ["FloatFooter"] = { fg = fg.common},
+	["NormalNC"]     = { bg = "none", fg = fg.muted },
 
-	["Pmenu"]         = { bg = colors.bg.elevated, fg = colors.fg.common },
-	["PmenuSel"]      = { bg = colors.accent, fg = colors.accents[4] },
-	["PmenuKind"]     = { bg = "none", fg = syntax.type },
-	["PmenuExtra"]    = { bg = "none", fg = colors.fg.subtle },
-	["PmenuThumb"]    = { bg = colors.accent[4] },
+	["Pmenu"]        = { bg = bg.elevated, fg = fg.common },
+	["PmenuSel"]     = { bg = colors.accent, fg = colors.accents[4] },
+	["PmenuKind"]    = { bg = "none", fg = syntax.type },
+	["PmenuExtra"]   = { bg = "none", fg = fg.subtle },
+	["PmenuThumb"]   = { bg = colors.accent[4] },
 
 	-- ["ComplMatchIns"] = nil
 	-- ["PreInsert"] = nil
 	-- ["ComplHint"] = nil
 	-- ["ComplHintMore"] = nil
 	-- ["Question"] = { fg = colors.accents[5] },
-	-- ["QuickFixLine"] = { bg = colors.bg.active },
-	["Search"]        = { bg = colors.accent[3], fg = colors.bg.common },
-	-- ["SpecialKey"] = { fg = colors.fg.subtle },
+	-- ["QuickFixLine"] = { bg = bg.active },
+	["Search"]       = { bg = colors.accent[3], fg = bg.common },
+	-- ["SpecialKey"] = { fg = fg.subtle },
 
 	-- ["SpellBad"] = { sp = colors.accents[1], undercurl = true },
 	-- ["SpellCap"] = { sp = colors.accents[3], undercurl = true },
 	-- ["SpellLocal"] = { sp = colors.accents[4], undercurl = true },
 	-- ["SpellRare"] = { sp = colors.accents[0xd], undercurl = true },
 
-	["StatusLine"]    = { bg = colors.bg.active, fg = colors.fg.common },
-	["StatusLineNC"]  = { bg = colors.bg.elevated, fg = colors.fg.muted },
+	["StatusLine"]   = { bg = bg.active, fg = fg.common },
+	["StatusLineNC"] = { bg = bg.elevated, fg = fg.muted },
 
-	["TabLine"]       = { bg = colors.bg.elevated, fg = colors.fg.muted },
-	["TabLineFill"]   = { bg = colors.bg.common },
-	["TabLineSel"]    = { bg = colors.accent, fg = colors.accents[1], bold = true },
+	["TabLine"]      = { bg = bg.elevated, fg = fg.muted },
+	["TabLineFill"]  = { bg = bg.common },
+	["TabLineSel"]   = { bg = colors.accent, fg = colors.accents[1], bold = true },
 
-	["Title"]         = { fg = colors.accents[4], bold = true },
-	["Visual"]        = { bg = colors.bg.active },
+	["Title"]        = { fg = colors.accent, bold = true },
+	["Visual"]       = { bg = bg.active },
 
 	-- ["WildMenu"] = { bg = colors.accent, fg = colors.accent_fg },
 })
@@ -147,9 +133,9 @@ apply_hl_map({
 apply_hl_map({
 	["Comment"]        = { fg = syntax.comment, italic = true },
 
-	["Constant"]       = { fg = syntax.constant },
+	["Constant"]       = { fg = syntax.constant }, -- const
 	["String"]         = { fg = syntax.string },
-	["Character"]      = { fg = syntax.string },
+	["Character"]      = { fg = syntax.string },  -- char
 	["Number"]         = { fg = syntax.number },
 	["Boolean"]        = { fg = syntax.builtin },
 	["Float"]          = { fg = syntax.number },
@@ -180,21 +166,21 @@ apply_hl_map({
 	["SpecialChar"]    = { fg = syntax.constant },
 	["Tag"]            = { fg = syntax.type },
 	["Delimiter"]      = { fg = syntax.punctuation },
-	["SpecialComment"] = { fg = colors.fg.subtle, italic = true },
+	["SpecialComment"] = { fg = fg.subtle, italic = true },
 	["Debug"]          = { fg = colors.accents[1] },
 
 	["Underlined"]     = { underline = true },
-	["Dimmed"]         = { fg = colors.fg.subtle },
+	["Dimmed"]         = { fg = fg.subtle },
 
-	["Ignore"]         = { fg = colors.fg.subtle },
+	["Ignore"]         = { fg = fg.subtle },
 
-	["Error"]          = { fg = colors.accents[1], bold = true },
+	["Error"]          = { fg = role.error, bold = true },
 
-	["Todo"]           = { fg = colors.accents[4], bold = true },
+	["Todo"]           = { fg = role.info, bold = true },
 
-	["Added"]          = { fg = colors.accents[2] },
-	["Changed"]        = { fg = colors.accents[4] },
-	["Removed"]        = { fg = colors.accents[1] },
+	["Added"]          = { fg = role.add },
+	["Changed"]        = { fg = role.change },
+	["Removed"]        = { fg = role.delete },
 })
 
 -- diagnostics
@@ -236,8 +222,8 @@ apply_hl_map({
 	["DiagnosticSignHint"]          = { fg = colors.accents[6] },
 	["DiagnosticSignOk"]            = { fg = colors.accents[2] },
 
-	["DiagnosticUnnecessary"]       = { fg = colors.fg.subtle },
-	["DiagnosticDeprecated"]        = { fg = colors.fg.subtle, strikethrough = true },
+	["DiagnosticUnnecessary"]       = { fg = fg.subtle },
+	["DiagnosticDeprecated"]        = { fg = fg.subtle, strikethrough = true },
 })
 
 -- treesitter
@@ -286,7 +272,7 @@ apply_hl_map({
 	["@function.call"]              = { fg = syntax.func_call },
 	["@function.macro"]             = { fg = syntax.macro },
 
-	["@function.method"]            = { fg = syntax.func },
+	["@function.method"]            = { link = "Function" },
 	["@function.method.call"]       = { fg = syntax.func_call },
 
 	["@constructor"]                = { fg = syntax.type },
@@ -320,23 +306,22 @@ apply_hl_map({
 	["@comment.error"]              = { link = "ErrorMsg" },
 	["@comment.warning"]            = { link = "WarningMsg" },
 	["@comment.todo"]               = { link = "Todo" },
-	["@comment.note"]               = { fg = colors.accents[5], bold = true },
+	["@comment.note"]               = { fg = role.info, bold = true },
 
-	["@markup.strong"]              = { fg = colors.fg.common, bold = true },
-	["@markup.italic"]              = { fg = colors.fg.common, italic = true },
-	["@markup.strikethrough"]       = { fg = colors.fg.common, strikethrough = true },
-	["@markup.underline"]           = { fg = colors.fg.common, underline = true },
+	["@markup.strong"]              = { fg = fg.common, bold = true },
+	["@markup.italic"]              = { fg = fg.common, italic = true },
+	["@markup.strikethrough"]       = { fg = fg.common, strikethrough = true },
+	["@markup.underline"]           = { fg = fg.common, underline = true },
 
-	-- TODO: need ".markdown"?
-	["@markup.heading"]             = { fg = colors.fg.common },
-	["@markup.heading.1"]           = { fg = colors.fg.common },
-	["@markup.heading.2"]           = { fg = colors.fg.common },
-	["@markup.heading.3"]           = { fg = colors.fg.common },
-	["@markup.heading.4"]           = { fg = colors.fg.common },
-	["@markup.heading.5"]           = { fg = colors.fg.common },
-	["@markup.heading.6"]           = { fg = colors.fg.common },
+	["@markup.heading"]             = { fg = fg.common },
+	["@markup.heading.1"]           = { fg = fg.common },
+	["@markup.heading.2"]           = { fg = fg.common },
+	["@markup.heading.3"]           = { fg = fg.common },
+	["@markup.heading.4"]           = { fg = fg.common },
+	["@markup.heading.5"]           = { fg = fg.common },
+	["@markup.heading.6"]           = { fg = fg.common },
 
-	["@markup.quote"]               = { fg = colors.fg.muted, italic = true },
+	["@markup.quote"]               = { fg = fg.muted, italic = true },
 	["@markup.math"]                = { fg = syntax.constant },
 
 	["@markup.link"]                = { fg = syntax.namespace, underline = true },
@@ -396,20 +381,20 @@ apply_hl_map_fg_only({
 
 apply_hl_map({
 	["@lsp.type.comment"]   = { link = "Comment" },
-	["@lsp.mod.deprecated"] = { fg = colors.fg.subtle, strikethrough = true },
+	["@lsp.mod.deprecated"] = { fg = fg.subtle, strikethrough = true },
 })
 
 -- lsp
 -- https://neovim.io/doc/user/lsp/#lsp-highlight
 apply_hl_map({
-	-- ["LspReferenceText"] = { bg = colors.bg.hover },
-	-- ["LspReferenceRead"] = { bg = colors.bg.hover },
-	-- ["LspReferenceWrite"] = { bg = colors.bg.hover },
-	-- ["LspReferenceTarget"] = { fg = colors.fg.common, bold = true },
-	-- ["LspInlayHint"] = { fg = colors.fg.subtle, bg = colors.bg.active },
-	-- ["LspCodeLens"] = { fg = colors.fg.subtle },
-	-- ["LspCodeLensSeparator"] = { fg = colors.fg.subtle },
-	["LspSignatureActiveParameter"] = { bg = colors.bg.hover },
+	-- ["LspReferenceText"] = { bg = bg.hover },
+	-- ["LspReferenceRead"] = { bg = bg.hover },
+	-- ["LspReferenceWrite"] = { bg = bg.hover },
+	-- ["LspReferenceTarget"] = { fg = fg.common, bold = true },
+	-- ["LspInlayHint"] = { fg = fg.subtle, bg = bg.active },
+	-- ["LspCodeLens"] = { fg = fg.subtle },
+	-- ["LspCodeLensSeparator"] = { fg = fg.subtle },
+	["LspSignatureActiveParameter"] = { bg = bg.hover },
 })
 
 -- ==================== plugins ====================
@@ -430,69 +415,71 @@ apply_hl_map({
 	["BlinkCmpKindKeyword"]         = { bg = "none", fg = syntax.keyword },
 	["BlinkCmpKindSnippet"]         = { bg = "none", fg = syntax.constant },
 	["BlinkCmpKindConstant"]        = { bg = "none", fg = syntax.constant },
-	["BlinkCmpMenu"]                = { bg = "none", fg = colors.fg.common },
-	["BlinkCmpMenuBorder"]          = { fg = colors.bg.border, bg = "none" },
-	["BlinkCmpDoc"]                 = { bg = "none", fg = colors.fg.common },
-	["BlinkCmpDocBorder"]           = { fg = colors.bg.border, bg = "none" },
-	["BlinkCmpSignatureHelp"]       = { bg = "none", fg = colors.fg.common },
-	["BlinkCmpSignatureHelpBorder"] = { fg = colors.bg.border, bg = "none" },
+	["BlinkCmpMenu"]                = { bg = "none", fg = fg.common },
+	["BlinkCmpMenuBorder"]          = { fg = bg.border, bg = "none" },
+	["BlinkCmpDoc"]                 = { bg = "none", fg = fg.common },
+	["BlinkCmpDocBorder"]           = { fg = bg.border, bg = "none" },
+	["BlinkCmpSignatureHelp"]       = { bg = "none", fg = fg.common },
+	["BlinkCmpSignatureHelpBorder"] = { fg = bg.border, bg = "none" },
 })
 
 -- neo-tree
 -- https://github.com/nvim-neo-tree/neo-tree.nvim
 apply_hl_map({
-	["NeoTreeNormal"]               = { bg = "none", fg = colors.fg.common },
-	["NeoTreeNormalNC"]             = { bg = "none", fg = colors.fg.muted },
-	["NeoTreeFloatBorder"]          = { fg = colors.bg.border, bg = "none" },
-	["NeoTreeWinSeparator"]         = { fg = colors.bg.border, bg = "none" },
-	["NeoTreeTabActive"]            = { fg = colors.fg.common, bg = "none" },
-	["NeoTreeTabInactive"]          = { fg = colors.fg.muted, bg = "none" },
+	["NeoTreeNormal"]               = { fg = fg.common, bg = "none" },
+	["NeoTreeNormalNC"]             = { fg = fg.muted, bg = "none" },
+	["NeoTreeFloatBorder"]          = { fg = bg.border, bg = "none" },
+	["NeoTreeWinSeparator"]         = { fg = bg.border, bg = "none" },
+	["NeoTreeTabActive"]            = { fg = fg.common, bg = "none" },
+	["NeoTreeTabInactive"]          = { fg = fg.muted, bg = "none" },
 	["NeoTreeTabSeparatorActive"]   = { fg = "none", bg = "none" },
 	["NeoTreeTabSeparatorInactive"] = { fg = "none", bg = "none" },
-	["NeoTreeRootName"]             = { fg = colors.fg.common, bold = true },
-	["NeoTreeIndentMarker"]         = { fg = colors.bg.border, bg = "none" },
+	["NeoTreeRootName"]             = { fg = syntax.namespace, bold = true },
+	["NeoTreeIndentMarker"]         = { fg = syntax.comment, bg = "none" },
 	["NeoTreeExpander"]             = { fg = syntax.punctuation, bg = "none" },
 	["NeoTreeDirectoryName"]        = { fg = syntax.namespace },
 	["NeoTreeDirectoryIcon"]        = { fg = syntax.namespace },
 	["NeoTreeOpenedFolderName"]     = { fg = syntax.func, bold = true },
 	["NeoTreeFileIcon"]             = { fg = syntax.namespace },
-	["NeoTreeFileName"]             = { fg = colors.fg.common },
+	["NeoTreeFileName"]             = { fg = fg.common },
 	["NeoTreeSymbolicLinkTarget"]   = { fg = syntax.keyword_flow },
-	["NeoTreeModified"]             = { fg = colors.accents[4] },
-	["NeoTreeMessage"]              = { fg = colors.fg.muted },
-	["NeoTreeGitAdded"]             = { fg = colors.accents[2] },
-	["NeoTreeGitModified"]          = { fg = colors.accents[4] },
-	["NeoTreeGitDeleted"]           = { fg = colors.accents[1] },
-	["NeoTreeGitUntracked"]         = { fg = syntax.func },
-	["NeoTreeGitIgnored"]           = { fg = colors.fg.subtle },
+	["NeoTreeModified"]             = { fg = role.change },
+	["NeoTreeMessage"]              = { fg = colors.accent },
+
+	["NeoTreeGitAdded"]             = { fg = role.add },
+	["NeoTreeGitModified"]          = { fg = role.change },
+	["NeoTreeGitDeleted"]           = { fg = role.delete },
+	["NeoTreeGitUntracked"]         = { fg = role.delete },
+	["NeoTreeGitIgnored"]           = { fg = syntax.comment },
 	["NeoTreeGitUnstaged"]          = { fg = colors.accents[1] },
 	["NeoTreeGitStaged"]            = { fg = colors.accents[2] },
-	["NeoTreeGitConflict"]          = { fg = colors.accents[1], bold = true },
+	["NeoTreeGitConflict"]          = { fg = role.error, bold = true },
 })
 
 -- gitsigns
 -- https://github.com/lewis6991/gitsigns.nvim
 apply_hl_map({
-	["GitSignsAdd"]    = { fg = colors.accents[2] },
-	["GitSignsChange"] = { fg = colors.accents[4] },
-	["GitSignsDelete"] = { fg = colors.accents[1] },
-	["GitSignsStaged"] = { fg = colors.accents[2] },
+	["GitSignsAdd"]       = { fg = role.add },
+	["GitSignsChange"]    = { fg = role.change },
+	["GitSignsDelete"]    = { fg = role.delete },
+	-- ["GitSignsChangedelete"] = { link = "GitSignsChange" },
+	-- ["GitSignsTopdelete"]    = { link = "GitSignsDelete" },
+	-- ["GitSignsUntracked"]    = { link = "GitSignsAdd" },
+	-- ["GitSignsStagedAdd"] = { link = "GitSignsAdd" },
 })
 
 -- render-markdown
 -- https://github.com/MeanderingProgrammer/render-markdown.nvim
 -- (!! RenderMarkdownHx 只是 icon, 而 RenderMarkdownHxBg 才是文本行，包括 fg 和 bg )
 apply_hl_map({
-	["RenderMarkdownH1Bg"]       = { fg = colors.fg.common, bold = true },
-	["RenderMarkdownH2Bg"]       = { fg = colors.fg.common, bold = true },
-	["RenderMarkdownH3Bg"]       = { fg = colors.fg.common, bold = true },
-	["RenderMarkdownH4Bg"]       = { fg = colors.fg.common, bold = true },
-	["RenderMarkdownH5Bg"]       = { fg = colors.fg.common, bold = true },
-	["RenderMarkdownH6Bg"]       = { fg = colors.fg.common, bold = true },
-	["RenderMarkdownCode"]       = { bg = colors.bg.common },
-	["RenderMarkdownCodeInline"] = { fg = colors.fg.common },
-	["RenderMarkdownCodeInfo"]   = { fg = colors.fg.common },
-	["RenderMarkdownCodeBorder"] = { fg = colors.fg.common },
+	["RenderMarkdownH1Bg"]       = { fg = fg.common, bold = true },
+	["RenderMarkdownH2Bg"]       = { fg = fg.common, bold = true },
+	["RenderMarkdownH3Bg"]       = { fg = fg.common, bold = true },
+	["RenderMarkdownH4Bg"]       = { fg = fg.common, bold = true },
+	["RenderMarkdownH5Bg"]       = { fg = fg.common, bold = true },
+	["RenderMarkdownH6Bg"]       = { fg = fg.common, bold = true },
+	["RenderMarkdownCode"]       = { bg = bg.common },
+	["RenderMarkdownCodeInline"] = { fg = fg.common },
+	["RenderMarkdownCodeInfo"]   = { fg = fg.common },
+	["RenderMarkdownCodeBorder"] = { fg = fg.common },
 })
-
-set_bg_transparent()

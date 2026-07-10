@@ -70,13 +70,14 @@ function M.rgb_to_hex(r, g, b)
 	)
 end
 
----Convert hex string to HSV components.
----@param hex string A hex color in string (#000000-#FFFFFF).
+---Convert RGB to HSV.
+---@param r number 0-255
+---@param g number 0-255
+---@param b number 0-255
 ---@return number h Hue: 0-360
 ---@return number s Saturation: 0-1
 ---@return number v Value: 0-1
-function M.hex_to_hsv(hex)
-	local r, g, b = M.hex_to_rgb(hex)
+function M.rgb_to_hsv(r, g, b)
 	r, g, b = r / 255, g / 255, b / 255
 	local maxc, minc = math.max(r, g, b), math.min(r, g, b)
 	local delta = maxc - minc
@@ -98,12 +99,14 @@ function M.hex_to_hsv(hex)
 	return h, s, v
 end
 
----Convert HSV components to hex string.
+---Convert HSV to RGB.
 ---@param h number Hue: 0-360
 ---@param s number Saturation: 0-1
 ---@param v number Value: 0-1
----@return string hex #000000-#FFFFFF
-function M.hsv_to_hex(h, s, v)
+---@return number r 0-255
+---@return number g 0-255
+---@return number b 0-255
+function M.hsv_to_rgb(h, s, v)
 	h = (h or 0) % 360
 	s = clamp_linear(s or 0)
 	v = clamp_linear(v or 0)
@@ -127,16 +130,35 @@ function M.hsv_to_hex(h, s, v)
 		r1, g1, b1 = c, 0, x
 	end
 
-	return M.rgb_to_hex((r1 + m) * 255, (g1 + m) * 255, (b1 + m) * 255)
+	return (r1 + m) * 255, (g1 + m) * 255, (b1 + m) * 255
 end
 
----Convert hex string to HSL components.
+---Convert hex string to HSV components.
 ---@param hex string A hex color in string (#000000-#FFFFFF).
 ---@return number h Hue: 0-360
 ---@return number s Saturation: 0-1
+---@return number v Value: 0-1
+function M.hex_to_hsv(hex)
+	return M.rgb_to_hsv(M.hex_to_rgb(hex))
+end
+
+---Convert HSV components to hex string.
+---@param h number Hue: 0-360
+---@param s number Saturation: 0-1
+---@param v number Value: 0-1
+---@return string hex #000000-#FFFFFF
+function M.hsv_to_hex(h, s, v)
+	return M.rgb_to_hex(M.hsv_to_rgb(h, s, v))
+end
+
+---Convert RGB to HSL.
+---@param r number 0-255
+---@param g number 0-255
+---@param b number 0-255
+---@return number h Hue: 0-360
+---@return number s Saturation: 0-1
 ---@return number l Lightness: 0-1
-function M.hex_to_hsl(hex)
-	local r, g, b = M.hex_to_rgb(hex)
+function M.rgb_to_hsl(r, g, b)
 	r, g, b = r / 255, g / 255, b / 255
 	local maxc, minc = math.max(r, g, b), math.min(r, g, b)
 	local delta = maxc - minc
@@ -157,12 +179,14 @@ function M.hex_to_hsl(hex)
 	return h, s, l
 end
 
----Convert HSL components to hex string.
+---Convert HSL to RGB.
 ---@param h number Hue: 0-360
 ---@param s number Saturation: 0-1
 ---@param l number Lightness: 0-1
----@return string hex #000000-#FFFFFF
-function M.hsl_to_hex(h, s, l)
+---@return number r 0-255
+---@return number g 0-255
+---@return number b 0-255
+function M.hsl_to_rgb(h, s, l)
 	h = (h or 0) % 360
 	s = clamp_linear(s or 0)
 	l = clamp_linear(l or 0)
@@ -184,7 +208,25 @@ function M.hsl_to_hex(h, s, l)
 	else
 		r1, g1, b1 = c, 0, x
 	end
-	return M.rgb_to_hex((r1 + m) * 255, (g1 + m) * 255, (b1 + m) * 255)
+	return (r1 + m) * 255, (g1 + m) * 255, (b1 + m) * 255
+end
+
+---Convert hex string to HSL components.
+---@param hex string A hex color in string (#000000-#FFFFFF).
+---@return number h Hue: 0-360
+---@return number s Saturation: 0-1
+---@return number l Lightness: 0-1
+function M.hex_to_hsl(hex)
+	return M.rgb_to_hsl(M.hex_to_rgb(hex))
+end
+
+---Convert HSL components to hex string.
+---@param h number Hue: 0-360
+---@param s number Saturation: 0-1
+---@param l number Lightness: 0-1
+---@return string hex #000000-#FFFFFF
+function M.hsl_to_hex(h, s, l)
+	return M.rgb_to_hex(M.hsl_to_rgb(h, s, l))
 end
 
 -- [[ Get Properties ]]
@@ -298,19 +340,45 @@ end
 ---Rotate a color hue in HSV space.
 ---@param hex string A hex color in string (#000000-#FFFFFF).
 ---@param degrees number Degrees (+360 to -360) to rotate hue (default: 0).
----@param sat_floor number|nil Optional saturation floor (0-1).
----@param val_floor number|nil Optional value floor (0-1).
 ---@return string hex hue-rotated hex color (#000000-#FFFFFF).
-function M.rotate_hue(hex, degrees, sat_floor, val_floor)
+function M.rotate_hue(hex, degrees)
 	local h, s, v = M.hex_to_hsv(hex)
 	h = (h + (degrees or 0)) % 360
-	if sat_floor then
-		s = math.max(s, sat_floor)
-	end
-	if val_floor then
-		v = math.max(v, val_floor)
-	end
 	return M.hsv_to_hex(h, s, v)
+end
+
+---Quantisized color key
+---@param r number 0-255
+---@param g number 0-255
+---@param b number 0-255
+---@param qbits number 1-8
+---@return number key 0..2^(3*qbits)-1
+function M.quantize(r, g, b, qbits)
+	local shift = 8 - qbits
+	local rq = r >> shift
+	local gq = g >> shift
+	local bq = b >> shift
+	return (rq << (2 * qbits)) | (gq << qbits) | bq
+end
+
+---Reproduce RGB from a quantized key.
+---@param key number
+---@param qbits number 1-8
+---@return number r 0-255
+---@return number g 0-255
+---@return number b 0-255
+function M.dequantize(key, qbits)
+	local mask = (1 << qbits) - 1
+	local bq = key & mask
+	local gq = (key >> qbits) & mask
+	local rq = (key >> (2 * qbits)) & mask
+
+	local shift = 8 - qbits
+	local half = (shift > 0) and (1 << (shift - 1)) or 0
+	local r = rq * (1 << shift) + half
+	local g = gq * (1 << shift) + half
+	local b = bq * (1 << shift) + half
+	return M.clamp(r, 0, 255), M.clamp(g, 0, 255), M.clamp(b, 0, 255)
 end
 
 return M

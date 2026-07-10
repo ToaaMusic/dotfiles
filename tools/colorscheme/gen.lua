@@ -27,6 +27,8 @@ img:seed_rng()
 
 -- 2. Sample dominant colors
 local dominants = sample.top_colors(img, {
+	-- topn = 1000,
+	-- qbits = 4,
 	-- sample.center_region(img),
 })
 

@@ -5,18 +5,24 @@ local h = require("color_helper")
 local luma = h.rgb_get_luma
 local rgb_to_hex = h.rgb_to_hex
 local clamp = h.clamp
+local quantize = h.quantize
+local dequantize = h.dequantize
 
 local M = {}
 
--- definations
+---@class SampleRegion
+---@field x0 number
+---@field y0 number
+---@field x1 number
+---@field y1 number
 
 ---@class SampleOptions
 ---@field samples? number
 ---@field topn? number
 ---@field qbits? number
 ---@field region? SampleRegion
----@field min_luma? number
----@field max_luma? number
+---@field min_luma? number 0-255
+---@field max_luma? number 0-255
 ---@field oversample_factor? number
 local SampleOptions_default = {
 	samples           = 12000,
@@ -28,75 +34,38 @@ local SampleOptions_default = {
 	oversample_factor = 10,
 }
 
----@class SampleRegion
----@field x0 number
----@field y0 number
----@field x1 number
----@field y1 number
-
--- local helpers
-
----Quantisized color key
----@param r number 0-255
----@param g number 0-255
----@param b number 0-255
----@param qbits number 1-8
----@return number key 0..2^(3*qbits)-1
-local function quant_key(r, g, b, qbits)
-	local shift = 8 - qbits
-	local rq = r >> shift
-	local gq = g >> shift
-	local bq = b >> shift
-	return (rq << (2 * qbits)) | (gq << qbits) | bq
-end
-
----Reproduce RGB from a quantized key.
----@param key number
----@param qbits number 1-8
----@return number r 0-255
----@return number g 0-255
----@return number b 0-255
-local function repr_from_key(key, qbits)
-	local mask = (1 << qbits) - 1
-	local bq = key & mask
-	local gq = (key >> qbits) & mask
-	local rq = (key >> (2 * qbits)) & mask
-
-	local shift = 8 - qbits
-	local half = (shift > 0) and (1 << (shift - 1)) or 0
-	local r = rq * (1 << shift) + half
-	local g = gq * (1 << shift) + half
-	local b = bq * (1 << shift) + half
-	return clamp(r, 0, 255), clamp(g, 0, 255), clamp(b, 0, 255)
-end
-
--- public
-
----Return the most common quantized colors from random samples.
----@param img table
+--[[Return the most common quantized colors from random samples.
+default opts:
+```lua
+local SampleOptions_default = {
+	samples           = 12000,
+	topn              = 16,
+	qbits             = 5,
+	region            = nil,
+	min_luma          = nil,
+	max_luma          = nil,
+	oversample_factor = 10,
+}
+```]]
+---@param img PPM
 ---@param opts SampleOptions|nil
 ---@return string[] hex_colors
 function M.top_colors(img, opts)
-	opts             = opts or SampleOptions_default
-	local samples    = opts.samples or SampleOptions_default.samples
-	local topn       = opts.topn or SampleOptions_default.topn
-	local qbits      = opts.qbits or SampleOptions_default.qbits
+	opts = opts or {}
+	setmetatable(opts, { __index = SampleOptions_default })
+	local samples    = opts.samples
+	local topn       = opts.topn
+	local qbits      = opts.qbits
 	local region     = opts.region
 	local min_luma   = opts.min_luma
 	local max_luma   = opts.max_luma
-	local oversample = opts.oversample_factor or SampleOptions_default.oversample_factor
+	local oversample = opts.oversample_factor
 
-	if samples <= 0 then
-		error("sample.top_colors: samples must be > 0")
-	end
-	if topn <= 0 then
-		error("sample.top_colors: topn must be > 0")
-	end
-	if qbits < 1 or qbits > 8 then
-		error("sample.top_colors: qbits must be 1..8")
-	end
+	if samples <= 0 then error("sample.top_colors: samples must be > 0") end
+	if topn <= 0 then error("sample.top_colors: topn must be > 0") end
+	if qbits < 1 or qbits > 8 then error("sample.top_colors: qbits must be 1..8") end
 
-	local hist = {}
+	local hist = {} -- { [color_key] = count }
 	local collected = 0
 	local tries = 0
 	local max_tries = samples * 4
@@ -108,12 +77,13 @@ function M.top_colors(img, opts)
 		return img:random_pixel()
 	end
 
+	-- main sample loop
 	while collected < samples and tries < max_tries do
 		tries = tries + 1
 		local r, g, b = next_rgb()
 		local y = luma(r, g, b)
 		if (not min_luma or y >= min_luma) and (not max_luma or y <= max_luma) then
-			local k = quant_key(r, g, b, qbits)
+			local k = quantize(r, g, b, qbits)
 			hist[k] = (hist[k] or 0) + 1
 			collected = collected + 1
 		end
@@ -134,7 +104,7 @@ function M.top_colors(img, opts)
 	local picked, seen = {}, {}
 	local limit = math.min(#bins, topn * oversample)
 	for i = 1, limit do
-		local r, g, b = repr_from_key(bins[i].k, qbits)
+		local r, g, b = dequantize(bins[i].k, qbits)
 		local hex = rgb_to_hex(r, g, b)
 		if not seen[hex] then
 			picked[#picked + 1] = hex

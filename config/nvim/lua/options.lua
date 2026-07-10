@@ -1,7 +1,8 @@
 local op = vim.opt
+local wo = vim.wo
 
 -- editor
-op.relativenumber = false
+op.relativenumber = true
 op.number = true
 op.cursorline = true
 op.cursorlineopt = "number"
@@ -10,7 +11,7 @@ op.formatoptions:remove({ "c", "r", "o" })
 op.iskeyword:append("-", "_")
 
 op.termguicolors = true
-op.fillchars:append({ eob = " " })
+op.fillchars:append({ eob = " ", fold = " " })
 
 -- tab
 op.tabstop = 2
@@ -25,16 +26,21 @@ op.ruler = false
 
 op.clipboard = "unnamedplus"
 
-vim.wo.foldmethod = "expr"
-vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- fold
+wo.foldenable = true
+-- wo.foldmethod = "expr"
+-- wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
+-- wo.foldlevel = 99
+-- wo.foldnestmax = 5
+-- op.foldmarker = "#region,#endregion"
+op.foldtext = "'> ' . getline(v:foldstart)"
+op.foldcolumn = '0'
 
-vim.wo.foldenable = true
-vim.wo.foldlevel = 99
-vim.wo.foldnestmax = 5
-
-op.foldmarker = "#region,#endregion"
 op.colorcolumn = '120'
 op.expandtab = false
+
+-- wo.conceallevel = 0
 
 -- disable netrw
 vim.g.loaded_netrw = 1

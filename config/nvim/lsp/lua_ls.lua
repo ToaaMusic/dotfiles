@@ -44,6 +44,10 @@ return {
 					align_continuous_rect_table_field = "true"
 				}
 			},
+			hover = {
+				enable = true,
+				previewFields = 1000,
+			},
 			type = {
 				castNumberToInteger = true,
 				-- checkTableShape = false,

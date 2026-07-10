@@ -1,4 +1,7 @@
 #cache
+config/cava/themes
+config/cava/shaders
+
 # config/fcitx5/conf/cached_layouts
 /.cache
 

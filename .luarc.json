@@ -1,6 +1,0 @@
-{
-  "workspace": {
-    "library": ["$TOAAM_DOTFILES/tools/shared/tdfConfig.lua"]
-  },
-  "runtime.version": "LuaJIT"
-}
