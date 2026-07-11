@@ -30,12 +30,12 @@ return function()
 	end
 
 	local doms = sample.top_colors(img, {
-		samples = 24000,
-		qbits = 4,
-		topn = 1000,
-		min_luma = 13,
-		max_luma = 242,
-		oversample_factor = 20,
+		samples = 12000,
+		qbits = 5,
+		topn = 16,
+		-- min_luma = 13,
+		-- max_luma = 242,
+		oversample_factor = 10,
 	})
 	write.dump_console(doms, string.format("dominants (%d): ", #doms))
 

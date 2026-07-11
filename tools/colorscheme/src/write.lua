@@ -530,9 +530,9 @@ end
 
 local M = {}
 
----@param colors string[]|string hex string list
+---@param color string[]|string hex string list
 ---@param msg string|nil
-function M.dump_console(colors, msg)
+function M.dump_console(color, msg)
 	local DOT = " "
 	if msg then
 		io.write(msg)
@@ -541,11 +541,11 @@ function M.dump_console(colors, msg)
 		local r, g, b = h.hex_to_rgb(hex)
 		io.write(string.format("\27[38;2;%d;%d;%dm%s", r, g, b, DOT))
 	end
-	if type(colors) == "string" then
-		dump(colors)
+	if type(color) == "string" then
+		dump(color)
 	else
-		for _, color in ipairs(colors) do
-			dump(color)
+		for _, color_item in ipairs(color) do
+			dump(color_item)
 		end
 	end
 	io.write("\27[0m\n")

@@ -135,13 +135,14 @@ return {
 							request_timeout = 5000,
 						},
 					},
+					---@diagnostic disable-next-line: missing-fields
 					config = {
-						_configs = {},
-						settings = {
-							["csharp|code_lens"] = {
-								dotnet_enable_references_code_lens = true,
-							},
-						},
+						-- _configs = {},
+						-- settings = {
+						-- 	["csharp|code_lens"] = {
+						-- 		dotnet_enable_references_code_lens = true,
+						-- 	},
+						-- },
 					},
 				},
 				debugger = {

@@ -1,7 +1,7 @@
 -- Color.lua
 -- a wrapper of color_helper to a def Color struct
 
-local h = require("color_helper")
+local ch = require("color_helper")
 
 ---@class Color
 ---@field public hex string
@@ -46,7 +46,7 @@ Color.__index = Color
 ---@return Color
 Color.__add = function(a, b)
 	---@diagnostic disable-next-line: missing-fields
-	return Color.new({ hex = h.mix(a.hex, b.hex) })
+	return Color.new({ hex = ch.mix(a.hex, b.hex) })
 end
 
 ---new a Color instance, a init is optional.
@@ -55,9 +55,9 @@ end
 function Color.new(color)
 	local init = color or {}
 	if init.hex then
-		init.r, init.g, init.b = h.hex_to_rgb(init.hex)
+		init.r, init.g, init.b = ch.hex_to_rgb(init.hex)
 	elseif init.r and init.g and init.b then
-		init.hex = h.rgb_to_hex(init.r, init.g, init.b)
+		init.hex = ch.rgb_to_hex(init.r, init.g, init.b)
 	end
 	return setmetatable(init, Color)
 end
@@ -65,40 +65,48 @@ end
 ---Perceptual luma (0-255).
 ---@return number
 function Color:get_luma()
-	return h.get_luma(self.hex)
+	return ch.get_luma(self.hex)
 end
 
 ---Chroma (saturation in CIE Lch).
 ---@return number
 function Color:get_chroma()
-	return h.get_chroma(self.hex)
+	return ch.get_chroma(self.hex)
 end
 
 ---Hue value (0-360).
 ---@return number|nil
 function Color:get_hue()
-	return h.get_hue(self.hex)
+	return ch.get_hue(self.hex)
+end
+
+---Hue setting.
+---@return string
+---@param hue number in degrees (0-360)
+function Color:set_hue(hue)
+	local _, s, v = ch.hex_to_hsv(self.hex)
+	return ch.hsv_to_hex(hue, s, v)
 end
 
 ---Euclidean RGB distance between two colors.
 ---@return number
 ---@param color Color
 function Color:distance(color)
-	return h.get_distance(self.hex, color.hex)
+	return ch.get_distance(self.hex, color.hex)
 end
 
 ---WCAG contrast ratio (>=1.0) between two colors.
 ---@return number
 ---@param color Color
 function Color:contrast(color)
-	return h.get_contrast(self.hex, color.hex)
+	return ch.get_contrast(self.hex, color.hex)
 end
 
 ---Mix with given color.
 ---@param color Color
 function Color:mix(color)
-	self.hex = h.mix(self.hex, color.hex)
-	self.r, self.g, self.b = h.hex_to_rgb(self.hex)
+	self.hex = ch.mix(self.hex, color.hex)
+	self.r, self.g, self.b = ch.hex_to_rgb(self.hex)
 	return self
 end
 

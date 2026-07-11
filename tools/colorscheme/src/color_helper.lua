@@ -337,6 +337,15 @@ function M.mix(hex1, hex2, ratio)
 	return M.rgb_to_hex(r1 + (r2 - r1) * ratio + 0.5, g1 + (g2 - g1) * ratio + 0.5, b1 + (b2 - b1) * ratio + 0.5)
 end
 
+---chage hue of a hex
+---@param hex string #000000-#FFFFFF
+---@param hue_to_chage number 0-360
+---@return string hex #000000-#FFFFFF
+function M.change_hue(hex, hue_to_chage)
+	local _, s, l = M.hex_to_hsl(hex)
+	return M.hsl_to_hex(hue_to_chage, s, l)
+end
+
 ---Rotate a color hue in HSV space.
 ---@param hex string A hex color in string (#000000-#FFFFFF).
 ---@param degrees number Degrees (+360 to -360) to rotate hue (default: 0).
