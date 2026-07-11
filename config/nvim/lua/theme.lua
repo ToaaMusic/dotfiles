@@ -186,44 +186,44 @@ apply_hl_map({
 -- diagnostics
 -- https://neovim.io/doc/user/diagnostic/#diagnostic-highlights
 apply_hl_map({
-	["DiagnosticError"]             = { fg = colors.accents[1] },
-	["DiagnosticWarn"]              = { fg = colors.accents[3] },
-	["DiagnosticInfo"]              = { fg = colors.accents[5] },
-	["DiagnosticHint"]              = { fg = colors.accents[6] },
-	["DiagnosticOk"]                = { fg = colors.accents[2] },
+	["DiagnosticError"]            = { fg = role.error },
+	["DiagnosticWarn"]             = { fg = role.warning },
+	["DiagnosticInfo"]             = { fg = role.info },
+	["DiagnosticHint"]             = { fg = role.hint },
+	["DiagnosticOk"]               = { fg = role.ok },
 
-	["DiagnosticVirtualTextError"]  = { fg = colors.accents[1] },
-	["DiagnosticVirtualTextWarn"]   = { fg = colors.accents[3] },
-	["DiagnosticVirtualTextInfo"]   = { fg = colors.accents[5] },
-	["DiagnosticVirtualTextHint"]   = { fg = colors.accents[6] },
-	["DiagnosticVirtualTextOk"]     = { fg = colors.accents[2] },
+	["DiagnosticVirtualTextError"] = { fg = role.error },
+	["DiagnosticVirtualTextWarn"]  = { fg = role.warning },
+	["DiagnosticVirtualTextInfo"]  = { fg = role.info },
+	["DiagnosticVirtualTextHint"]  = { fg = role.hint },
+	["DiagnosticVirtualTextOk"]    = { fg = role.ok },
 
-	["DiagnosticVirtualLinesError"] = { fg = colors.accents[1] },
-	["DiagnosticVirtualLinesWarn"]  = { fg = colors.accents[3] },
-	["DiagnosticVirtualLinesInfo"]  = { fg = colors.accents[5] },
-	["DiagnosticVirtualLinesHint"]  = { fg = colors.accents[6] },
-	["DiagnosticVirtualLinesOk"]    = { fg = colors.accents[2] },
+	-- ["DiagnosticVirtualLinesError"] = { fg = colors.accents[1] },
+	-- ["DiagnosticVirtualLinesWarn"]  = { fg = colors.accents[3] },
+	-- ["DiagnosticVirtualLinesInfo"]  = { fg = colors.accents[5] },
+	-- ["DiagnosticVirtualLinesHint"]  = { fg = colors.accents[6] },
+	-- ["DiagnosticVirtualLinesOk"]    = { fg = colors.accents[2] },
+	--
+	-- ["DiagnosticUnderlineError"]    = { undercurl = true, sp = colors.accents[1] },
+	-- ["DiagnosticUnderlineWarn"]     = { undercurl = true, sp = colors.accents[3] },
+	-- ["DiagnosticUnderlineInfo"]     = { undercurl = true, sp = colors.accents[5] },
+	-- ["DiagnosticUnderlineHint"]     = { undercurl = true, sp = colors.accents[6] },
+	-- ["DiagnosticUnderlineOk"]       = { undercurl = true, sp = colors.accents[2] },
+	--
+	-- ["DiagnosticFloatingError"]     = { fg = colors.accents[1] },
+	-- ["DiagnosticFloatingWarn"]      = { fg = colors.accents[3] },
+	-- ["DiagnosticFloatingInfo"]      = { fg = colors.accents[5] },
+	-- ["DiagnosticFloatingHint"]      = { fg = colors.accents[6] },
+	-- ["DiagnosticFloatingOk"]        = { fg = colors.accents[2] },
+	--
+	-- ["DiagnosticSignError"]         = { fg = colors.accents[1] },
+	-- ["DiagnosticSignWarn"]          = { fg = colors.accents[3] },
+	-- ["DiagnosticSignInfo"]          = { fg = colors.accents[5] },
+	-- ["DiagnosticSignHint"]          = { fg = colors.accents[6] },
+	-- ["DiagnosticSignOk"]            = { fg = colors.accents[2] },
 
-	["DiagnosticUnderlineError"]    = { undercurl = true, sp = colors.accents[1] },
-	["DiagnosticUnderlineWarn"]     = { undercurl = true, sp = colors.accents[3] },
-	["DiagnosticUnderlineInfo"]     = { undercurl = true, sp = colors.accents[5] },
-	["DiagnosticUnderlineHint"]     = { undercurl = true, sp = colors.accents[6] },
-	["DiagnosticUnderlineOk"]       = { undercurl = true, sp = colors.accents[2] },
-
-	["DiagnosticFloatingError"]     = { fg = colors.accents[1] },
-	["DiagnosticFloatingWarn"]      = { fg = colors.accents[3] },
-	["DiagnosticFloatingInfo"]      = { fg = colors.accents[5] },
-	["DiagnosticFloatingHint"]      = { fg = colors.accents[6] },
-	["DiagnosticFloatingOk"]        = { fg = colors.accents[2] },
-
-	["DiagnosticSignError"]         = { fg = colors.accents[1] },
-	["DiagnosticSignWarn"]          = { fg = colors.accents[3] },
-	["DiagnosticSignInfo"]          = { fg = colors.accents[5] },
-	["DiagnosticSignHint"]          = { fg = colors.accents[6] },
-	["DiagnosticSignOk"]            = { fg = colors.accents[2] },
-
-	["DiagnosticUnnecessary"]       = { fg = fg.subtle },
-	["DiagnosticDeprecated"]        = { fg = fg.subtle, strikethrough = true },
+	["DiagnosticUnnecessary"]      = { fg = fg.subtle },
+	["DiagnosticDeprecated"]       = { fg = fg.subtle, strikethrough = true },
 })
 
 -- treesitter
@@ -459,9 +459,9 @@ apply_hl_map({
 -- gitsigns
 -- https://github.com/lewis6991/gitsigns.nvim
 apply_hl_map({
-	["GitSignsAdd"]       = { fg = role.add },
-	["GitSignsChange"]    = { fg = role.change },
-	["GitSignsDelete"]    = { fg = role.delete },
+	["GitSignsAdd"]    = { fg = role.add },
+	["GitSignsChange"] = { fg = role.change },
+	["GitSignsDelete"] = { fg = role.delete },
 	-- ["GitSignsChangedelete"] = { link = "GitSignsChange" },
 	-- ["GitSignsTopdelete"]    = { link = "GitSignsDelete" },
 	-- ["GitSignsUntracked"]    = { link = "GitSignsAdd" },

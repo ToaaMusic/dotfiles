@@ -127,6 +127,7 @@ function Ansi16.new()
 	return setmetatable({}, Ansi16)
 end
 
+-- ---@param seed string
 -- function Ansi16.from_seed(seed)
 -- 	local h, s, l = h.hex_to_hsl(seed)
 -- 	local ansi = Ansi16.new()
@@ -142,98 +143,43 @@ end
 ---@param self tdf.ColorScheme
 ---@return tdf.ColorScheme
 function ColorScheme:build_ansi16()
-	local used       = {}
+	local used        = {}
 	-- unpack
-	local dark       = self.dark_mode
-	local brand      = self.accent
-	local bg         = self.bg.common
-	local fg         = self.fg.common
-	local candidates = self.candidates
-	local accents    = self.accents
+	local dark        = self.dark_mode
+	local brand       = self.accent
+	local bg          = self.bg.common
+	local fg          = self.fg.common
+	local candidates  = self.candidates
 
 	-- local base_hue   = h.get_hue(brand) or 0
-	local base_hue   = 0
-	local black_slot = dark and h.mix(bg, fg, 0.26) or h.mix(bg, fg, 0.68)
-	local white_slot = dark and h.mix(fg, bg, 0.18) or h.mix(fg, bg, 0.30)
+	local base_hue    = 0
+	local black_slot  = dark and h.mix(bg, fg, 0.26) or h.mix(bg, fg, 0.68)
+	local white_slot  = dark and h.mix(fg, bg, 0.18) or h.mix(fg, bg, 0.30)
 
-	local role_color = s.role_color
-
-	-- local hue_offsets = { 15, 135, 60, 225, 300, 185 }
+	local role_color  = s.role_color
 
 	---@type string[]
-	local normal     = {}
-	normal[1]        = s.ensure_contrast_soft(black_slot, bg, 1.8, 0.18)
-	normal[2]        = role_color(
-		candidates,
-		(base_hue + 15) % 360,
-		bg,
-		used,
-		dark and 0.78 or 0.70,
-		dark and 0.84 or 0.72,
-		0.22,
-		dark and 3.2 or 3.0,
-		accents[1] or brand
-	)
-	normal[3]        = role_color(
-		candidates,
-		(base_hue + 135) % 360,
-		bg,
-		used,
-		dark and 0.72 or 0.66,
-		dark and 0.82 or 0.70,
-		0.22,
-		dark and 3.2 or 3.0,
-		accents[2] or brand
-	)
-	normal[4]        = role_color(
-		candidates,
-		(base_hue + 60) % 360,
-		bg,
-		used,
-		dark and 0.78 or 0.68,
-		dark and 0.86 or 0.74,
-		0.20,
-		dark and 3.0 or 2.8,
-		accents[3] or brand
-	)
-	normal[5]        = role_color(
-		candidates,
-		(base_hue + 225) % 360,
-		bg,
-		used,
-		dark and 0.72 or 0.64,
-		dark and 0.82 or 0.70,
-		0.22,
-		dark and 3.2 or 3.0,
-		accents[4] or brand
-	)
-	normal[6]        = role_color(
-		candidates,
-		(base_hue + 300) % 360,
-		bg,
-		used,
-		dark and 0.76 or 0.68,
-		dark and 0.84 or 0.72,
-		0.22,
-		dark and 3.2 or 3.0,
-		accents[5] or brand
-	)
-	normal[7]        = role_color(
-		candidates,
-		(base_hue + 185) % 360,
-		bg,
-		used,
-		dark and 0.74 or 0.66,
-		dark and 0.82 or 0.70,
-		0.22,
-		dark and 3.2 or 3.0,
-		accents[6] or brand
-	)
-	normal[8]        = s.ensure_contrast(white_slot, bg, 4.5)
+	local normal      = {}
+	local hue_offsets = { 15, 135, 60, 225, 300, 185 }
+	normal[1]         = s.ensure_contrast_soft(black_slot, bg, 1.8, 0.18)
+	for i = 2, 7 do
+		normal[i] = role_color(
+			candidates,
+			(base_hue + hue_offsets[i - 1]) % 360,
+			bg,
+			used,
+			dark and 0.72 or 0.64,
+			dark and 0.82 or 0.70,
+			0.22,
+			dark and 3.2 or 3.0,
+			brand
+		)
+	end
+	normal[8] = s.ensure_contrast(white_slot, bg, 4.5)
 
 	---@type string[]
-	local bright     = {}
-	bright[1]        = s.ensure_contrast_soft(h.mix(normal[1], fg, dark and 0.28 or 0.18), bg, 2.4, 0.16)
+	local bright = {}
+	bright[1] = s.ensure_contrast_soft(h.mix(normal[1], fg, dark and 0.28 or 0.18), bg, 2.4, 0.16)
 	for i = 2, 7 do
 		bright[i] = s.ensure_contrast_soft(h.mix(normal[i], fg, dark and 0.14 or 0.10), bg, 4.0, 0.14)
 	end

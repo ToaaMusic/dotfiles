@@ -1,23 +1,18 @@
 ---@diagnostic disable: unused-local, missing-fields
 
 local new_Color = require("Color")
+local write = require("write")
 
 return function()
-	---@param color Color
-	local function dump(color)
-		local DOT = " "
-		local content = string.format("\27[38;2;%d;%d;%dm%s", color.r, color.g, color.b, DOT)
-		print(content .. "\27[0m")
-	end
-
-	local color = new_Color({ r = 200, g = 200, b = 0, })
+	local color = new_Color({ r = 225, g = 179, b = 203, })
 	local black = new_Color()
 
-	print(getmetatable(color))
+	-- print(getmetatable(color))
+	write.dump_console(color.hex)
 	print("hex: ", color)
 	print("hue: ", color:get_hue())
-	print("distance to black: ", color:distance(black))
-	print("contrast to black: ", color:contrast(black))
-	print("mix with black: ", color:mix(black))
-	dump(color)
+	-- print("distance to black: ", color:distance(black))
+	-- print("contrast to black: ", color:contrast(black))
+	-- print("mix with black: ", color:mix(black))
+	write.dump_console(color:set_hue(180))
 end
