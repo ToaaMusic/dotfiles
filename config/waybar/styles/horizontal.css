@@ -1,53 +1,13 @@
 /* global */
 * {
-  font-size: 11pt;
+  font-size: 10pt;
   font-weight: bold;
   border-radius: 10px;
-  transition-property: background-color;
-  transition-duration: 0.5s;
 }
 window#waybar {
   background-color: transparent;
-}
-window > box {
-  margin-left: 3px;
-  margin-right: 3px;
-  margin-top: 2px;
-  padding-top: 3px;
-  padding-bottom: 6px;
-}
-.modules-left,
-.modules-center,
-.modules-right {
-  padding-top: 3px;
-  background: shade(alpha(@bg, 0.9), 1);
-  box-shadow: 1px 2px 2px @bg-shadow;
-  text-shadow: 1px 1px 2px @fg-shadow;
-  /* opacity: calc(0.80); */
-}
-
-/* workspaces */
-#workspaces button {
-  border: none;
-  margin-left: 5px;
-  margin-right: 3px;
-  padding: 0rem;
-  background-color: transparent;
-  box-shadow: none;
-  text-shadow: none;
-  color: @fg;
-}
-#workspaces button.active {
-  background-color: transparent;
   color: @a;
-}
-#workspaces button.urgent {
-  background: transparent;
-  color: @a1;
-}
-#workspaces button:hover {
-  background: transparent;
-  color: @fg-hover;
+  transition: background-color 0.3s ease;
 }
 
 /* tooltip */
@@ -55,15 +15,87 @@ tooltip {
   background: shade(alpha(@bg, 0.9), 1);
   box-shadow: 1px 2px 2px @bg-shadow;
   text-shadow: 1px 1px 2px @fg-shadow;
-  border: none;
   border: 2px solid @bg-border;
 }
 tooltip label {
-  padding: 0px;
   color: @fg;
 }
 
+.modules-left,
+.modules-center,
+.modules-right {
+  background: shade(alpha(@bg, 0.8), 1);
+  box-shadow: 1px 2px 2px @bg-shadow;
+  text-shadow: 1px 1px 2px @fg-shadow;
+  margin: 0 0 4px 0;
+  padding: 2px 14px 1px 14px;
+}
+
+.modules-center {
+  border-radius: 0 0 20px 20px;
+}
+
+.modules-left {
+  border-radius: 0 0 20px 0;
+}
+
+.modules-right {
+  border-radius: 0 0 0 20px;
+}
+
+/* workspaces */
+#workspaces {
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin: 0 4px;
+}
+
+#workspaces button {
+  background-color: alpha(@fg, 0.5);
+  border-radius: 999px;
+  padding: 0 10px;
+  margin: 0 3px;
+  min-width: 0;
+  min-height: 0;
+  transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
+}
+
+#workspaces button.active {
+  background-color: @a;
+  min-width: 30px;
+  transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
+}
+
+#workspaces button.empty {
+  background-color: alpha(@fg, 0.2);
+}
+
+#workspaces button.empty.active {
+  background-color: alpha(@fg, 0.5);
+}
+
+#workspaces button.overview {
+  background-color: @a;
+  min-width: 30px;
+  transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
+}
+
+#workspaces button:hover {
+  border: 1px solid @bg-border;
+  background-color: @a;
+  transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
+  min-width: 20px;
+}
+
+#workspaces button.active:hover {
+  transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
+  min-width: 20px;
+}
+
 /* modules */
+#custom-lock,
+#custom-monitor,
+#custom-notify,
 #mode,
 #clock,
 #memory,
@@ -77,83 +109,82 @@ tooltip label {
 #battery,
 #mpris,
 #cava {
+  color: @fg;
   padding-left: 10px;
   padding-right: 10px;
+  min-width: 20px;
+  transition: all 1s cubic-bezier(0, 0.5, 0.35, 1);
+	margin: 0 2px;
 }
-#mode {
-  margin-left: 10px;
-  background-color: rgb(248, 189, 150);
-  color: rgb(26, 24, 38);
-}
+
 #mpris.playing {
   color: @fg;
 }
 #mpris.paused {
   color: @fg-hover;
 }
-/* colors */
-#temperature {
-  color: @fg;
+
+#pulseaudio-slider slider {
+  opacity: 0;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+  background: none;
 }
-#memory {
-  color: @fg;
+#pulseaudio-slider trough {
+  min-width: 60px;
+  min-height: 10px;
+  border-radius: 5px;
+  background: rgba(203, 203, 203, 0.5); /* gray with 0.5 alpha */
 }
-#cpu {
-  color: @fg;
+#pulseaudio-slider highlight {
+  min-width: 10px;
+  border-radius: 5px;
+  background: @a;
 }
-#pulseaudio {
-  color: @fg;
+
+#custom-monitor:hover,
+#custom-lock:hover,
+#custom-notify:hover,
+#cpu:hover,
+#memory:hover,
+#temperature:hover,
+#mpris:hover,
+#pulseaudio:hover,
+#battery:hover,
+#clock:hover {
+  color: @bg;
+  background-color: @a;
+  transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
+  min-width: 50px;
 }
-#clock {
-  color: @fg;
+
+/* little button */
+#pulseaudio,
+#custom-monitor,
+#custom-lock,
+#custom-notify {
+  padding: 0;
 }
-#idle_inhibitor {
-  color: rgb(221, 182, 242);
+#custom-monitor:hover,
+#custom-lock:hover,
+#custom-notify:hover {
+  min-width: 50px;
 }
-#backlight {
-  color: rgb(248, 189, 150);
+
+#clock:hover {
+  min-width: 70px;
 }
-#network {
-  color: #abe9b3;
-}
-#network.disconnected {
-  color: rgb(255, 255, 255);
-}
-#battery.charging,
-#battery.full,
-#battery.discharging {
-  color: rgb(250, 227, 176);
-}
-#battery.critical:not(.charging) {
-  color: rgb(242, 143, 173);
-}
-#tray {
-  padding-right: 10px;
-  padding-left: 10px;
-}
-#mpd.paused {
-  color: #414868;
-  font-style: italic;
-}
-#mpd.stopped {
-  background: transparent;
-}
-#mpd {
-  color: #c0caf5;
-}
-#cava-internal {
-  font-family: "Hack Nerd Font";
-}
+
 @keyframes blink-update {
   to {
-    background-color: dodgerblue;
+    background-color: @a;
   }
 }
 
 @keyframes blink_red {
   to {
-    background-color: rgb(242, 143, 173);
-    color: rgb(26, 24, 38);
+    background-color: @error;
   }
 }
 .warning,

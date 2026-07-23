@@ -22,3 +22,11 @@
 @define-color a4 rgb(245, 224, 220);
 @define-color a5 rgb(248, 189, 150);
 @define-color a6 rgb(242, 143, 173);
+
+/* role */
+
+@define-color error rgb(234, 23, 23);
+@define-color ok #98c379;
+@define-color warning #e5c07b;
+@define-color info #61afef;
+@define-color hint #c678dd;

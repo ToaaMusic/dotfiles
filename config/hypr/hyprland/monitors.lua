@@ -1,7 +1,7 @@
 -- Monitors
 -- local monitors = hl.get_monitors()
 
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
+-- hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
 -- somehow didn't work on first time
 

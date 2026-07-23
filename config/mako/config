@@ -29,3 +29,6 @@ on-touch=dismiss
 
 # Include auto-generated colors
 include=~/.config/mako/g.colors
+
+[mode=do-not-disturb]
+invisible=1
