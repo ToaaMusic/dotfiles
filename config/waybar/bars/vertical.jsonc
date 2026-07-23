@@ -2,79 +2,63 @@
   "layer": "bottom",
   "position": "right",
   "reload_style_on_change": true,
-  "modules-left": ["temperature", "memory", "cpu"],
-  "modules-center": ["mpris"],
-  "modules-right": ["pulseaudio", "battery"],
-  //top
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/lock", "custom/notify"],
+
   "hyprland/workspaces": {
+    "all-outputs": true,
+    "sort-by-number": true,
+    "show-special": true,
     "format": "{icon}",
     "format-icons": {
-      "default": "",
-      "active": "",
-    },
-    "on-click": "activate",
-    "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
-  },
-  "temperature": {
-    "interval": 1,
-    "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
-    "critical-threshold": 80,
-    "tooltip": true,
-    "format": "", // {temperatureC}°C
-  },
-  "memory": {
-    "font-size": 8,
-    "interval": 1,
-    "format": "󰍛", // {}%
-    "format-alt": "󰍛", // {used}/{total} GiB
-    "states": {
-      "warning": 85,
+      "active": "",
+      "default": "",
     },
   },
-  "cpu": {
-    "interval": 1,
-    "format": "󰻠", // {usage}%
-    "format-alt": "󰻠", // {avg_frequency} GHz
+
+  "custom/lock": {
+    "on-click": "hyprlock",
+    "format": "󰌾",
+    "tooltip": false,
   },
-  //center
-  "mpris": {
-    //"player": "musicfox",
-    //"dynamic-order": ["artist", "title"],
-    //"format": "{player_icon} {dynamic}",
-    //"format-paused": "{status_icon} <i>{dynamic}</i>",
-    "format": "{player_icon}",
-    "format-paused": "{status_icon}",
-    "status-icons": {
-      "paused": "",
-    },
-    "player-icons": {
-      "default": "",
-    },
-  },
-  //bottom
-  "pulseaudio": {
-    "scroll-step": 1,
+
+  "custom/notify": {
+    "exec": "~/.config/waybar/scripts/notify-stat.sh",
+    "return-type": "json",
+    "signal": 1,
+    "interval": 30,
+    "on-click": "~/.config/waybar/scripts/notify-toggle.sh",
     "format": "{icon}",
-    "format-muted": "󰖁",
     "format-icons": {
-      "default": ["", "", ""],
+      "activated": "󰂚",
+      "deactivated": "󰂛",
     },
-    "on-click-right": "pavucontrol",
-    "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
-    "tooltip": true,
-    "tooltip-format": "{volume}%",
+    "tooltip": false,
   },
-  "battery": {
-    "interval": 10,
-    "states": {
-      "warning": 20,
-      "critical": 10,
+
+  "clock": {
+    "format": "{:%H\n%M\n--\n%d\n%m\n%y}",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 4,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'><b>{}</b></span>",
+        "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>",
+      },
     },
-    "format": "{icon}",
-    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-    "format-full": "{icon}",
-    "format-charging": "󰂄 {capacity}%",
-    "tooltip": true,
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-up": "tz_up",
+      "on-scroll-down": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down",
+    },
   },
 }

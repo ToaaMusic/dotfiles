@@ -46,6 +46,13 @@ local function write_waybar(p)
 @define-color fg-subtle %s;
 @define-color fg-shadow %s;
 
+/* role */
+@define-color error %s;
+@define-color ok %s;
+@define-color warning %s;
+@define-color info %s;
+@define-color hint %s;
+
 /* accents */
 @define-color a %s;
 
@@ -63,6 +70,11 @@ local function write_waybar(p)
 			p.fg.muted,
 			p.fg.subtle,
 			p.fg.shadow,
+			p.role.error,
+			p.role.ok,
+			p.role.warning,
+			p.role.info,
+			p.role.hint,
 			p.accent
 		)
 	)

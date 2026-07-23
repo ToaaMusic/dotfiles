@@ -3,20 +3,56 @@
   "position": "top",
   "name": "horizontal",
   "reload_style_on_change": true,
-  "modules-left": ["temperature", "memory", "cpu"],
-  "modules-center": ["mpris"],
-  "modules-right": ["pulseaudio", "battery"],
-  //left
+  "modules-left": ["mpris", "pulseaudio", "pulseaudio/slider"],
+  "modules-center": ["clock", "hyprland/workspaces", "group/monitor"],
+  "modules-right": ["custom/lock", "custom/notify"],
+
   "hyprland/workspaces": {
+    "all-outputs": true,
+    "sort-by-number": true,
+    "show-special": true,
     "format": "{icon}",
     "format-icons": {
-      "default": "",
-      "active": "",
+      "active": "",
+      "default": "",
     },
-    "on-click": "activate",
-    "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
   },
+
+  "custom/monitor": {
+    "format": "󰣇",
+    "tooltip": false,
+  },
+
+  "custom/lock": {
+    "on-click": "hyprlock",
+    "format": "󰌾",
+    "tooltip": false,
+  },
+
+  "custom/notify": {
+    "exec": "~/.config/waybar/scripts/notify-stat.sh",
+    "return-type": "json",
+    "signal": 1,
+    "interval": 30,
+    "on-click": "~/.config/waybar/scripts/notify-toggle.sh",
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "󰂚",
+      "deactivated": "󰂛",
+    },
+    "tooltip": false,
+  },
+
+  "group/monitor": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 500,
+      "transition-left-to-right": true,
+      "click-to-reveal": true,
+    },
+    "modules": ["custom/monitor", "cpu", "memory", "temperature"],
+  },
+
   "temperature": {
     "interval": 1,
     "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
@@ -25,6 +61,7 @@
     "tooltip": true,
     "format": " {temperatureC}°C",
   },
+
   "memory": {
     "interval": 1,
     "format": "󰍛 {}%",
@@ -33,24 +70,29 @@
       "warning": 85,
     },
   },
+
   "cpu": {
     "interval": 1,
     "format": "󰻠 {usage}%",
     "format-alt": "󰻠 {avg_frequency} GHz",
   },
-  //middle
+
   "mpris": {
     //"player": "musicfox",
-    "dynamic-order": ["artist", "title"],
-    "format": "{player_icon} {dynamic}",
-    "format-paused": "{status_icon} {dynamic}",
+    "dynamic-order": ["title", "artist"],
+    "format": "{player_icon}  {dynamic}",
+    "format-paused": "{status_icon}  {dynamic}",
     "status-icons": {
-      "paused": "",
+      // , 
+      "paused": "",
     },
     "player-icons": {
-      "default": "",
+      "default": "",
     },
+    "artist-len": 15,
+    "title-len": 20,
   },
+
   "cava": {
     "cava_config": "$HOME/.config/cava/waybar_raw.conf",
     "input_delay": 2,
@@ -59,11 +101,12 @@
       "on-click-right": "mode",
     },
   },
-  //right
+
   "pulseaudio": {
     "scroll-step": 1,
-    "format": "{icon} {volume}%",
-    "format-muted": "󰖁 Muted",
+    /* "format": "{icon} {volume}%", */
+    "format": "{icon}",
+    "format-muted": "󰖁",
     "format-icons": {
       "default": ["", "", ""],
     },
@@ -71,6 +114,13 @@
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "tooltip": false,
   },
+
+  "pulseaudio/slider": {
+    "min": 0,
+    "max": 100,
+    "orientation": "horizontal",
+  },
+
   "battery": {
     "interval": 10,
     "states": {
@@ -82,5 +132,31 @@
     "format-full": "",
     "format-charging": "󰂄 {capacity}%",
     "tooltip": false,
+  },
+
+  "clock": {
+    "format": " {:%H:%M} ",
+    "format-alt": " {:%A, %d %B %Y} ",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'><b>{}</b></span>",
+        "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>",
+      },
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-up": "tz_up",
+      "on-scroll-down": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down",
+    },
   },
 }

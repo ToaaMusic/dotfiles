@@ -1,58 +1,12 @@
 /* global */
 * {
-  /* font-family: "JetbrainsMonoNL Nerd Font Mono"; */
   font-size: 10pt;
   font-weight: bold;
-  border-radius: 5px;
-  transition-property: background-color;
-  transition-duration: 0.5s;
 }
 window#waybar {
-  background-color: transparent;
-}
-window > box {
-  margin-left: 3px;
-  margin-right: 3px;
-  margin-top: 1px;
-  padding-top: 3px;
-  padding-bottom: 6px;
-}
-.modules-left,
-.modules-center,
-.modules-right {
-  padding-bottom: 3px;
-  background: shade(alpha(@bg, 0.9), 1);
-  box-shadow: 1px 2px 2px @bg-shadow;
-  text-shadow: 1px 1px 2px @fg-shadow;
-  /* opacity: calc(0.80); */
-}
-
-/* workspaces */
-#workspaces {
-  margin-top: 5px;
-  margin-bottom: -2px;
-}
-#workspaces button {
-  padding: 0px;
-  margin: 0px;
-  border: none;
-  background-color: transparent;
-  box-shadow: none;
-  text-shadow: none;
-  margin-top: -3px;
+  /* background-color: transparent; */
+  background-color: alpha(@bg, 0.8);
   color: @fg;
-}
-#workspaces button.active {
-  background-color: transparent;
-  color: @a;
-}
-#workspaces button.urgent {
-  background: transparent;
-  color: @a1;
-}
-#workspaces button:hover {
-  background: transparent;
-  color: @fg-hover;
 }
 
 /* tooltip */
@@ -60,19 +14,76 @@ tooltip {
   background: shade(alpha(@bg, 0.9), 1);
   box-shadow: 1px 2px 2px @bg-shadow;
   text-shadow: 1px 1px 2px @fg-shadow;
-  border: none;
   border: 2px solid @bg-border;
 }
 tooltip label {
-  padding: 0px;
   color: @fg;
 }
 
+.modules-left,
+.modules-center,
+.modules-right {
+  border-radius: 20px;
+  padding: 1px;
+  text-shadow: 1px 1px 2px @fg-shadow;
+}
+
+/* workspaces */
+#workspaces {
+  border-radius: 999px;
+  padding: 8px 2px;
+  margin: 4px 0;
+}
+
+#workspaces button {
+  background-color: alpha(@fg, 0.5);
+  border-radius: 999px;
+  padding: 0 9px;
+  margin: 4px;
+  min-width: 0;
+  min-height: 0;
+  transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
+}
+
+#workspaces button.active {
+  background-color: @a;
+  padding: 16px 0;
+  transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
+}
+
+#workspaces button.empty {
+  background-color: alpha(@fg, 0.2);
+}
+
+#workspaces button.empty.active {
+  background-color: alpha(@fg, 0.5);
+}
+
+#workspaces button.overview {
+  background-color: @a;
+  min-height: 30px;
+  transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
+}
+
+#workspaces button:hover {
+  border: 1px solid @bg-border;
+  background-color: @a;
+  transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
+  min-height: 40px;
+}
+
+#workspaces button.active:hover {
+  transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
+  min-height: 40px;
+}
+
 /* modules */
+#custom-lock,
+#custom-monitor,
+#custom-notify,
 #mode,
 #clock,
 #memory,
-#temperature,
 #cpu,
 #mpd,
 #temperature,
@@ -82,84 +93,60 @@ tooltip label {
 #battery,
 #mpris,
 #cava {
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 5px;
+  padding: 1px;
+  transition: all 1s cubic-bezier(0, 0.5, 0.35, 1);
+  border-radius: 20px;
+  min-height: 30px;
+  margin: 0 2px;
 }
-#mode {
-  margin-left: 10px;
-  background-color: rgb(248, 189, 150);
-  color: rgb(26, 24, 38);
-}
+
 #mpris.playing {
   color: @fg-hover;
 }
 #mpris.paused {
   color: @fg;
 }
-/* colors */
-#temperature {
-  color: @fg;
+
+#custom-lock:hover,
+#custom-notify:hover,
+#custom-bar:hover,
+#custom-logo:hover,
+#clock:hover,
+#power-profiles-daemon:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#battery:hover,
+#custom-notification:hover {
+  color: #000000;
+  background-color: @a;
+  transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
+  min-height: 20px;
 }
-#memory {
-  color: @fg;
+
+/* little button */
+#pulseaudio,
+#custom-lock,
+#custom-notify {
+  padding: 0;
 }
-#cpu {
-  color: @fg;
+#custom-lock:hover,
+#custom-notify:hover {
+  min-height: 50px;
 }
-#pulseaudio {
-  color: @fg;
+
+#clock:hover {
+  min-height: 140px;
 }
-#clock {
-  color: @fg;
-}
-#idle_inhibitor {
-  color: rgb(221, 182, 242);
-}
-#backlight {
-  color: rgb(248, 189, 150);
-}
-#network {
-  color: #abe9b3;
-}
-#network.disconnected {
-  color: rgb(255, 255, 255);
-}
-#battery.charging,
-#battery.full,
-#battery.discharging {
-  color: rgb(250, 227, 176);
-}
-#battery.critical:not(.charging) {
-  color: rgb(242, 143, 173);
-}
-#tray {
-  padding-right: 10px;
-  padding-left: 10px;
-}
-#mpd.paused {
-  color: #414868;
-  font-style: italic;
-}
-#mpd.stopped {
-  background: transparent;
-}
-#mpd {
-  color: #c0caf5;
-}
-#cava-internal {
-  font-family: "Hack Nerd Font";
-}
+
 @keyframes blink-update {
   to {
-    background-color: dodgerblue;
+    background-color: @a;
   }
 }
 
 @keyframes blink_red {
   to {
-    background-color: rgb(242, 143, 173);
-    color: rgb(26, 24, 38);
+    background-color: @error;
   }
 }
 .warning,
@@ -171,4 +158,3 @@ tooltip label {
   animation-iteration-count: infinite;
   animation-direction: alternate;
 }
-
