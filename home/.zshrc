@@ -11,65 +11,70 @@ setopt inc_append_history
 setopt append_history
 
 function y() {
-  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-  command yazi "$@" --cwd-file="$tmp"
-  IFS= read -r -d '' cwd <"$tmp"
-  [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
-  rm -f -- "$tmp"
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd <"$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
 }
 
 function dotnet() {
-  if [[ "$1" == "run" || "$1" == "test" ]]; then
-    local dir="$PWD"
-    local found_env=""
+	if [[ "$1" == "run" || "$1" == "test" ]]; then
+		local dir="$PWD"
+		local found_env=""
 
-    while [[ "$dir" != "/" ]]; do
-      if [[ -f "$dir/.env.sh" ]]; then
-        found_env="$dir/.env.sh"
-        break
-      fi
-      dir="$(dirname "$dir")"
-    done
+		while [[ "$dir" != "/" ]]; do
+			if [[ -f "$dir/.env.sh" ]]; then
+				found_env="$dir/.env.sh"
+				break
+			fi
+			dir="$(dirname "$dir")"
+		done
 
-    if [[ -n "$found_env" ]]; then
-      echo "🔧 Loading: $found_env"
-      (
-        source "$found_env"
-        command dotnet "$@"
-      )
-    else
-      command dotnet "$@"
-    fi
-  else
-    command dotnet "$@"
-  fi
+		if [[ -n "$found_env" ]]; then
+			echo "🔧 Loading: $found_env"
+			(
+				source "$found_env"
+				command dotnet "$@"
+			)
+		else
+			command dotnet "$@"
+		fi
+	else
+		command dotnet "$@"
+	fi
 }
 
 # my cli tools
 function todo() {
-  local script="$TOAAM_DOTFILES/tools/todo/todo.lua"
-  lua "$script" "$@"
+	local script="$TOAAM_DOTFILES/tools/todo/todo.lua"
+	lua "$script" "$@"
 }
 
 function ro() {
-  local script="$TOAAM_DOTFILES/tools/router/router.lua"
-  lua "$script" "$@"
+	local script="$TOAAM_DOTFILES/tools/router/router.lua"
+	lua "$script" "$@"
 }
 
 # open dotfiles project
 function tdf() {
-  # local opener=${1:-${GUI_EDITOR:-nvim}}
-  nvim "$TOAAM_DOTFILES"
+	# local opener=${1:-${GUI_EDITOR:-nvim}}
+	nvim "$TOAAM_DOTFILES"
 }
 
 # cd repos dir
 function repos() {
-  cd ~/repos/
+	cd ~/repos/
 }
 
 # transparent cava
 function cavat() {
-  kitty --override "background_opacity=0" cava
+	kitty --class "cava" \
+		-o background_opacity=0 \
+		-o window_border_width=0 \
+		-o window_padding_width=0 \
+		-o hide_window_decorations=yes \
+		-e cava
 }
 
 alias ls='ls --color=auto'
@@ -84,29 +89,29 @@ alias ectl=/home/ToaaM/repos/ebrain-ai/.build/ctl/EbrainEngine.Ctl
 # prefix
 _CURRENT_PREFIX=""
 pre() {
-  if [[ $# -gt 0 ]]; then
-    _CURRENT_PREFIX="$*"
-    [[ "$_CURRENT_PREFIX" != *" " ]] && _CURRENT_PREFIX+=" "
+	if [[ $# -gt 0 ]]; then
+		_CURRENT_PREFIX="$*"
+		[[ "$_CURRENT_PREFIX" != *" " ]] && _CURRENT_PREFIX+=" "
 
-    function accept-line() {
-      # 检查是否是要排除的命令（pre 本身）
-      local first_word="${BUFFER%% *}"
-      if [[ -n "$_CURRENT_PREFIX" && -n "$BUFFER" && "$first_word" != "pre" ]]; then
-        BUFFER="${_CURRENT_PREFIX}${BUFFER}"
-      fi
-      zle .accept-line
-    }
-    zle -N accept-line
-    echo "✓ 前缀已设置: '$_CURRENT_PREFIX'"
+		function accept-line() {
+			# 检查是否是要排除的命令（pre 本身）
+			local first_word="${BUFFER%% *}"
+			if [[ -n "$_CURRENT_PREFIX" && -n "$BUFFER" && "$first_word" != "pre" ]]; then
+				BUFFER="${_CURRENT_PREFIX}${BUFFER}"
+			fi
+			zle .accept-line
+		}
+		zle -N accept-line
+		echo "✓ 前缀已设置: '$_CURRENT_PREFIX'"
 
-  elif [[ -n "$_CURRENT_PREFIX" ]]; then
-    unset _CURRENT_PREFIX
-    function accept-line() { zle .accept-line; }
-    zle -N accept-line
-    echo "✓ 前缀已取消"
+	elif [[ -n "$_CURRENT_PREFIX" ]]; then
+		unset _CURRENT_PREFIX
+		function accept-line() { zle .accept-line; }
+		zle -N accept-line
+		echo "✓ 前缀已取消"
 
-  else
-    echo "错误: 没有设置任何前缀" >&2
-    return 1
-  fi
+	else
+		echo "错误: 没有设置任何前缀" >&2
+		return 1
+	fi
 }
