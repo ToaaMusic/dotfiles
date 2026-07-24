@@ -48,7 +48,6 @@ wsr({ workspace = "1", layout = "scrolling" })
 -- no_blur
 wr({ name = "no-blur-ebrain", match = { class = "EbrainAI.Linux" }, no_blur = true })
 wr({ name = "no-blur-ebrain-title", match = { title = "ebrain-ai" }, no_blur = true })
--- wr({ name = "no-blur-cava", match = { title = "cava" }, no_blur = true })
 
 -- floating
 local float_size = { "(monitor_w*0.75)", "(monitor_h*0.75)" }
@@ -77,4 +76,21 @@ wr({
 	keep_aspect_ratio = true,
 	size = { "(monitor_w*0.25)", "(monitor_h*0.25)" },
 	move = { "(monitor_w*0.73)", "(monitor_h*0.72)" },
+})
+
+-- cava
+wr({
+	name = "pin-cava",
+	match = { class = "cava" },
+	move = "0 monitor_h-100+8",
+	size = { "(monitor_w)", 100 },
+	float = true,
+	pin = true,
+	no_shadow = true,
+	no_blur = true,
+	border_size = 0,
+	rounding = 0,
+	--no events
+	no_focus = true,
+	no_follow_mouse = true,
 })

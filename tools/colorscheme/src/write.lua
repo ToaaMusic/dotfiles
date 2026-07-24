@@ -603,6 +603,7 @@ function M.invoke(p)
 	os.execute("makoctl reload >/dev/null 2>&1")
 	os.execute("fcitx5 -rd >/dev/null 2>&1")
 	os.execute("pkill -SIGUSR1 kitty")
+	os.execute("pkill -SIGUSR1 cava")
 end
 
 return M
