@@ -72,7 +72,7 @@ It's up to you.
 After installing the key components to apply, if you want the full experience or just lazy to customize everything, you can simply install the deps all.
 
 ```bash
-sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper
+sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper hyprlock
 ```
 
 ```bash
