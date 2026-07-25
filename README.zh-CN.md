@@ -70,7 +70,7 @@ cd dotfiles
 装好关键组件后，如果想获得完整体验或懒得逐一配置，可以直接全部安装。
 
 ```bash
-sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper
+sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper hyprlock
 ```
 
 ```bash

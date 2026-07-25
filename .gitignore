@@ -18,7 +18,6 @@ ebrain-ai/
 tools/router/
 tools/gui/
 /config.lua
-hyprlock.conf
 tools/colorscheme/TODO.md
 
 
