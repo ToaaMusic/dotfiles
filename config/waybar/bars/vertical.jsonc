@@ -9,11 +9,12 @@
   "hyprland/workspaces": {
     "all-outputs": true,
     "sort-by-number": true,
-    "show-special": true,
+    "show-special": false,
     "format": "{icon}",
     "format-icons": {
       "active": "",
       "default": "",
+      "special": "",
     },
   },
 
@@ -21,6 +22,15 @@
     "on-click": "hyprlock",
     "format": "󰌾",
     "tooltip": false,
+    "menu": "on-click-right",
+    "menu-file": "~/.config/waybar/menus/power_menu.xml",
+    "menu-actions": {
+      "lock": "hyprlock",
+      "shutdown": "shutdown",
+      "reboot": "reboot",
+      "suspend": "systemctl suspend",
+      "hibernate": "systemctl hibernate",
+    },
   },
 
   "custom/notify": {

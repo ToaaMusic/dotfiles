@@ -9,6 +9,12 @@ local logger = require("logger").get_logger()
 ---definations
 ---@diagnostic disable: unused-local
 
+---@class tdf.Palette
+---@field darker string[]
+---@field lighter string[]
+local Palette = {}
+Palette.__index = Palette
+
 ---@class RoleColors
 ---@field error string
 ---@field ok string
@@ -104,6 +110,7 @@ SyntaxColors.__index = SyntaxColors
 ---@class tdf.ColorScheme
 ---@field dark_mode boolean
 ---@field accent string -- TODO: brand color
+---@field brand_palette tdf.Palette
 ---@field bg tdf.BackgroundColors
 ---@field fg tdf.ForegroundColors
 ---@field ansi16? tdf.Ansi16

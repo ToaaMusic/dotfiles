@@ -1,4 +1,8 @@
 /* global */
+@import "default.css";
+@import "default-colors.css";
+@import "colors.g.css";
+
 * {
   font-size: 10pt;
   font-weight: bold;

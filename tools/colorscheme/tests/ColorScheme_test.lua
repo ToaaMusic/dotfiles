@@ -3,6 +3,8 @@ local new_Scheme = require("ColorScheme")
 local write = require("write")
 local ppm = require("ppm")
 local sample = require("sample")
+local h = require("color_helper")
+local s = require("strategy")
 
 local tdf_dir = os.getenv("TOAAM_DOTFILES")
 
@@ -23,6 +25,9 @@ return function()
 	-- 	"#75b5af",
 	-- 	"#b279a3"
 	-- })
+
+	local white = "#FFFFFF"
+	local black = "#000000"
 
 	local img, err = ppm.from_file(tdf_dir .. "/tools/colorscheme/test.ppm")
 	if not img then
@@ -47,4 +52,7 @@ return function()
 	write.dump_console(scheme.accents, "accents: ")
 	write.dump_console(scheme.candidates, string.format("candidates (%d): ", #scheme.candidates))
 	--]]
+
+	local brand = scheme.accent
+	write.dump_console(s.gradient(brand, black, 6))
 end

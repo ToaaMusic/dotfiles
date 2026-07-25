@@ -25,7 +25,7 @@ end
 
 ---@param p tdf.ColorScheme
 local function write_waybar(p)
-	local path = os.getenv("HOME") .. "/.config/waybar/colors.g.css"
+	local path = os.getenv("HOME") .. "/.config/waybar/styles/colors.g.css"
 	local f = assert(io.open(path, "w"))
 	local content = [[
 /* Generated from wallpaper */
@@ -600,6 +600,7 @@ function M.invoke(p)
 
 	-- reload
 	os.execute("hyprctl reload config-only")
+	os.execute("pkill -SIGUSR2 waybar") -- TODO: 不知道为什么waybar的css引用嵌套多了重载没效果，需要手动
 	os.execute("makoctl reload >/dev/null 2>&1")
 	os.execute("fcitx5 -rd >/dev/null 2>&1")
 	os.execute("pkill -SIGUSR1 kitty")

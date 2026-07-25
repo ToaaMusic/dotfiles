@@ -1,0 +1,135 @@
+@import "default.css";
+@import "default-colors.css";
+@import "colors.g.css";
+
+@define-color bg rgb(0, 0, 0);
+@define-color bg_main alpha(@bg, 0.65);
+@define-color bg_main_tooltip alpha(@bg, 0.7);
+@define-color bg_hover rgba(200, 200, 200, 0.3);
+@define-color bg_active rgba(100, 100, 100, 0.5);
+@define-color border_main rgba(255, 255, 255, 0.2);
+@define-color content_main white;
+@define-color content_inactive rgba(255, 255, 255, 0.25);
+
+* {
+  text-shadow: none;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  font-family: "Segoe UI", "Ubuntu";
+  font-weight: 600;
+  font-size: 12.7px;
+}
+
+window#waybar {
+  background: @bg_main;
+  border-top: 1px solid @border_main;
+  color: @content_main;
+}
+
+tooltip {
+  background: @bg_main_tooltip;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: @border_main;
+}
+tooltip label {
+  color: @content_main;
+}
+
+#custom-start {
+  color: #0078d4;
+  padding-left: 8px;
+  padding-right: 13px;
+  font-size: 24px;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#custom-start:hover {
+  background: @bg_hover;
+}
+
+#taskbar button {
+  /* border-radius: 4px; */
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(
+    to right,
+    transparent 45%,
+    rgba(255, 255, 255, 0.3) 45%,
+    rgba(255, 255, 255, 0.3) 55%,
+    transparent 55%
+  );
+  border-image-slice: 1;
+  margin: 2px 2px;
+  padding: 3px 5px;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#taskbar button.active {
+  border-image: linear-gradient(
+    to right,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 30%,
+    rgba(255, 255, 255, 0.3) 70%,
+    transparent 70%
+  );
+  border-image-slice: 1;
+  background: @bg_active;
+}
+
+#taskbar button:hover {
+  background: @bg_hover;
+}
+
+#custom-tray-expander,
+#custom-im {
+  padding: 0px 3px;
+}
+
+#custom-tray-expander,
+#custom-im {
+  margin: 0px 3px;
+}
+
+#tray > .passive {
+  border-bottom: none;
+}
+#tray > .active {
+  border-bottom: 1px solid white;
+  border-bottom: none;
+}
+#tray > .needs-attention {
+  border-bottom: 1px solid @warning;
+  border-bottom: none;
+}
+#tray > widget {
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+#tray > widget > image {
+  padding: 3px;
+}
+#tray > widget:hover {
+  background: @bg_hover;
+}
+
+#pulseaudio {
+  font-family: "JetBrainsMono Nerd Font";
+  padding-left: 3px;
+  padding-right: 3px;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#clock {
+  padding-top: 3px;
+  padding-right: 5px;
+  padding-left: 5px;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+#custom-tray-expander:hover,
+#custom-im:hover,
+#pulseaudio:hover,
+#clock:hover {
+  background: @bg_hover;
+}
