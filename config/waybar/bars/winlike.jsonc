@@ -1,0 +1,123 @@
+{
+  "layer": "top",
+  "position": "bottom",
+  "name": "winlike",
+  "reload_style_on_change": true,
+  "modules-left": ["custom/weather"],
+  "modules-center": ["custom/start", "wlr/taskbar"],
+  "modules-right": ["group/tray", "custom/im", "pulseaudio", "clock"],
+
+  "custom/weather": {
+    "exec": "${HOME}/.config/waybar/scripts/get-weather.sh",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 3600,
+  },
+
+  "image#start": {
+    "exec": "echo $HOME/Pictures/windows11.png",
+    "size": 25,
+    "interval": 30,
+  },
+
+  "custom/start": {
+    //"format": "󰣇",
+    "format": "󰍲",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "~/.config/waybar/menus/start_menu.xml",
+    "menu-actions": {
+      "lock": "hyprlock",
+      "shutdown": "shutdown",
+      "reboot": "reboot",
+      "suspend": "systemctl suspend",
+      "hibernate": "systemctl hibernate",
+    },
+  },
+
+  "wlr/taskbar": {
+    //"all-outputs": true,
+    "format": "{icon}",
+    "icon-size": 22,
+    "icon-theme": "Numix-Circle",
+    "tooltip-format": "{title}",
+    "on-click": "minimize-raise",
+    "on-click-middle": "close",
+  },
+
+  "custom/tray-expander": {
+    "format": "",
+    "tooltip": false,
+  },
+
+  "tray": {
+    "show-passive-items": true,
+    "expand": true,
+    "icon-size": 18,
+    "spacing": 3,
+  },
+
+  "group/tray": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 500,
+      "transition-left-to-right": true,
+      "click-to-reveal": true,
+    },
+    "modules": ["custom/tray-expander", "tray"],
+  },
+
+  "custom/im": {
+    "exec": "~/.config/waybar/scripts/im-stat.sh",
+    "interval": 1,
+    "return-type": "json",
+    "format": " {} ",
+    "on-click": "fcitx5-remote -t",
+  },
+
+  "network": {
+    "format-wifi": " {icon}",
+    "format-ethernet": "  ",
+    "format-disconnected": "󰌙",
+    "format-icons": ["󰤯 ", "󰤟 ", "󰤢 ", "󰤢 ", "󰤨 "],
+  },
+
+  "pulseaudio": {
+    "max-volume": 100,
+    "scroll-step": 10,
+    "format": "{icon}",
+    "tooltip-format": "{volume}%",
+    "format-muted": " ",
+    "format-icons": {
+      "default": [" ", " ", " "],
+    },
+    "on-click": "pavucontrol ",
+  },
+
+  "clock": {
+    "format": "      {:%R\n %d.%m.%Y}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "year",
+      "mode-mon-col": 3,
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "on-click-right": "mode",
+      "format": {
+        "months": "<span color='#ffead3'><b>{}</b></span>",
+        "days": "<span color='#ecc6d9'><b>{}</b></span>",
+        "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+        "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+        "today": "<span color='#ff6699'><b><u>{}</u></b></span>",
+      },
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-click-forward": "tz_up",
+      "on-click-backward": "tz_down",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down",
+    },
+  },
+}

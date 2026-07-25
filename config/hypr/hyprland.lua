@@ -78,6 +78,14 @@ hl.config({
 		enabled = true,
 		workspace_wraparound = true,
 	},
+
+	cursor = {
+		no_warps = true,
+	},
+
+	quirks = {
+		-- prefer_hdr = 2,
+	},
 })
 
 -- Curves

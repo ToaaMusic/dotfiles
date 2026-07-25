@@ -27,7 +27,8 @@ bind(mainMod .. " + B", hl.dsp.exec_cmd(v.browser))
 bind(mainMod .. " + W", hl.dsp.exec_cmd(cmdPath .. "wall.sh"))
 bind(mainMod .. " + SHIFT + W", hl.dsp.exec_cmd(cmdPath .. "wall-gui.sh"))
 bind(mainMod .. " + R", hl.dsp.exec_cmd(cmdPath .. "refresh.sh"))
-bind(mainMod .. " + H", hl.dsp.exec_cmd(cmdPath .. "toggle-waybar-layout.sh"))
+bind(mainMod .. " + H", hl.dsp.exec_cmd(cmdPath .. "switch-waybar.sh"))
+bind(mainMod .. " + SHIFT + H", hl.dsp.exec_cmd("~/.config/waybar/scripts/change-bar.sh winlike"))
 bind("Print", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
 
 -- window management

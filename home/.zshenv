@@ -27,3 +27,6 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 # cargo
 export PATH="$PATH:$HOME/.cargo/bin"
+
+# ruby
+export PATH="$HOME/.local/share/gem/ruby/3.4.0/bin:$PATH"

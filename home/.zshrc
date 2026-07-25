@@ -79,6 +79,7 @@ function cavat() {
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias ff=fastfetch
 alias yazi=y
 alias zed=zeditor
 alias oc=opencode
