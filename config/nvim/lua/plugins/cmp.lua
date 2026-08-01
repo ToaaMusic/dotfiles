@@ -1,4 +1,8 @@
 return {
+	-- https://github.com/hrsh7th/nvim-cmp
+	-- {
+	-- 	"hrsh7th/nvim-cmp",
+	-- },
 	-- https://main.cmp.saghen.dev/
 	{
 		"saghen/blink.cmp",
@@ -18,17 +22,10 @@ return {
 		---@type blink.cmp.Config
 		opts = {
 
+			cmdline = { enabled = false },
+
 			-- press K to see details
 			keymap = { preset = "default" },
-
-			signature = {
-				trigger = {
-					show_on_accept = true,
-					show_on_accept_on_trigger_character = true,
-				},
-				window = { show_documentation = true, border = "rounded" },
-				enabled = true,
-			},
 
 			-- (Default) Only show the documentation popup when manually triggered
 			completion = {
@@ -87,6 +84,15 @@ return {
 					"snippets",
 					-- "buffer",
 				},
+			},
+
+			signature = {
+				enabled = true,
+				-- trigger = {
+				-- 	show_on_accept = true,
+				-- 	show_on_accept_on_trigger_character = true,
+				-- },
+				window = { show_documentation = true, border = "rounded" },
 			},
 
 			-- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
