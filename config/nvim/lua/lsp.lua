@@ -3,7 +3,7 @@ vim.lsp.enable({
 	"lua_ls",
 	-- "roslyn_ls",
 	"clangd",
-	"ts_ls",
+	"vtsls",
 	"vue",
   "glsl",
   "bashls"
