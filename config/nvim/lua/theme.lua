@@ -44,9 +44,9 @@ apply_hl_map({
 	["ColorColumn"]  = { bg = bg.active }, -- max col len
 	["Conceal"]      = { fg = fg.subtle },
 	["CurSearch"]    = { fg = fg.common, bg = colors.accents[4] },
-	["Cursor"]       = { fg = colors.accent, bg = colors.accent },
-	["lCursor"]      = { fg = colors.accent, bg = colors.accent },
-	["CursorIM"]     = { fg = colors.accent, bg = colors.accent },
+	["Cursor"]       = { fg = colors.brand, bg = colors.brand },
+	["lCursor"]      = { fg = colors.brand, bg = colors.brand },
+	["CursorIM"]     = { fg = colors.brand, bg = colors.brand },
 	["CursorColumn"] = { bg = bg.hover },
 	["CursorLine"]   = { bg = bg.hover },
 	["Diractory"]    = { fg = fg.common },
@@ -58,7 +58,7 @@ apply_hl_map({
 	-- ["DiffTextAdd"]  = { fg = colors.accents[2] },
 
 	["EndOfBuffer"]  = { fg = "NONE", bg = "none" },
-	["TermCursor"]   = { fg = colors.accent, bg = colors.accent },
+	["TermCursor"]   = { fg = colors.brand, bg = colors.brand },
 
 	["OkMsg"]        = { fg = role.ok },
 	["WarningMsg"]   = { fg = role.warning },
@@ -96,10 +96,10 @@ apply_hl_map({
 	["NormalNC"]     = { bg = "none", fg = fg.muted },
 
 	["Pmenu"]        = { bg = bg.elevated, fg = fg.common },
-	["PmenuSel"]     = { bg = colors.accent, fg = colors.accents[4] },
+	["PmenuSel"]     = { bg = colors.brand, fg = colors.accents[4] },
 	["PmenuKind"]    = { bg = "none", fg = syntax.type },
 	["PmenuExtra"]   = { bg = "none", fg = fg.subtle },
-	["PmenuThumb"]   = { bg = colors.accent[4] },
+	["PmenuThumb"]   = { bg = colors.accents[4] },
 
 	-- ["ComplMatchIns"] = nil
 	-- ["PreInsert"] = nil
@@ -107,7 +107,7 @@ apply_hl_map({
 	-- ["ComplHintMore"] = nil
 	-- ["Question"] = { fg = colors.accents[5] },
 	-- ["QuickFixLine"] = { bg = bg.active },
-	["Search"]       = { bg = colors.accent[3], fg = bg.common },
+	["Search"]       = { bg = colors.accents[3], fg = bg.common },
 	-- ["SpecialKey"] = { fg = fg.subtle },
 
 	-- ["SpellBad"] = { sp = colors.accents[1], undercurl = true },
@@ -120,9 +120,9 @@ apply_hl_map({
 
 	["TabLine"]      = { bg = bg.elevated, fg = fg.muted },
 	["TabLineFill"]  = { bg = bg.common },
-	["TabLineSel"]   = { bg = colors.accent, fg = colors.accents[1], bold = true },
+	["TabLineSel"]   = { bg = colors.brand, fg = colors.accents[1], bold = true },
 
-	["Title"]        = { fg = colors.accent, bold = true },
+	["Title"]        = { fg = colors.brand, bold = true },
 	["Visual"]       = { bg = bg.active },
 
 	-- ["WildMenu"] = { bg = colors.accent, fg = colors.accent_fg },
@@ -444,7 +444,7 @@ apply_hl_map({
 	["NeoTreeFileName"]             = { fg = fg.common },
 	["NeoTreeSymbolicLinkTarget"]   = { fg = syntax.keyword_flow },
 	["NeoTreeModified"]             = { fg = role.change },
-	["NeoTreeMessage"]              = { fg = colors.accent },
+	["NeoTreeMessage"]              = { fg = colors.brand },
 
 	["NeoTreeGitAdded"]             = { fg = role.add },
 	["NeoTreeGitModified"]          = { fg = role.change },

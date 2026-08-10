@@ -1,544 +1,142 @@
 -- write.lua
 -- write tdf.ColorScheme to config files
 
-local h = require("color_helper")
-local s = require("strategy")
-
----@param p tdf.ColorScheme
-local function write_hypr(p)
-	local path = os.getenv("HOME") .. "/.config/hypr/hyprland/colors.g.lua"
-	local f = assert(io.open(path, "w"))
-	local header = [[
--- Generated from wallpaper
--- Do not edit manually!
-
-]]
-	local content = header .. [[
-return {
-  active_border_color = "rgba(%sff)",
-  inactive_border_color = "%s",
-}
-]]
-	f:write(content:format(p.accent:sub(2), p.bg.border))
-	f:close()
-end
-
----@param p tdf.ColorScheme
-local function write_waybar(p)
-	local path = os.getenv("HOME") .. "/.config/waybar/styles/colors.g.css"
-	local f = assert(io.open(path, "w"))
-	local content = [[
-/* Generated from wallpaper */
-/* Do not edit manually! */
-
-/* background */
-@define-color bg %s;
-@define-color bg-elevated %s;
-@define-color bg-hover %s;
-@define-color bg-active %s;
-@define-color bg-border %s;
-@define-color bg-shadow %s;
-
-/* text */
-@define-color fg %s;
-@define-color fg-hover %s;
-@define-color fg-muted %s;
-@define-color fg-subtle %s;
-@define-color fg-shadow %s;
-
-/* role */
-@define-color error %s;
-@define-color ok %s;
-@define-color warning %s;
-@define-color info %s;
-@define-color hint %s;
-
-/* accents */
-@define-color a %s;
-
-]]
-	f:write(
-		content:format(
-			p.bg.common,
-			p.bg.elevated,
-			p.bg.hover,
-			p.bg.active,
-			p.bg.border,
-			p.bg.shadow,
-			p.fg.common,
-			p.fg.hover,
-			p.fg.muted,
-			p.fg.subtle,
-			p.fg.shadow,
-			p.role.error,
-			p.role.ok,
-			p.role.warning,
-			p.role.info,
-			p.role.hint,
-			p.accent
-		)
-	)
-	for i = 1, 6 do
-		f:write(string.format("@define-color a%d %s;\n", i, p.accents[i]))
-	end
-	f:close()
-
-	-- copy to gtk
-	-- local gtk_path = os.getenv("HOME") .. "/.config/gtk-3.0/colors.g.css"
-	-- os.execute("cp " .. path .. " " .. gtk_path)
-end
-
----@param p tdf.ColorScheme
-local function write_kitty(p)
-	local path = os.getenv("HOME") .. "/.config/kitty/colors.g.conf"
-
-	local active_template = string.format(
-		"{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
-		"_" .. p.accent:sub(2),
-		"_" .. p.bg.common:sub(2),
-		"_" .. p.accent:sub(2),
-		"_" .. p.accent:sub(2),
-		"_" .. p.accent:sub(2),
-		"_" .. p.bg.common:sub(2)
-	)
-	local inactive_template = string.format(
-		"{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
-		"_" .. p.fg.muted:sub(2),
-		"_" .. p.bg.common:sub(2),
-		"_" .. p.bg.elevated:sub(2),
-		"_" .. p.fg.muted:sub(2),
-		"_" .. p.fg.muted:sub(2),
-		"_" .. p.bg.common:sub(2)
-	)
-
-	local ansi16 = {}
-	for i = 0, 7 do
-		table.insert(ansi16, string.format("color%d %s\n", i, p.ansi_normal[i + 1]))
-		table.insert(ansi16, string.format("color%d %s\n", i + 8, p.ansi_bright[i + 1]))
+---@param val any
+---@param indent number|nil
+---@return string
+local function serialize_lua(val, indent)
+	indent = indent or 0
+	local function indent_str()
+		return string.rep("  ", indent)
 	end
 
-	local template = [[
-# Generated from wallpaper
-# Do not edit manually!
+	local function serialize_value(v, level)
+		if type(v) == "nil" then
+			return "nil"
+		elseif type(v) == "string" then
+			return string.format("%q", v)
+		elseif type(v) == "number" then
+			return tostring(v)
+		elseif type(v) == "boolean" then
+			return v and "true" or "false"
+		elseif type(v) == "table" then
+			-- Check if it's a list-like table (array)
+			local is_list = true
+			local max_key = 0
+			for k, _ in pairs(v) do
+				if type(k) ~= "number" or k <= 0 then
+					is_list = false
+					break
+				end
+				if k > max_key then max_key = k end
+			end
+			-- Check if keys are sequential starting from 1
+			if is_list then
+				for i = 1, max_key do
+					if v[i] == nil then
+						is_list = false
+						break
+					end
+				end
+			end
 
-foreground %s
-background %s
-selection_foreground %s
-selection_background %s
-cursor %s
-cursor_text_color %s
-url_color %s
-active_border_color %s
-inactive_border_color %s
-bell_border_color %s
-wayland_titlebar_color system
-active_tab_foreground %s
-active_tab_background %s
-inactive_tab_foreground %s
-inactive_tab_background %s
-tab_bar_background %s
-mark1_foreground %s
-mark1_background %s
-mark2_foreground %s
-mark2_background %s
-mark3_foreground %s
-mark3_background %s
-%s
+			if is_list and max_key > 0 then
+				-- Array-style table: { "a", "b", "c" }
+				local items = {}
+				for i = 1, max_key do
+					items[i] = serialize_value(v[i], level)
+				end
+				return "{" .. table.concat(items, ", ") .. "}"
+			else
+				-- Map-style table: { key = "value", ... }
+				local keys = {}
+				for k, _ in pairs(v) do
+					if type(k) == "number" and k > 0 and v[k] ~= nil then
+						keys[#keys + 1] = { key = k, str = "[" .. k .. "]" }
+					elseif type(k) == "string" and k:match("^[%a_][%w_]*$") then
+						keys[#keys + 1] = { key = k, str = k }
+					else
+						keys[#keys + 1] = { key = k, str = "[" .. serialize_value(k, level) .. "]" }
+					end
+				end
+				table.sort(keys, function(a, b) return tostring(a.key) < tostring(b.key) end)
 
-active_tab_title_template %q
-tab_title_template %q
-]]
+				if #keys == 0 then
+					return "{}"
+				end
 
-	local content = template:format(
-		p.fg.common,
-		p.bg.common,
-		p.accents[1],
-		p.accent,
-		p.accents[4],
-		p.accents[1],
-		p.accents[4],
-		p.accents[4],
-		p.bg.border,
-		p.accents[2],
-		p.accents[1],
-		p.accent,
-		p.fg.muted,
-		p.bg.elevated,
-		p.bg.common,
-		p.accents[1],
-		p.accent,
-		p.accents[1],
-		p.accents[2],
-		p.accents[1],
-		p.accents[3],
-		ansi16,
-		active_template,
-		inactive_template
-	)
-
-	local f = assert(io.open(path, "w"))
-	f:write(content)
-	f:close()
-end
-
----@param p tdf.ColorScheme
-local function write_rofi(p)
-	local path = os.getenv("HOME") .. "/.config/rofi/colors.g.rasi"
-	local f = assert(io.open(path, "w"))
-	f:write(
-		string.format(
-			[[
-* {
-    bg: %s;
-    fg: %s;
-    bg-elevated: %s;
-    bg-lighter: %s;
-    bg-active: %s;
-    border: %s;
-    fg-muted: %s;
-    fg-subtle: %s;
-    fg-hover: %s;
-    accent: %s;
-    accent-fg: %s;
-]],
-			p.bg.common,
-			p.fg.common,
-			p.bg.elevated,
-			p.bg.hover,
-			p.bg.active,
-			p.bg.border,
-			p.fg.muted,
-			p.fg.subtle,
-			p.fg.hover,
-			p.accent,
-			p.accents[1]
-		)
-	)
-	for i = 1, 6 do
-		f:write(string.format("    a%d: %s;\n", i, p.accents[i]))
+				local lines = {}
+				for _, item in ipairs(keys) do
+					local val_str = serialize_value(v[item.key], level + 1)
+					lines[#lines + 1] = indent_str() .. "  " .. item.str .. " = " .. val_str .. ","
+				end
+				return "{\n" .. table.concat(lines, "\n") .. "\n" .. indent_str() .. "}"
+			end
+		else
+			return tostring(v)
+		end
 	end
-	f:write("}\n")
-	f:close()
+
+	return serialize_value(val, indent)
 end
 
----@param p tdf.ColorScheme
-local function write_fcitx5(p)
-	local path = os.getenv("HOME") .. "/.local/share/fcitx5/themes/auto-gen/theme.conf"
-	os.execute("mkdir -p " .. path:match("(.*/)"))
-	local f = assert(io.open(path, "w"))
+--#region
+---@diagnostic disable: unused-local
+---@diagnostic disable: unused-function
 
-	local asset_theme = p.dark_mode and "default-dark" or "default"
-	local asset_root = "/usr/share/fcitx5/themes/" .. asset_theme
+---@class GenerationTask
+---@field path string The target path
+---@field type? string|"lua"|"gtk_css" The type of file to generate, which decides the build-in generation function to use
+---@field func? fun(p:tdf.ColorScheme):string Your custom function to generate
+---@field header? string The header content of the file to be generated
+local GenerationTask = {}
+GenerationTask.__index = GenerationTask
 
-	local template = [[
-[Metadata]
-Name=Auto Gen
-Version=1
-Author=ToaaM
-Description=Auto generated theme
-ScaleWithDPI=True
-
-[InputPanel]
-NormalColor=%s
-HighlightCandidateColor=%s
-HighlightColor=%s
-HighlightBackgroundColor=%s
-PageButtonAlignment=Last Candidate
-
-[InputPanel/TextMargin]
-Left=5
-Right=5
-Top=5
-Bottom=5
-
-[InputPanel/ContentMargin]
-Left=2
-Right=2
-Top=2
-Bottom=2
-
-[InputPanel/Background]
-Color=%s
-BorderColor=%s
-BorderWidth=2
-
-[InputPanel/Background/Margin]
-Left=2
-Right=2
-Top=2
-Bottom=2
-
-[InputPanel/Highlight]
-Color=%s
-
-[InputPanel/Highlight/Margin]
-Left=5
-Right=5
-Top=5
-Bottom=5
-
-[InputPanel/PrevPage]
-Image=%s/prev.png
-
-[InputPanel/PrevPage/ClickMargin]
-Left=5
-Right=5
-Top=4
-Bottom=4
-
-[InputPanel/NextPage]
-Image=%s/next.png
-
-[InputPanel/NextPage/ClickMargin]
-Left=5
-Right=5
-Top=4
-Bottom=4
-
-[Menu]
-NormalColor=%s
-HighlightCandidateColor=%s
-
-[Menu/Background]
-Color=%s
-BorderColor=%s
-BorderWidth=2
-
-[Menu/Background/Margin]
-Left=2
-Right=2
-Top=2
-Bottom=2
-
-[Menu/ContentMargin]
-Left=2
-Right=2
-Top=2
-Bottom=2
-
-[Menu/CheckBox]
-Image=%s/radio.png
-
-[Menu/SubMenu]
-Image=%s/arrow.png
-
-[Menu/Highlight]
-Color=%s
-
-[Menu/Highlight/Margin]
-Left=5
-Right=5
-Top=5
-Bottom=5
-
-[Menu/Separator]
-Color=%s
-
-[Menu/TextMargin]
-Left=5
-Right=5
-Top=5
-Bottom=5
-
-[AccentColorField]
-0=Input Panel Border
-1=Input Panel Highlight Candidate Background
-2=Input Panel Highlight
-3=Menu Border
-4=Menu Separator
-5=Menu Selected Item Background
-]]
-
-	local content = template:format(
-		p.fg.common, -- NormalColor
-		p.accent[1], -- HighlightCandidateColor
-		p.accent[1], -- HighlightColor
-		p.accent,  -- HighlightBackgroundColor
-		p.bg.common, -- [InputPanel/Background] Color
-		p.bg.border, -- BorderColor
-		p.bg.active, -- [InputPanel/Highlight] Color
-		asset_root, -- [InputPanel/PrevPage] Image
-		asset_root, -- [InputPanel/NextPage] Image
-		p.fg.common, -- [Menu] NormalColor
-		p.accent[1], -- [Menu] HighlightCandidateColor
-		p.bg.common, -- [Menu/Background] Color
-		p.bg.border, -- [Menu/Background] BorderColor
-		asset_root, -- [Menu/CheckBox] Image
-		asset_root, -- [Menu/SubMenu] Image
-		p.bg.active, -- [Menu/Highlight] Color
-		p.bg.border -- [Menu/Separator] Color
-	)
-
-	f:write(content)
-	f:close()
-end
-
----@param p tdf.ColorScheme
-local function write_nvim(p)
-	local syntax_keys = {
-		"comment",
-		"keyword",
-		"keyword_flow",
-		"keyword_return",
-		"string",
-		"number",
-		"type",
-		"func",
-		"func_call",
-		"variable",
-		"constant",
-		"macro",
-		"builtin",
-		"property",
-		"parameter",
-		"operator",
-		"punctuation",
-		"namespace",
+---@param path string
+---@param func fun(p:tdf.ColorScheme)
+---@param header string|nil
+function GenerationTask:new(path, func, header)
+	---@type GenerationTask
+	local obj = {
+		path = path,
+		func = func,
+		header = header
 	}
-
-	local path = os.getenv("HOME") .. "/.config/nvim/lua/colors/g.lua"
-	os.execute("mkdir -p " .. path:match("(.*/)"))
-
-	local f = assert(io.open(path, "w"))
-
-	local template = [[
--- Generated from wallpaper
--- Do not edit manually!
-
-return {
-  dark_mode = %s,
-	bg = {
-		common = %q,
-  	elevated = %q,
-  	hover = %q,
-  	active = %q,
-  	border = %q,
-  	shadow = %q,
-	},
-  fg = {
-		common = %q,
-  	muted = %q,
-  	subtle = %q,
-  	hover = %q,
-  	shadow = %q,
-	},
-	role = {
-		error = %q,
-		ok = %q,
-		warning = %q,
-		info = %q,
-		hint = %q,
-		add  = %q,
-		delete = %q,
-		change = %q,
-	},
-  accent = %q,
-  accents = {%s},
-  syntax = {%s},
-  ansi_normal = {%s},
-  ansi_bright = {%s},
-}
-]]
-
-	-- accents
-	local accent_lines = {}
-	for _, a in ipairs(p.accents) do
-		accent_lines[#accent_lines + 1] = string.format("%q,", a)
-	end
-
-	-- syntax
-	local syntax_lines = {}
-	for _, key in ipairs(syntax_keys) do
-		syntax_lines[#syntax_lines + 1] = string.format("%s = %q,", key, p.syntax[key])
-	end
-
-	-- ansi_normal
-	local ansi_normal_items = {}
-	for i = 1, 8 do
-		ansi_normal_items[#ansi_normal_items + 1] = string.format("%q", p.ansi_normal[i])
-	end
-
-	-- ansi_bright
-	local ansi_bright_items = {}
-	for i = 1, 8 do
-		ansi_bright_items[#ansi_bright_items + 1] = string.format("%q", p.ansi_bright[i])
-	end
-
-	local content = template:format(
-		p.dark_mode and "true" or "false",
-		p.bg.common,
-		p.bg.elevated,
-		p.bg.hover,
-		p.bg.active,
-		p.bg.border,
-		p.bg.shadow,
-		p.fg.common,
-		p.fg.muted,
-		p.fg.subtle,
-		p.fg.hover,
-		p.fg.shadow,
-		p.role.error,
-		p.role.ok,
-		p.role.warning,
-		p.role.info,
-		p.role.hint,
-		p.role.add,
-		p.role.delete,
-		p.role.change,
-		p.accent,
-		table.concat(accent_lines, "\n"),
-		table.concat(syntax_lines, "\n"),
-		table.concat(ansi_normal_items, ", "),
-		table.concat(ansi_bright_items, ", ")
-	)
-
-	f:write(content)
-	f:close()
-
-	os.execute("stylua " .. path .. " 2>/dev/null")
+	return setmetatable(obj, GenerationTask)
 end
 
----@param p tdf.ColorScheme
-local function write_cava(p)
-	local path = os.getenv("HOME") .. "/.config/cava/themes/colors.g.theme"
+---@param self GenerationTask
+---@param scheme tdf.ColorScheme
+function GenerationTask:run(scheme)
+	local path = self.path
+	local func = self.func
+	local header = self.header or ""
+	local t_type = self.type
 	os.execute("mkdir -p " .. path:match("(.*/)"))
-
-	local template = [[
-[color]
-background = default
-foreground = '%s'
-gradient = 1
-%s
-]]
-
-	local gradient_lines = {}
-	for i, color in ipairs(s.gradient(p.accent, p.accents[2], 8)) do
-		gradient_lines[#gradient_lines + 1] = string.format("gradient_color_%d = '%s'", i, color)
+	local f = assert(io.open(path, "w"))
+	local content
+	if func ~= nil then
+		content = func(scheme)
+	elseif t_type == "lua" then
+		content = "return " .. serialize_lua(scheme)
+	elseif t_type ~= nil then
+		local tpl = require("tpls." .. t_type)
+		content = tpl(scheme)
+	else
+		content = ""
 	end
-
-	local content = template:format(p.accent, table.concat(gradient_lines, "\n"))
-
-	local f = assert(io.open(path, "w"))
-	f:write(content)
+	f:write(header .. content)
 	f:close()
+	if t_type == "lua" then
+		os.execute("stylua " .. path .. " 2>/dev/null")
+	end
 end
 
----@param p tdf.ColorScheme
-local function write_mako(p)
-	local path = os.getenv("HOME") .. "/.config/mako/g.colors"
-	os.execute("mkdir -p " .. path:match("(.*/)"))
-	local template = [[
-# Generated from wallpaper
+---@diagnostic enable: unused-local
+---@diagnostic enable: unused-function
+--#endregion
 
-background-color=%s
-text-color=%s
-border-color=%s
-]]
-	local content = template:format(p.bg.common, p.fg.common, p.bg.border)
-	local f = assert(io.open(path, "w"))
-	f:write(content)
-	f:close()
-end
+local h = require("color_helper")
 
 local M = {}
 
@@ -589,14 +187,11 @@ end
 
 ---@param p tdf.ColorScheme
 function M.invoke(p)
-	write_hypr(p)
-	write_waybar(p)
-	write_kitty(p)
-	write_cava(p)
-	write_rofi(p)
-	write_fcitx5(p)
-	write_nvim(p)
-	write_mako(p)
+	local cag_config = require("center_config").load_tdf_config().color_auto_gen
+	---@diagnostic disable-next-line: need-check-nil
+	for _, gen_task in ipairs(cag_config.tasks) do
+		GenerationTask.run(gen_task, p)
+	end
 
 	-- reload
 	os.execute("hyprctl reload config-only")

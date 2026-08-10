@@ -6,13 +6,16 @@ end
 local config_path = tdf_root .. "/config.lua"
 
 ---@class tdf.Config
+---@field components? tdf.Components
 ---@field link? tdf.LinkConfig
+---@field color_auto_gen? tdf.ColorAutoGenConfig
+
+---@class tdf.Components
 ---@field compositor? string|"hypr"
 ---@field applauncher? string|"rofi"
 ---@field notify? string|"mako"|"dunst"
 ---@field terminal? string|"kitty"|"gohstty"
 ---@field shell? string|"zsh"|"bash"|"fish"
----@field color_auto_gen? tdf.ColorAutoGenConfig
 
 ---@class tdf.LinkConfig
 ---@field enable? boolean
@@ -20,19 +23,63 @@ local config_path = tdf_root .. "/config.lua"
 ---@class tdf.ColorAutoGenConfig
 ---@field enable? boolean
 ---@field notify? boolean
----@field day_mode? "auto"|"day"|"night"
+---@field dark_mode? "auto"|"day"|"night"
+---@field tasks? GenerationTask[]
+
+local HOME = os.getenv("HOME")
 
 ---@type tdf.Config
 local default_config = {
-	compositor = "hypr",
-	applauncher = "rofi",
-	notify = "mako",
-	terminal = "kitty",
-	shell = "zsh",
+	components = {
+		compositor = "hypr",
+		applauncher = "rofi",
+		notify = "mako",
+		terminal = "kitty",
+		shell = "zsh",
+	},
 	color_auto_gen = {
 		enable = true,
 		notify = true,
-		day_mode = "auto",
+		dark_mode = "auto",
+		tasks = {
+			{
+				header = [[
+-- Generated from wallpaper
+-- Do not edit manually!
+
+		]],
+				path = HOME .. "/.config/hypr/hyprland/colors.g.lua",
+				type = "hypr",
+			},
+			{
+				path = HOME .. "/.config/nvim/lua/colors/g.lua",
+				type = "lua"
+			},
+			{
+				path = HOME .. "/.config/cava/themes/colors.g.theme",
+				type = "cava"
+			},
+			{
+				path = HOME .. "/.local/share/fcitx5/themes/auto-gen/theme.conf",
+				type = "fcitx5"
+			},
+			{
+				path = HOME .. "/.config/kitty/colors.g.conf",
+				type = "kitty"
+			},
+			{
+				path = HOME .. "/.config/mako/g.colors",
+				type = "mako"
+			},
+			{
+				path = HOME .. "/.config/rofi/colors.g.rasi",
+				type = "rofi"
+			},
+			{
+				path = HOME .. "/.config/waybar/styles/colors.g.css",
+				type = "waybar"
+			}
+		}
 	},
 }
 
@@ -81,7 +128,7 @@ end
 
 ---load $TOAAM_DOTFILES/config.lua
 ---@return tdf.Config
-function M.load_tdf()
+function M.load_tdf_config()
 	return M.load(os.getenv("TOAAM_DOTFILES") .. "/config.lua")
 end
 
@@ -105,12 +152,12 @@ function M.save(config)
 	local c = config.color_auto_gen
 
 	if c then
-		local changed = (c.enable ~= true or c.notify ~= true or c.day_mode ~= "auto")
+		local changed = (c.enable ~= true or c.notify ~= true or c.dark_mode ~= "auto")
 		if changed then
 			L[#L + 1] = I .. "color_auto_gen = {"
 			L[#L + 1] = I .. I .. "enable = " .. M.serialize_lua_value(c.enable) .. ","
 			L[#L + 1] = I .. I .. "notify = " .. M.serialize_lua_value(c.notify) .. ","
-			L[#L + 1] = I .. I .. "day_mode = " .. string.format("%q", c.day_mode) .. ","
+			L[#L + 1] = I .. I .. "day_mode = " .. string.format("%q", c.dark_mode) .. ","
 			L[#L + 1] = I .. "},"
 		end
 	end
@@ -134,4 +181,5 @@ end
 
 -- local config = M.load_tdf()
 -- print(config.shell)
+
 return M

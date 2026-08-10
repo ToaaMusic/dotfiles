@@ -4,6 +4,7 @@
 local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
 local tdf_dir = os.getenv("TOAAM_DOTFILES")
 for _, dep in ipairs({
+	script_dir .. "?.lua;",
 	script_dir .. "src/?.lua;",
 	tdf_dir .. "/tools/shared/?.lua;",
 }) do
@@ -41,7 +42,7 @@ local scheme = new_Scheme(dominants)
 
 --#region log
 
----[[
+--[[
 write.dump_mako(scheme.accents, "accents")
 write.dump_mako(scheme.ansi_normal, "ansi_normal")
 write.dump_mako(scheme.ansi_bright, "ansi_bright")
