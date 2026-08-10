@@ -2,7 +2,7 @@ local op = vim.opt
 local wo = vim.wo
 
 -- editor
-op.relativenumber = true
+op.relativenumber = false
 op.number = true
 op.cursorline = true
 op.cursorlineopt = "number"

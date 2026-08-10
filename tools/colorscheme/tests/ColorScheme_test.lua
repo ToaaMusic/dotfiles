@@ -46,13 +46,13 @@ return function()
 
 	---[[
 	local scheme = new_Scheme(doms)
-	write.dump_console(scheme.accent, "brand: ")
+	write.dump_console(scheme.brand, "brand: ")
 	write.dump_console(scheme.ansi_normal, "ansi_normal: ")
 	write.dump_console(scheme.ansi_bright, "ansi_bright: ")
 	write.dump_console(scheme.accents, "accents: ")
 	write.dump_console(scheme.candidates, string.format("candidates (%d): ", #scheme.candidates))
 	--]]
 
-	local brand = scheme.accent
+	local brand = scheme.brand
 	write.dump_console(s.gradient(brand, black, 6))
 end

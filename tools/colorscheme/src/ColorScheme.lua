@@ -108,18 +108,18 @@ local SyntaxColors = {}
 SyntaxColors.__index = SyntaxColors
 
 ---@class tdf.ColorScheme
----@field dark_mode boolean
----@field accent string -- TODO: brand color
----@field brand_palette tdf.Palette
----@field bg tdf.BackgroundColors
----@field fg tdf.ForegroundColors
----@field ansi16? tdf.Ansi16
----@field role RoleColors
----@field candidates string[] -- to be obsoleted
----@field accents string[] -- to be obsoleted
----@field ansi_normal string[] -- TODO: use ansi16 field instead
----@field ansi_bright string[]
----@field syntax tdf.SyntaxColors
+---@field dark_mode boolean         -- The day/night flag
+---@field brand string              -- The brand color
+---@field brand_palette tdf.Palette -- The palette of the brand color
+---@field bg tdf.BackgroundColors   -- Background color Group
+---@field fg tdf.ForegroundColors   -- Foreground color Group
+---@field ansi16? tdf.Ansi16        -- The ANSI 16 color set
+---@field role RoleColors           -- Role colors for diagnostics and diff
+---@field syntax tdf.SyntaxColors   -- Syntax color Group
+---@field candidates string[]       -- TODO: to be obsoleted
+---@field accents string[]          -- TODO: to be obsoleted, use brand_palette field instead
+---@field ansi_normal string[]      -- TODO: to be obsoleted, use ansi16 field instead
+---@field ansi_bright string[]      -- TODO: to be obsoleted, use ansi16 field instead
 ---@field protected __index? tdf.ColorScheme
 ---@field protected new? fun(init: tdf.ColorScheme|nil): tdf.ColorScheme
 local ColorScheme = {
@@ -153,7 +153,7 @@ function ColorScheme:build_ansi16()
 	local used        = {}
 	-- unpack
 	local dark        = self.dark_mode
-	local brand       = self.accent
+	local brand       = self.brand
 	local bg          = self.bg.common
 	local fg          = self.fg.common
 	local candidates  = self.candidates
@@ -338,7 +338,7 @@ function ColorScheme.from_dominants(dominants, invert_bool)
 			hover  = fg_hover,
 			shadow = fg_shadow,
 		},
-		accent      = accent,
+		brand       = accent,
 		candidates  = candidates,
 		accents     = accents,
 		ansi_normal = nil,
