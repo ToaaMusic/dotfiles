@@ -1,4 +1,4 @@
-# My Hyprland Configuration ~ `ver 0.55`
+# My Hyprland Configuration ~ `ver >= 0.55`
 
 See [Hyprland's official documentation](https://wiki.hyprland.org/) for more.
 
