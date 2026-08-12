@@ -1,8 +1,10 @@
 @import "~/.config/rofi/colors.g.rasi"
 
 * {
+	bg:                 @bg-common;
+	fg:                 @fg-common;
 	background-color: transparent;
-	text-color:       @fg;
+  text-color:         @fg;
 }
 
 window {
@@ -27,7 +29,7 @@ wrap {
 	children: [ inputbar, message ];
   background-color: @bg;
 	/** background-image: linear-gradient(white/5%, white/40%); */
-	border-color: @border;
+	border-color: @bg-border;
 	border: 2px;
 	border-radius: 0.4em;
 }
@@ -50,7 +52,7 @@ entry {
 }
 message {
 	background-color: @bg;
-	border-color: @border;
+	border-color: @bg-border;
 	padding: 0.4em;
 	spacing: 0.4em;
 }
@@ -66,7 +68,7 @@ listview {
 element {
 	orientation: vertical;
   background-color: @bg;
-	border-color: @border;
+	border-color: @bg-border;
 	border: 2px;
 	border-radius: 0.4em;
   children: [element-icon, element-text ];
@@ -84,5 +86,5 @@ element-text {
 
 element selected {
   background-color: @bg-active;
-	border-color: @a1;
+	border-color: @brand;
 }

@@ -1,13 +1,8 @@
 // --------------- global ---------------- //
 
 * {
-  bg:               #282738;
-  fg:               #E5B9C6;
-  bg-lighter:       #353446;
-  a1:               #E5B9C6;
-  a6:               #E5B9C6;
-  background-color:   @bg;
-  text-color:         @fg;
+  bg-common:               #282738;
+  fg-common:               #E5B9C6;
   font: "Maple Mono NF CN Bold 12";
 }
 
@@ -15,10 +10,16 @@
 // unless you want rofi to ignore the color generator from wallpaper
 @import "~/.config/rofi/colors.g.rasi" 
 
+* {
+	bg:                 @bg-common;
+	fg:                 @fg-common;
+  background-color:   @bg;
+  text-color:         @fg;
+}
 
 window {
   background-color: @bg;
-  border-color: @a6;
+  border-color: @bg-border;
   border:       2px;
   border-radius: 12px;
   width: 600px;
@@ -73,7 +74,7 @@ entry {
     placeholder: "";
     placeholder-color: @bg;
     cursor: text;
-    background-color: @bg-lighter;
+    background-color: @bg-hover;
     padding: 8px;
     border-radius: 5px;
     text-color: @fg;
@@ -92,7 +93,7 @@ listview {
 scrollbar {
     width:        4px ;
     border:       0;
-    handle-color: @a1;
+    handle-color: @brand;
     handle-width: 8px ;
     padding:      0;
 }
@@ -130,18 +131,18 @@ element.normal.active {
     text-color:       @fg;
 }
 element.selected.normal {
-    background-color: @a1;
-    border-color: @a1;
+    background-color: @brand;
+    border-color:     @brand;
     text-color:       @bg;
 }
 element.selected.urgent {
-    background-color: @a1;
-    border-color: @a1;
+    background-color: @brand;
+    border-color:     @brand;
     text-color:       @bg;
 }
 element.selected.active {
-    background-color: @a1;
-    border-color: @a1;
+    background-color: @brand;
+    border-color:     @brand;
     text-color:       @bg;
 }
 element.alternate.normal {
@@ -159,18 +160,18 @@ element.alternate.active {
 
 
 element-text.selected.normal {
-    background-color: @a1;
-    border-color: @a1;
+    background-color: @brand;
+    border-color:     @brand;
     text-color:       @bg;
 }
 element-text.selected.urgent {
-    background-color: @a1;
-    border-color: @a1;
+    background-color: @brand;
+    border-color:     @brand;
     text-color:       @bg;
 }
 element-text.selected.active {
-    background-color: @a1;
-    border-color: @a1;
+    background-color: @brand;
+    border-color:     @brand;
     text-color:       @bg;
 }
 mode-switcher {

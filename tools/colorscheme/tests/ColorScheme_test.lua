@@ -55,4 +55,6 @@ return function()
 
 	local brand = scheme.brand
 	write.dump_console(s.gradient(brand, black, 6))
+
+	print(require("write").serialize_gtk_css(scheme))
 end
