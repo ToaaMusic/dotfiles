@@ -7,7 +7,6 @@ local config_path = tdf_root .. "/config.lua"
 
 ---@class tdf.Config
 ---@field components? tdf.Components
----@field link? tdf.LinkConfig
 ---@field color_auto_gen? tdf.ColorAutoGenConfig
 
 ---@class tdf.Components
@@ -17,14 +16,11 @@ local config_path = tdf_root .. "/config.lua"
 ---@field terminal? string|"kitty"|"gohstty"
 ---@field shell? string|"zsh"|"bash"|"fish"
 
----@class tdf.LinkConfig
----@field enable? boolean
-
 ---@class tdf.ColorAutoGenConfig
----@field enable? boolean
----@field notify? boolean
----@field dark_mode? "auto"|"day"|"night"
----@field tasks? GenerationTask[]
+---@field enable? boolean Generate colors or not when changing wallpaper
+---@field notify? boolean Send notification or not
+---@field dark_mode? "auto"|"day"|"night" Forced dark mode or not
+---@field tasks? GenerationTask[] List of serialization tasks
 
 local HOME = os.getenv("HOME")
 
@@ -43,19 +39,34 @@ local default_config = {
 		dark_mode = "auto",
 		tasks = {
 			{
-				header = [[
--- Generated from wallpaper
--- Do not edit manually!
-
-		]],
+				header = "-- Generated from wallpaper\n-- Do not edit manually!\n\n",
 				path = HOME .. "/.config/hypr/hyprland/colors.g.lua",
-				type = "hypr",
+				type = "lua",
 			},
 			{
+				header = "-- Generated from wallpaper\n-- Do not edit manually!\n\n",
 				path = HOME .. "/.config/nvim/lua/colors/g.lua",
 				type = "lua"
 			},
 			{
+				path = HOME .. "/.config/rofi/colors.g.rasi",
+				type = "flat",
+				flatOpts = {
+					replace_underscore = true,
+					kv_sep = ": ",
+					terminator = ";",
+					indent = 2
+				},
+				header = "* {\n",
+				footer = "\n}",
+			},
+			{
+				header = "/* Generated from wallpaper\n * Do not edit manually!\n */\n\n",
+				path = HOME .. "/.config/waybar/styles/colors.g.css",
+				type = "gtk_css"
+			},
+			{
+				header = "# Generated from wallpaper\n# Do not edit manually!\n\n",
 				path = HOME .. "/.config/cava/themes/colors.g.theme",
 				type = "cava"
 			},
@@ -64,6 +75,7 @@ local default_config = {
 				type = "fcitx5"
 			},
 			{
+				header = "# Generated from wallpaper\n# Do not edit manually!\n\n",
 				path = HOME .. "/.config/kitty/colors.g.conf",
 				type = "kitty"
 			},
@@ -71,14 +83,6 @@ local default_config = {
 				path = HOME .. "/.config/mako/g.colors",
 				type = "mako"
 			},
-			{
-				path = HOME .. "/.config/rofi/colors.g.rasi",
-				type = "rofi"
-			},
-			{
-				path = HOME .. "/.config/waybar/styles/colors.g.css",
-				type = "waybar"
-			}
 		}
 	},
 }

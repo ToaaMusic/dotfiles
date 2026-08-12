@@ -1,35 +1,37 @@
 ---@param scheme tdf.ColorScheme
 ---@return string
 return function(scheme)
+	local brand_no_hash = scheme.brand:sub(2)
+	local bg_no_hash = scheme.bg.common:sub(2)
+	local fg_muted_no_hash = scheme.fg.muted:sub(2)
+	local bg_elevated_no_hash = scheme.bg.elevated:sub(2)
+
 	local active_template = string.format(
 		"{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
-		"_" .. scheme.brand:sub(2),
-		"_" .. scheme.bg.common:sub(2),
-		"_" .. scheme.brand:sub(2),
-		"_" .. scheme.brand:sub(2),
-		"_" .. scheme.brand:sub(2),
-		"_" .. scheme.bg.common:sub(2)
+		"_" .. brand_no_hash,
+		"_" .. bg_no_hash,
+		"_" .. bg_no_hash,
+		"_" .. brand_no_hash,
+		"_" .. brand_no_hash,
+		"_" .. bg_no_hash
 	)
 	local inactive_template = string.format(
 		"{fmt.fg.%s}{fmt.bg.%s}{fmt.fg.%s}{fmt.bg.%s} {title.split()[0]} {fmt.fg.%s}{fmt.bg.%s} ",
-		"_" .. scheme.fg.muted:sub(2),
-		"_" .. scheme.bg.common:sub(2),
-		"_" .. scheme.bg.elevated:sub(2),
-		"_" .. scheme.fg.muted:sub(2),
-		"_" .. scheme.fg.muted:sub(2),
-		"_" .. scheme.bg.common:sub(2)
+		"_" .. fg_muted_no_hash,
+		"_" .. bg_no_hash,
+		"_" .. bg_elevated_no_hash,
+		"_" .. fg_muted_no_hash,
+		"_" .. fg_muted_no_hash,
+		"_" .. bg_no_hash
 	)
 
-	local ansi16 = {}
+	local ansi_lines = {}
 	for i = 0, 7 do
-		table.insert(ansi16, string.format("color%d %s\n", i, scheme.ansi_normal[i + 1]))
-		table.insert(ansi16, string.format("color%d %s\n", i + 8, scheme.ansi_bright[i + 1]))
+		ansi_lines[#ansi_lines + 1] = string.format("color%d %s", i, scheme.ansi_normal[i + 1])
+		ansi_lines[#ansi_lines + 1] = string.format("color%d %s", i + 8, scheme.ansi_bright[i + 1])
 	end
 
 	local template = [[
-# Generated from wallpaper
-# Do not edit manually!
-
 foreground %s
 background %s
 selection_foreground %s
@@ -61,26 +63,26 @@ tab_title_template %q
 	local content = template:format(
 		scheme.fg.common,
 		scheme.bg.common,
-		scheme.accents[1],
+		scheme.bg.common,
 		scheme.brand,
 		scheme.accents[4],
-		scheme.accents[1],
+		scheme.bg.common,
 		scheme.accents[4],
 		scheme.accents[4],
 		scheme.bg.border,
 		scheme.accents[2],
-		scheme.accents[1],
+		scheme.bg.common,
 		scheme.brand,
 		scheme.fg.muted,
 		scheme.bg.elevated,
 		scheme.bg.common,
-		scheme.accents[1],
+		scheme.bg.common,
 		scheme.brand,
-		scheme.accents[1],
+		scheme.bg.common,
 		scheme.accents[2],
-		scheme.accents[1],
+		scheme.bg.common,
 		scheme.accents[3],
-		ansi16,
+		table.concat(ansi_lines, "\n"),
 		active_template,
 		inactive_template
 	)

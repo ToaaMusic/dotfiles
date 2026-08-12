@@ -3,6 +3,9 @@
 @import "default-colors.css";
 @import "colors.g.css";
 
+@define-color fg @fg-common;
+@define-color bg @bg-common;
+
 * {
   font-size: 10pt;
   font-weight: bold;
@@ -50,7 +53,7 @@ tooltip label {
 }
 
 #workspaces button.active {
-  background-color: @a;
+  background-color: @brand;
   padding: 16px 0;
   transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
 }
@@ -64,14 +67,14 @@ tooltip label {
 }
 
 #workspaces button.overview {
-  background-color: @a;
+  background-color: @brand;
   min-height: 30px;
   transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
 }
 
 #workspaces button:hover {
   border: 1px solid @bg-border;
-  background-color: @a;
+  background-color: @brand;
   transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
   min-height: 40px;
 }
@@ -122,7 +125,7 @@ tooltip label {
 #battery:hover,
 #custom-notification:hover {
   color: #000000;
-  background-color: @a;
+  background-color: @brand;
   transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
   min-height: 20px;
 }
@@ -144,13 +147,13 @@ tooltip label {
 
 @keyframes blink-update {
   to {
-    background-color: @a;
+    background-color: @brand;
   }
 }
 
 @keyframes blink_red {
   to {
-    background-color: @error;
+    background-color: @role-error;
   }
 }
 .warning,
