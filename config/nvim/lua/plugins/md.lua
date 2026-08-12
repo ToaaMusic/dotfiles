@@ -4,10 +4,26 @@ return {
 	-- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
 	dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" }, -- if you use standalone mini plugins
 	-- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-	ft = "markdown",
+	ft = { "markdown", "lua" },
 	---@module 'render-markdown'
 	---@type render.md.UserConfig
 	opts = {
+		-- injections = {
+		-- 	lua = {
+		-- 		enabled = true,
+		-- 		query = [[
+		-- 			(comment
+		-- 			  "[[" content: (_) @injection.content
+		-- 			  (#set! injection.combined)
+		-- 			  (#set! injection.language "markdown"))
+		-- 		]],
+		-- 	},
+		-- },
+
+		file_types = {
+			"markdown",
+			-- "lua"
+		},
 		render_modes = { "n", "i" },
 		-- all the "sign" means at the left of gutter
 		-- such as the lang icon of code blocks, i'll disable
@@ -36,10 +52,10 @@ return {
 		code = {
 			render_modes = { "n" },
 			width = "block",
-      min_width = 60,
-      -- left_pad = 2,
-      -- right_pad = 2,
-      conceal_delimiters = false,
+			min_width = 60,
+			-- left_pad = 2,
+			-- right_pad = 2,
+			conceal_delimiters = false,
 			language = true,
 		},
 
