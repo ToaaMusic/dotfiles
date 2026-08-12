@@ -29,7 +29,7 @@ RoleColors.__index = RoleColors
 
 ---@class tdf.Ansi16
 ---@field protected new? fun(init: tdf.Ansi16|nil): tdf.Ansi16
----@field protected from_seed? fun(seed: string): tdf.Ansi16
+---@field protected __pairs? fun(t: tdf.Ansi16): (fun(), tdf.Ansi16, nil)
 ---@field Black string
 ---@field Red string
 ---@field Green string
@@ -64,7 +64,27 @@ local Ansi16 = {
 	BrightCyan    = "#00ffff",
 	BrightWhite   = "#ffffff",
 }
+local ansi16_order = {
+	"Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White",
+	"BrightBlack", "BrightRed", "BrightGreen", "BrightYellow",
+	"BrightBlue", "BrightMagenta", "BrightCyan", "BrightWhite",
+}
+
 Ansi16.__index = Ansi16
+Ansi16.__pairs = function(t)
+	local i = 0
+	return function()
+		i = i + 1
+		local k = ansi16_order[i]
+		if k then
+			return k, t[k]
+		end
+	end, t, nil
+end
+
+function Ansi16.new(tbl)
+	return setmetatable(tbl or {}, Ansi16)
+end
 
 ---@class tdf.BackgroundColors
 ---@field common string
@@ -113,13 +133,11 @@ SyntaxColors.__index = SyntaxColors
 ---@field brand_palette tdf.Palette -- The palette of the brand color
 ---@field bg tdf.BackgroundColors   -- Background color Group
 ---@field fg tdf.ForegroundColors   -- Foreground color Group
----@field ansi16? tdf.Ansi16        -- The ANSI 16 color set
+---@field ansi16 tdf.Ansi16         -- The ANSI 16 color set
 ---@field role RoleColors           -- Role colors for diagnostics and diff
 ---@field syntax tdf.SyntaxColors   -- Syntax color Group
 ---@field candidates string[]       -- TODO: to be obsoleted
 ---@field accents string[]          -- TODO: to be obsoleted, use brand_palette field instead
----@field ansi_normal string[]      -- TODO: to be obsoleted, use ansi16 field instead
----@field ansi_bright string[]      -- TODO: to be obsoleted, use ansi16 field instead
 ---@field protected __index? tdf.ColorScheme
 ---@field protected new? fun(init: tdf.ColorScheme|nil): tdf.ColorScheme
 local ColorScheme = {
@@ -129,17 +147,6 @@ local ColorScheme = {
 ColorScheme.__index = ColorScheme
 
 ---@diagnostic enable: unused-local
-
-function Ansi16.new()
-	return setmetatable({}, Ansi16)
-end
-
--- ---@param seed string
--- function Ansi16.from_seed(seed)
--- 	local h, s, l = h.hex_to_hsl(seed)
--- 	local ansi = Ansi16.new()
--- 	return ansi
--- end
 
 function ColorScheme.new(init)
 	init = init or {}
@@ -192,52 +199,67 @@ function ColorScheme:build_ansi16()
 	end
 	bright[8] = s.ensure_contrast(fg, bg, 7.0)
 
-	self.ansi_normal = normal
-	self.ansi_bright = bright
-
+	self.ansi16 = Ansi16.new({
+		Black         = normal[1],
+		Red           = normal[2],
+		Green         = normal[3],
+		Yellow        = normal[4],
+		Blue          = normal[5],
+		Magenta       = normal[6],
+		Cyan          = normal[7],
+		White         = normal[8],
+		BrightBlack   = bright[1],
+		BrightRed     = bright[2],
+		BrightGreen   = bright[3],
+		BrightYellow  = bright[4],
+		BrightBlue    = bright[5],
+		BrightMagenta = bright[6],
+		BrightCyan    = bright[7],
+		BrightWhite   = bright[8],
+	})
 	return self
 end
 
 ---@param self tdf.ColorScheme
 ---@return tdf.ColorScheme
 function ColorScheme:build_syntax()
-	local ansin = self.ansi_normal
+	local A = self.ansi16
 	local bg = self.bg.common
 	local fg = self.fg.common
 	self.syntax = {
 		comment        = h.mix(fg, bg, 0.5),
-		keyword        = ansin[6],
-		keyword_flow   = s.ensure_contrast_soft(h.mix(ansin[4], ansin[2], 0.20), bg, 4.4, 0.14),
-		keyword_return = s.ensure_contrast_soft(h.mix(ansin[6], ansin[2], 0.35), bg, 4.6, 0.14),
-		string         = ansin[3],
-		number         = ansin[4],
-		type           = ansin[5],
-		func           = ansin[7],
-		func_call      = s.ensure_contrast_soft(h.mix(ansin[7], fg, 0.10), bg, 4.8, 0.14),
+		keyword        = A.Magenta,
+		keyword_flow   = s.ensure_contrast_soft(h.mix(A.Yellow, A.Red, 0.20), bg, 4.4, 0.14),
+		keyword_return = s.ensure_contrast_soft(h.mix(A.Magenta, A.Red, 0.35), bg, 4.6, 0.14),
+		string         = A.Green,
+		number         = A.Yellow,
+		type           = A.Blue,
+		func           = A.Cyan,
+		func_call      = s.ensure_contrast_soft(h.mix(A.Cyan, fg, 0.10), bg, 4.8, 0.14),
 		variable       = self.fg.hover,
-		constant       = s.ensure_contrast_soft(h.mix(ansin[4], ansin[2], 0.25), bg, 4.2, 0.14),
-		macro          = ansin[2],
-		builtin        = s.ensure_contrast_soft(h.mix(ansin[2], ansin[4], 0.45), bg, 4.4, 0.14),
-		property       = ansin[7],
-		parameter      = s.ensure_contrast_soft(h.mix(ansin[7], ansin[5], 0.38), bg, 4.4, 0.14),
+		constant       = s.ensure_contrast_soft(h.mix(A.Yellow, A.Red, 0.25), bg, 4.2, 0.14),
+		macro          = A.Red,
+		builtin        = s.ensure_contrast_soft(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
+		property       = A.Cyan,
+		parameter      = s.ensure_contrast_soft(h.mix(A.Cyan, A.Blue, 0.38), bg, 4.4, 0.14),
 		operator       = self.fg.subtle,
 		punctuation    = self.fg.subtle,
-		namespace      = s.ensure_contrast_soft(h.mix(ansin[5], ansin[6], 0.32), bg, 4.4, 0.14),
+		namespace      = s.ensure_contrast_soft(h.mix(A.Blue, A.Magenta, 0.32), bg, 4.4, 0.14),
 	}
 	return self
 end
 
 function ColorScheme:build_role()
-	local ansin = self.ansi_normal
-	self.role   = {
-		error   = ansin[2],
-		ok      = ansin[3],
-		warning = ansin[4],
-		info    = ansin[7],
-		hint    = ansin[8],
-		add     = ansin[3],
-		delete  = ansin[2],
-		change  = ansin[5],
+	local A   = self.ansi16
+	self.role = {
+		error   = A.Red,
+		ok      = A.Green,
+		warning = A.Yellow,
+		info    = A.Cyan,
+		hint    = A.White,
+		add     = A.Green,
+		delete  = A.Red,
+		change  = A.Blue,
 	}
 	return self
 end
@@ -322,8 +344,8 @@ function ColorScheme.from_dominants(dominants, invert_bool)
 	---@diagnostic disable: assign-type-mismatch
 	---@diagnostic disable-next-line: missing-fields
 	return ColorScheme.new({
-		dark_mode   = dark_mode,
-		bg          = {
+		dark_mode  = dark_mode,
+		bg         = {
 			common   = bg,
 			elevated = bg_elevated,
 			hover    = bg_hover,
@@ -331,19 +353,18 @@ function ColorScheme.from_dominants(dominants, invert_bool)
 			border   = bg_border,
 			shadow   = bg_shadow,
 		},
-		fg          = {
+		fg         = {
 			common = fg,
 			muted  = fg_muted,
 			subtle = fg_subtle,
 			hover  = fg_hover,
 			shadow = fg_shadow,
 		},
-		brand       = accent,
-		candidates  = candidates,
-		accents     = accents,
-		ansi_normal = nil,
-		ansi_bright = nil,
-		syntax      = nil,
+		brand      = accent,
+		candidates = candidates,
+		accents    = accents,
+		ansi16     = nil,
+		syntax     = nil,
 	}):build_ansi16():build_syntax():build_role()
 	---@diagnostic enable: assign-type-mismatch
 end

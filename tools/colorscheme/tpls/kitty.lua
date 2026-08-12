@@ -26,9 +26,8 @@ return function(scheme)
 	)
 
 	local ansi_lines = {}
-	for i = 0, 7 do
-		ansi_lines[#ansi_lines + 1] = string.format("color%d %s", i, scheme.ansi_normal[i + 1])
-		ansi_lines[#ansi_lines + 1] = string.format("color%d %s", i + 8, scheme.ansi_bright[i + 1])
+	for _, color in pairs(scheme.ansi16) do
+		ansi_lines[#ansi_lines + 1] = string.format("color%d %s", #ansi_lines, color)
 	end
 
 	local template = [[

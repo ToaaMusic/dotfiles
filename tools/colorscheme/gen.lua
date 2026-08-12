@@ -44,8 +44,7 @@ local scheme = new_Scheme(dominants)
 
 --[[
 write.dump_mako(scheme.accents, "accents")
-write.dump_mako(scheme.ansi_normal, "ansi_normal")
-write.dump_mako(scheme.ansi_bright, "ansi_bright")
+write.dump_console(scheme.ansi16, "ansi16: ")
 --]]
 
 --#endregion

@@ -47,8 +47,7 @@ return function()
 	---[[
 	local scheme = new_Scheme(doms)
 	write.dump_console(scheme.brand, "brand: ")
-	write.dump_console(scheme.ansi_normal, "ansi_normal: ")
-	write.dump_console(scheme.ansi_bright, "ansi_bright: ")
+	write.dump_console(scheme.ansi16, "ansi16: ")
 	write.dump_console(scheme.accents, "accents: ")
 	write.dump_console(scheme.candidates, string.format("candidates (%d): ", #scheme.candidates))
 	--]]
