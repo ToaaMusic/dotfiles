@@ -2,7 +2,7 @@
 -- See https://wiki.hypr.land/Configuring/Basics/Binds/
 local v = require("vars")
 local bind = hl.bind
-local mainMod = "ALT"
+local mainMod = "SUPER"
 local cmdPath = "$HOME/.config/hypr/cmds/"
 
 --test
@@ -16,6 +16,13 @@ bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
 bind(mainMod .. " + M", hl.dsp.exec_cmd("hyprctl dispatch exit"))
 bind(mainMod .. " + P", hl.dsp.window.pseudo())
 bind(mainMod .. " + J", hl.dsp.layout("togglesplit")) -- dwindle only
+
+-- game mode
+bind(mainMod .. " + Escape", hl.dsp.submap("game"))
+bind("ALT + Escape", hl.dsp.submap("game"))
+hl.define_submap("game", function()
+	bind("Escape", hl.dsp.submap("reset"))
+end)
 
 -- apps
 bind(mainMod .. " + TAB", hl.dsp.exec_cmd(v.menu))
