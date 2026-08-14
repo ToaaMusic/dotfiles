@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-LOCKDIR="/tmp/random-wallpaper.lock"
+LOCKDIR="/tmp/wall.lock"
 if ! mkdir "$LOCKDIR" 2>/dev/null; then
 	# stale lock from kill -9? check if any wallpaper script is actually running
-	if ! pgrep -f "random-wallpaper\.sh" | grep -qv "$$"; then
+	if ! pgrep -f "wall\.sh" | grep -qv "$$"; then
 		rm -rf "$LOCKDIR"
 		mkdir "$LOCKDIR" || {
 			notify-send "Wallpaper" "Failed to acquire lock" -t 2000
