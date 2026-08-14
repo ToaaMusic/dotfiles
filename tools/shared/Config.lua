@@ -19,8 +19,9 @@ local config_path = tdf_root .. "/config.lua"
 ---@class tdf.ColorAutoGenConfig
 ---@field enable? boolean Generate colors or not when changing wallpaper
 ---@field notify? boolean Send notification or not
----@field dark_mode? "auto"|"day"|"night" Forced dark mode or not
+---@field theme_mode? "auto"|"invert"|"dark"|"light"
 ---@field tasks? GenerationTask[] List of serialization tasks
+---@field force? tdf.ColorSchemeAllNullable Force use the fields in this scheme, only bg.common and fg.common are worked for now
 
 local HOME = os.getenv("HOME")
 
@@ -36,7 +37,8 @@ local default_config = {
 	color_auto_gen = {
 		enable = true,
 		notify = true,
-		dark_mode = "auto",
+		theme_mode = "auto",
+		force = {},
 		tasks = {
 			{
 				header = "-- Generated from wallpaper\n-- Do not edit manually!\n\n",
@@ -49,10 +51,21 @@ local default_config = {
 				type = "lua"
 			},
 			{
+				header = "# Generated from wallpaper\n# Do not edit manually!\n\n",
+				path = HOME .. "/.config/hypr/colors.g.conf",
+				type = "flat",
+				flatOpts = {
+					kv_sep = " = ",
+					prefix = "$",
+					format = "16#rgba(%r%g%bff)",
+					k_sep = "_",
+				}
+			},
+			{
 				path = HOME .. "/.config/rofi/colors.g.rasi",
 				type = "flat",
 				flatOpts = {
-					replace_underscore = true,
+					f_sep = "-",
 					kv_sep = ": ",
 					terminator = ";",
 					indent = 2
@@ -133,57 +146,7 @@ end
 ---load $TOAAM_DOTFILES/config.lua
 ---@return tdf.Config
 function M.load_tdf_config()
-	return M.load(os.getenv("TOAAM_DOTFILES") .. "/config.lua")
+	return M.load(config_path)
 end
-
-function M.serialize_lua_value(v)
-	if type(v) == "boolean" then
-		return v and "true" or "false"
-	elseif type(v) == "string" then
-		return string.format("%q", v)
-	else
-		return tostring(v)
-	end
-end
-
----@param config tdf.Config
-function M.save(config)
-	local L = {}
-	L[#L + 1] = "---@type tdf.Config"
-	L[#L + 1] = "return {"
-	local I = "  "
-
-	local c = config.color_auto_gen
-
-	if c then
-		local changed = (c.enable ~= true or c.notify ~= true or c.dark_mode ~= "auto")
-		if changed then
-			L[#L + 1] = I .. "color_auto_gen = {"
-			L[#L + 1] = I .. I .. "enable = " .. M.serialize_lua_value(c.enable) .. ","
-			L[#L + 1] = I .. I .. "notify = " .. M.serialize_lua_value(c.notify) .. ","
-			L[#L + 1] = I .. I .. "day_mode = " .. string.format("%q", c.dark_mode) .. ","
-			L[#L + 1] = I .. "},"
-		end
-	end
-
-	local defaults = { compositor = "hypr", applauncher = "rofi", notify = "mako", terminal = "kitty", shell = "zsh" }
-	for _, k in ipairs({ "compositor", "applauncher", "notify", "terminal", "shell" }) do
-		if config[k] ~= defaults[k] then
-			L[#L + 1] = I .. k .. " = " .. string.format("%q", config[k]) .. ","
-		end
-	end
-	L[#L + 1] = "}"
-	local f = io.open(config_path, "w")
-	if f then
-		f:write(table.concat(L, "\n") .. "\n")
-		f:close()
-		print("Saved to " .. config_path)
-	else
-		print("ERROR: cannot write " .. config_path)
-	end
-end
-
--- local config = M.load_tdf()
--- print(config.shell)
 
 return M

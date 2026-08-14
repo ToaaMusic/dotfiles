@@ -1,0 +1,4 @@
+{
+  "misc.parameters": ["--develop=true", "--logpath=./log"],
+  "runtime.plugin": "./tools/plugin.lua"
+}

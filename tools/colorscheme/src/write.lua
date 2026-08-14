@@ -8,13 +8,15 @@ local M = {}
 --#region declarations
 
 ---@class FlatSerializeOpts
----@field kv_sep? string       key-value separator, e.g. "=", ":", " "
----@field terminator? string   line terminator, e.g. ";", "," or ""
----@field prefix? string       prefix for each line, e.g. "@define-color "
----@field indent? number       indentation level, default 0
----@field indent_width? string indentation string, default "  "
----@field value_quote? string|nil  wrap values with this quote char
----@field replace_underscore? boolean replace "_" with "-" in the keys of the table itself, because some formats like rofi's rasi don't support "_"
+---@field kv_sep? string        key-value separator, e.g. "=", ":", " "
+---@field k_sep? string|"-"|"_" separator for key path, default "-"
+---@field terminator? string    line terminator, e.g. ";", "," or ""
+---@field prefix? string        prefix for each line, e.g. "@define-color "
+---@field indent? number        indentation level, default 0
+---@field indent_width? string  indentation string, default "  "
+---@field v_quote? string       wrap values with this quote char
+---@field f_sep? string         the separator of lua field itself
+---@field format? string        default "16#rgb"
 
 --[[
 A generation task. The `type` decides the generation function to use, or you can use `func` to specify your own.
@@ -75,8 +77,8 @@ local task_flat = {
     prefix = "pre",
     indent = 2,
     indent_width = " ",
-    value_quote = "\"",
-    replace_underscore = true,
+    v_quote = "\"",
+		f_sep = "_",
   },
 }
 ```
@@ -113,6 +115,7 @@ local scheme = {
 ---@field header? string The header content of the file to be generated
 ---@field footer? string The footer content of the file to be generated
 local GenerationTask = {}
+---@package
 GenerationTask.__index = GenerationTask
 
 --#endregion
@@ -146,25 +149,74 @@ local function serialize_flat(tbl, opts, path_prefix)
 	local prefix = opts.prefix or ""
 	local indent = opts.indent or 0
 	local indent_w = opts.indent_width or "  "
-	local vquote = opts.value_quote
+	local vquote = opts.v_quote
 	path_prefix = path_prefix or ""
-	local p_sep = "-"
+	local k_sep = opts.k_sep or "-"
+	local v_format = opts.format
 
 	local function indent_str(level)
 		return string.rep(indent_w, level)
 	end
 
+	---@diagnostic disable: unused-function, unused-local
+	---@param template string
+	local function parse_color_template(template, r, g, b, alpha)
+		local base
+		local processed_template = template
+
+		local base_prefix = template:match("^(%d+)#")
+		if base_prefix then
+			base = tonumber(base_prefix) or 10
+			processed_template = template:sub(#base_prefix + 2) -- remove "#"
+		end
+
+		---@param num number 0~255
+		local function to_base(num)
+			if base == 10 then return tostring(num) end
+			local digits = "0123456789abcdefghijklmnopqrstuvwxyz"
+			local result = ""
+			local n = num
+			repeat
+				local remainder = n % base
+				result = digits:sub(remainder + 1, remainder + 1) .. result
+				n = math.floor(n / base)
+			until n == 0
+			return result
+		end
+
+		local replacements = {
+			["%%r"] = to_base(r),
+			["%%g"] = to_base(g),
+			["%%b"] = to_base(b),
+			["%%a"] = alpha and tostring(alpha) or "1",
+			["%%%%"] = "%",
+		}
+
+		local result = processed_template
+		for pattern, value in pairs(replacements) do
+			result = result:gsub(pattern, value)
+		end
+
+		return result
+	end
+
 	local function fmt_val(v)
+		if v_format then
+			local r, g, b = h.hex_to_rgb(v)
+			if r and g and b then
+				v = parse_color_template(v_format, r, g, b)
+			end
+		end
 		if vquote then
 			return vquote .. v .. vquote
 		end
 		return v
 	end
 
-	local replace_uscore = opts.replace_underscore
+	local f_sep = opts.f_sep
 	local function fmt_key(key)
-		if replace_uscore then
-			key = key:gsub("_", "-")
+		if f_sep then
+			key = key:gsub("_", f_sep)
 		end
 		return key
 	end
@@ -173,7 +225,7 @@ local function serialize_flat(tbl, opts, path_prefix)
 	for k, v in pairs(tbl) do
 		local fmt_k = fmt_key(k)
 		if type(v) == "table" and not is_list(v) then
-			local sub_path = path_prefix ~= "" and (path_prefix .. p_sep .. fmt_k) or fmt_k
+			local sub_path = path_prefix ~= "" and (path_prefix .. k_sep .. fmt_k) or fmt_k
 			lines[#lines + 1] = serialize_flat(v, opts, sub_path)
 		elseif type(v) == "table" then
 			for i = 1, #v do
@@ -185,7 +237,7 @@ local function serialize_flat(tbl, opts, path_prefix)
 			end
 		else
 			if type(v) == "string" then
-				local key = path_prefix ~= "" and (path_prefix .. p_sep .. fmt_k) or fmt_k
+				local key = path_prefix ~= "" and (path_prefix .. k_sep .. fmt_k) or fmt_k
 				lines[#lines + 1] = string.format("%s%s%s%s%s",
 					indent_str(indent), prefix, key, kv_sep, fmt_val(v)) .. term
 			end
@@ -265,15 +317,26 @@ local function serialize_lua(val, indent)
 	return serialize_value(val, indent)
 end
 
+---@package
 ---@param path string
----@param func fun(p:tdf.ColorScheme)
+---@param type string
+---@param flatOpts FlatSerializeOpts|nil
+---@param func fun(p:tdf.ColorScheme)|nil
 ---@param header string|nil
-function GenerationTask:new(path, func, header)
+---@param footer string|nil
+---@overload fun(tbl: table): GenerationTask
+function GenerationTask.new(path, type, flatOpts, func, header, footer)
+	if type(path) == "table" then
+		return setmetatable(path, GenerationTask)
+	end
 	---@type GenerationTask
 	local obj = {
 		path = path,
+		type = type,
+		flatOpts = flatOpts,
 		func = func,
-		header = header
+		header = header,
+		footer = footer
 	}
 	return setmetatable(obj, GenerationTask)
 end

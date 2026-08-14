@@ -28,19 +28,19 @@ fi
 # set
 hyprctl hyprpaper wallpaper ",$WALL"
 
-# gen color
-GEN_LUA="$TOAAM_DOTFILES/tools/colorscheme/gen.lua"
-ffmpeg -v error -i "$WALL" -f image2pipe -vcodec ppm - | lua "$GEN_LUA"
-
 # cache
 KV_FILE="$TOAAM_DOTFILES/.cache"
 kv="$TOAAM_DOTFILES/scripts/kv.sh"
 $kv $KV_FILE wallpaper $WALL
 
-if [ ! -f "$HOME/.config/hypr/g.conf" ]; then
-	touch "$HOME/.config/hypr/g.conf"
+if [ ! -f "$HOME/.config/hypr/cache.conf" ]; then
+	touch "$HOME/.config/hypr/cache.conf"
 fi
-echo "\$wall=$WALL" >"$HOME/.config/hypr/g.conf"
+echo "\$wall=$WALL" >"$HOME/.config/hypr/cache.conf"
+
+# gen color
+GEN_LUA="$TOAAM_DOTFILES/tools/colorscheme/gen.lua"
+ffmpeg -v error -i "$WALL" -f image2pipe -vcodec ppm - | lua "$GEN_LUA"
 
 # notify
-notify-send "Wallpaper Changed" "$(basename "$WALL")" -i "$WALL"
+# notify-send "Wallpaper Changed" "$(basename "$WALL")" -i "$WALL"

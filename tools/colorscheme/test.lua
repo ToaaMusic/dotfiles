@@ -12,9 +12,16 @@ for _, dep in ipairs(deps) do
 end
 
 if arg[1] then
-	for _, test_mod in ipairs(arg) do
-		local run = require(test_mod .. "_test")
-		run()
+	local test_task_list = {}
+	for i, test_mod in ipairs(arg) do
+		local succes, run = pcall(require, test_mod .. "_test")
+		if succes then
+			table.remove(arg, i)
+			table.insert(test_task_list, run)
+		end
+	end
+	for _, task in ipairs(test_task_list) do
+		task()
 	end
 else
 	print("No test selected")
