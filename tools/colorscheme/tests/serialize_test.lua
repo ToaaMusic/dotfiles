@@ -38,7 +38,7 @@ return function()
 	print(serialize_mod.serialize_flat(test_table, { indent_width = "\t", indent = 1 }))
 
 	print("\n=== value_quote = '\"' ===")
-	print(serialize_mod.serialize_flat(test_table, { value_quote = "\"" }))
+	print(serialize_mod.serialize_flat(test_table, { v_quote = "\"" }))
 
 	print("\n=== all combined ===")
 	print(serialize_mod.serialize_flat(test_table, {
@@ -47,7 +47,7 @@ return function()
 		prefix = "pre ",
 		indent = 1,
 		indent_width = "\t",
-		value_quote = "\"",
+		v_quote = "\"",
 	}))
 
 	print("=== gtk css ===")

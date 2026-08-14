@@ -1,9 +1,15 @@
+local luarc = vim.fs.root(0, { ".luarc.json" })
+local luarc_params = {}
+if luarc then
+	local ok, data = pcall(vim.json.decode, table.concat(vim.fn.readfile(luarc .. "/.luarc.json"), "\n"))
+	if ok and data and data["misc.parameters"] then
+		luarc_params = data["misc.parameters"]
+	end
+end
+
 ---@type vim.lsp.Config
 return {
-	cmd = {
-		"lua-language-server",
-		-- "--locale=zh-cn"
-	},
+	cmd = vim.list_extend({ "lua-language-server" }, luarc_params),
 	filetypes = { "lua" },
 	root_markers = {
 		".emmyrc.json",

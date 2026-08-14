@@ -1,9 +1,10 @@
-#cache
 config/cava/themes
 config/cava/shaders
 
+# cache
 # config/fcitx5/conf/cached_layouts
 /.cache
+cache.conf
 
 # auto generated files
 g.*
@@ -20,6 +21,9 @@ tools/gui/
 /config.lua
 tools/colorscheme/TODO.md
 
+# log
+logs/
+log/
 
 # personal files
 others/

@@ -6,7 +6,8 @@ local s = require("strategy")
 ---@diagnostic disable-next-line: unused-local
 local logger = require("logger").get_logger()
 
----definations
+--#region declarations
+
 ---@diagnostic disable: unused-local
 
 ---@class tdf.Palette
@@ -138,16 +139,22 @@ SyntaxColors.__index = SyntaxColors
 ---@field syntax tdf.SyntaxColors   -- Syntax color Group
 ---@field candidates string[]       -- TODO: to be obsoleted
 ---@field accents string[]          -- TODO: to be obsoleted, use brand_palette field instead
----@field protected __index? tdf.ColorScheme
----@field protected new? fun(init: tdf.ColorScheme|nil): tdf.ColorScheme
 local ColorScheme = {
+	---@package
 	__name = "ColorScheme",
+	---@package
 	__metatable = "ColorScheme class",
 }
+---@package
 ColorScheme.__index = ColorScheme
+
+---@allnullable tdf.ColorScheme
 
 ---@diagnostic enable: unused-local
 
+--#endregion
+
+---@package
 function ColorScheme.new(init)
 	init = init or {}
 	---@diagnostic disable-next-line: redundant-return-value
@@ -264,40 +271,64 @@ function ColorScheme:build_role()
 	return self
 end
 
---- Factory function creates a ColorScheme instance from dominant color list.
---- @param dominants string[] list of hex string
---- @param invert_bool boolean|nil invert day/night mode, default is false (true to be opposite to wallpaper)
---- @return tdf.ColorScheme
-function ColorScheme.from_dominants(dominants, invert_bool)
-	invert_bool = invert_bool or false
+---@package
+---Factory function creates a ColorScheme instance from dominant color list.
+---@param dominants string[] list of hex string
+---@param theme_mode string|nil invert day/night mode, default is false (true to be opposite to wallpaper)
+---@param force tdf.ColorSchemeAllNullable|nil
+---@return tdf.ColorScheme
+function ColorScheme.from_dominants(dominants, theme_mode, force)
+	if #dominants < 4 then
+		logger:error("Not enough colors sampled from image")
+	end
+
+	-- force
+	force = force or {}
+	---@cast force +tdf.ColorScheme
+	---@cast force -tdf.ColorSchemeAllNullable
+	theme_mode = theme_mode or "auto"
+	local bg_force = force.bg and force.bg.common or nil
+	local fg_force = force.fg and force.fg.common or nil
+
 	-- sort by luma (dark -> light)
 	local sorted = s.unique_colors(dominants)
 	table.sort(sorted, function(a, b)
 		return h.get_luma(a) < h.get_luma(b)
 	end)
 
-	-- dark mode or not
+	-- dark theme or not
 	local median       = sorted[math.ceil(#sorted / 2)]
 	local wall_is_dark = s.is_dark(median)
-	local dark_mode    = invert_bool and not wall_is_dark or wall_is_dark -- invert ? !wall : wall
+	local dark_theme
+	if theme_mode == "auto" then
+		dark_theme = wall_is_dark
+	elseif theme_mode == "invert" then
+		dark_theme = not wall_is_dark
+	elseif theme_mode == "dark" then
+		dark_theme = true
+	elseif theme_mode == "light" then
+		dark_theme = false
+	else
+		dark_theme = wall_is_dark
+	end
 
 	-- bg & fg
-	local bg           = dark_mode and sorted[1] or sorted[#sorted]
-	local fg           = s.ensure_contrast(dark_mode and sorted[#sorted] or sorted[1], bg, 7.0)
+	local bg          = bg_force or (dark_theme and sorted[1] or sorted[#sorted])
+	local fg          = fg_force or s.ensure_contrast(dark_theme and sorted[#sorted] or sorted[1], bg, 7.0)
 
-	local bg_elevated  = h.mix(bg, fg, dark_mode and 0.10 or 0.08)
-	local bg_hover     = h.mix(bg, fg, dark_mode and 0.15 or 0.12)
-	local bg_active    = h.mix(bg, fg, dark_mode and 0.22 or 0.18)
-	local bg_border    = h.mix(bg, fg, dark_mode and 0.28 or 0.24)
-	local bg_shadow    = dark_mode and "#101010" or "#bfb7af"
+	local bg_elevated = h.mix(bg, fg, dark_theme and 0.10 or 0.08)
+	local bg_hover    = h.mix(bg, fg, dark_theme and 0.15 or 0.12)
+	local bg_active   = h.mix(bg, fg, dark_theme and 0.22 or 0.18)
+	local bg_border   = h.mix(bg, fg, dark_theme and 0.28 or 0.24)
+	local bg_shadow   = dark_theme and "#101010" or "#bfb7af"
 
-	local fg_muted     = s.ensure_contrast(h.mix(fg, bg, 0.35), bg, 4.5)
-	local fg_subtle    = s.ensure_contrast(h.mix(fg, bg, 0.48), bg, 3.2)
-	local fg_hover     = s.ensure_contrast(h.mix(fg, bg, 0.14), bg, 6.0)
-	local fg_shadow    = dark_mode and "rgba(0, 0, 0, 0.377)" or bg
+	local fg_muted    = s.ensure_contrast(h.mix(fg, bg, 0.35), bg, 4.5)
+	local fg_subtle   = s.ensure_contrast(h.mix(fg, bg, 0.48), bg, 3.2)
+	local fg_hover    = s.ensure_contrast(h.mix(fg, bg, 0.14), bg, 6.0)
+	local fg_shadow   = dark_theme and "rgba(0, 0, 0, 0.377)" or bg
 
 	-- candidates
-	local candidates   = {}
+	local candidates  = {}
 	for _, hex in ipairs(dominants) do
 		if h.get_distance(hex, bg) >= 28 and h.get_distance(hex, fg) >= 24 then
 			candidates[#candidates + 1] = hex
@@ -344,7 +375,7 @@ function ColorScheme.from_dominants(dominants, invert_bool)
 	---@diagnostic disable: assign-type-mismatch
 	---@diagnostic disable-next-line: missing-fields
 	return ColorScheme.new({
-		dark_mode  = dark_mode,
+		dark_mode  = dark_theme,
 		bg         = {
 			common   = bg,
 			elevated = bg_elevated,
