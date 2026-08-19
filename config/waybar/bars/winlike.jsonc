@@ -5,7 +5,12 @@
   "reload_style_on_change": true,
   "modules-left": ["custom/weather"],
   "modules-center": ["custom/start", "wlr/taskbar"],
-  "modules-right": ["group/tray", "custom/im", "pulseaudio", "clock"],
+  "modules-right": [
+    "group/tray",
+    // "custom/im",
+    "pulseaudio",
+    "clock",
+  ],
 
   "custom/weather": {
     "exec": "${HOME}/.config/waybar/scripts/get-weather.sh",
@@ -62,7 +67,7 @@
     "orientation": "horizontal",
     "drawer": {
       "transition-duration": 500,
-      "transition-left-to-right": true,
+      "transition-left-to-right": false,
       "click-to-reveal": true,
     },
     "modules": ["custom/tray-expander", "tray"],

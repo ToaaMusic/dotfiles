@@ -13,6 +13,7 @@
 }
 window#waybar {
   background-color: transparent;
+  /* background-color: alpha(@bg, 0.5); */
   color: @brand;
   transition: background-color 0.3s ease;
 }
@@ -103,6 +104,7 @@ tooltip label {
 #custom-lock,
 #custom-monitor,
 #custom-notify,
+#custom-tray-expander,
 #mode,
 #clock,
 #memory,
@@ -119,9 +121,9 @@ tooltip label {
   color: @fg;
   padding-left: 10px;
   padding-right: 10px;
-  min-width: 20px;
+  min-width: 25px;
   transition: all 1s cubic-bezier(0, 0.5, 0.35, 1);
-  margin: 0 2px;
+  margin: 0 1px;
 }
 
 #mpris.playing {
@@ -150,6 +152,7 @@ tooltip label {
   background: @brand;
 }
 
+#custom-tray-expander:hover,
 #custom-monitor:hover,
 #custom-lock:hover,
 #custom-notify:hover,
@@ -168,6 +171,7 @@ tooltip label {
 
 /* little button */
 #pulseaudio,
+#custom-tray-expander,
 #custom-monitor,
 #custom-lock,
 #custom-notify {
@@ -177,6 +181,10 @@ tooltip label {
 #custom-lock:hover,
 #custom-notify:hover {
   min-width: 50px;
+}
+
+#custom-tray-expander:hover {
+  min-width: 25px;
 }
 
 #clock:hover {
