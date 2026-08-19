@@ -5,7 +5,12 @@
   "reload_style_on_change": true,
   "modules-left": ["mpris", "pulseaudio", "pulseaudio/slider"],
   "modules-center": ["clock", "hyprland/workspaces", "group/monitor"],
-  "modules-right": ["custom/lock", "custom/notify"],
+  "modules-right": [
+    // "wlr/taskbar",
+    "group/tray",
+    "custom/lock",
+    "custom/notify",
+  ],
 
   "hyprland/workspaces": {
     "all-outputs": true,
@@ -19,19 +24,51 @@
     },
   },
 
+  "wlr/taskbar": {
+    //"all-outputs": true,
+    "format": "{icon}",
+    "icon-size": 22,
+    "icon-theme": "Numix-Circle",
+    "tooltip-format": "{title}",
+    "on-click": "minimize-raise",
+    "on-click-middle": "close",
+  },
+
   "custom/monitor": {
     "format": "󰣇",
     "tooltip": false,
   },
 
+  "custom/tray-expander": {
+    "format": "󰇘",
+    "tooltip": false,
+  },
+
+  "tray": {
+    "show-passive-items": true,
+    "expand": true,
+    "icon-size": 18,
+    "spacing": 3,
+  },
+
+  "group/tray": {
+    "orientation": "horizontal",
+    "drawer": {
+      "transition-duration": 500,
+      "transition-left-to-right": false,
+      "click-to-reveal": false,
+    },
+    "modules": ["custom/tray-expander", "tray"],
+  },
+
   "custom/lock": {
-		"on-click": "hyprlock",
+    "on-click": "hyprlock",
     "format": "󰌾",
     "tooltip": false,
     "menu": "on-click-right",
     "menu-file": "~/.config/waybar/menus/power_menu.xml",
     "menu-actions": {
-			"lock": "hyprlock",
+      "lock": "hyprlock",
       "shutdown": "shutdown",
       "reboot": "reboot",
       "suspend": "systemctl suspend",

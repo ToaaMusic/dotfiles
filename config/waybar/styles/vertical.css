@@ -88,6 +88,7 @@ tooltip label {
 #custom-lock,
 #custom-monitor,
 #custom-notify,
+#custom-tray-expander,
 #mode,
 #clock,
 #memory,
@@ -104,16 +105,17 @@ tooltip label {
   transition: all 1s cubic-bezier(0, 0.5, 0.35, 1);
   border-radius: 20px;
   min-height: 30px;
-  margin: 0 2px;
+  margin: 0 1px;
 }
 
 #mpris.playing {
-  color: @fg-hover;
-}
-#mpris.paused {
   color: @fg;
 }
+#mpris.paused {
+  color: @fg-hover;
+}
 
+#custom-tray-expander:hover,
 #custom-lock:hover,
 #custom-notify:hover,
 #custom-bar:hover,
@@ -132,6 +134,7 @@ tooltip label {
 
 /* little button */
 #pulseaudio,
+#custom-tray-expander,
 #custom-lock,
 #custom-notify {
   padding: 0;
@@ -139,6 +142,10 @@ tooltip label {
 #custom-lock:hover,
 #custom-notify:hover {
   min-height: 50px;
+}
+
+#custom-tray-expander:hover {
+  min-height: 30px;
 }
 
 #clock:hover {

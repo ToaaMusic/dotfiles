@@ -3,7 +3,7 @@
 @import "colors.g.css";
 
 @define-color bg rgb(0, 0, 0);
-@define-color bg_main alpha(@bg, 0.65);
+@define-color bg_main alpha(@bg, 0.85);
 @define-color bg_main_tooltip alpha(@bg, 0.7);
 @define-color bg_hover rgba(200, 200, 200, 0.3);
 @define-color bg_active rgba(100, 100, 100, 0.5);
