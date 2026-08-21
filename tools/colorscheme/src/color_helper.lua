@@ -337,6 +337,15 @@ function M.mix(hex1, hex2, ratio)
 	return M.rgb_to_hex(r1 + (r2 - r1) * ratio + 0.5, g1 + (g2 - g1) * ratio + 0.5, b1 + (b2 - b1) * ratio + 0.5)
 end
 
+---Change lightness of a hex (HSL L)
+---@param hex string #000000-#FFFFFF
+---@param l_to_change number 0-1
+---@return string hex #000000-#FFFFFF
+function M.change_lightness(hex, l_to_change)
+	local h, s, _ = M.hex_to_hsl(hex)
+	return M.hsl_to_hex(h, s, l_to_change)
+end
+
 ---chage hue of a hex
 ---@param hex string #000000-#FFFFFF
 ---@param hue_to_chage number 0-360
