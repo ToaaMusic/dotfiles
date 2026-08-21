@@ -9,6 +9,8 @@ local bg = colors.bg
 local syntax = colors.syntax
 local role = colors.role
 
+vim.o.background = colors.dark_mode and "dark" or "light"
+
 ---@param map table<string, vim.api.keyset.highlight>
 ---@param ns_id number|nil
 ---@param enable boolean|nil

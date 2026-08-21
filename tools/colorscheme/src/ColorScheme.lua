@@ -313,7 +313,8 @@ function ColorScheme.from_dominants(dominants, theme_mode, force)
 	end
 
 	-- bg & fg
-	local bg          = bg_force or (dark_theme and sorted[1] or sorted[#sorted])
+	-- TODO: 这里只是为了让壁纸是亮色而config设置强制暗色后背景更深，但也会影响壁纸本身是暗色的情况，这种情况不需要
+	local bg          = bg_force or (dark_theme and h.change_lightness(sorted[1], 0.15) or sorted[#sorted])
 	local fg          = fg_force or s.ensure_contrast(dark_theme and sorted[#sorted] or sorted[1], bg, 7.0)
 
 	local bg_elevated = h.mix(bg, fg, dark_theme and 0.10 or 0.08)
@@ -325,7 +326,7 @@ function ColorScheme.from_dominants(dominants, theme_mode, force)
 	local fg_muted    = s.ensure_contrast(h.mix(fg, bg, 0.35), bg, 4.5)
 	local fg_subtle   = s.ensure_contrast(h.mix(fg, bg, 0.48), bg, 3.2)
 	local fg_hover    = s.ensure_contrast(h.mix(fg, bg, 0.14), bg, 6.0)
-	local fg_shadow   = dark_theme and "rgba(0, 0, 0, 0.377)" or bg
+	local fg_shadow   = dark_theme and "#000000" or bg
 
 	-- candidates
 	local candidates  = {}
