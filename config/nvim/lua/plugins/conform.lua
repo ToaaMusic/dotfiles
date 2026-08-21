@@ -12,7 +12,7 @@ return {
 				-- lua = { "stylua" },
 				sh = { "shfmt" },
 				zsh = { "shfmt" },
-				cs = { "csharpier" },
+				cs = { "csharpier", lsp_format = "prefer" },
 				glsl = { "clang-format" },
 				rust = { "rustfmt", lsp_format = "fallback" },
 				markdown = { "prettier" },
