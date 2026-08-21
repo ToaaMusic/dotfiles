@@ -5,6 +5,7 @@
 
 local wr = hl.window_rule
 local wsr = hl.workspace_rule
+local lr = hl.layer_rule
 
 -- Example window rules that are useful
 
@@ -86,3 +87,6 @@ wr({
 	no_focus = true,
 	no_follow_mouse = true,
 })
+
+-- layer rule
+lr({ match = { namespace = "notifications" }, animation = "slide right" })
