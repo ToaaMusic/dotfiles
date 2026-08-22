@@ -3,7 +3,9 @@
 
 local set_hl = vim.api.nvim_set_hl
 ---@type tdf.ColorScheme
-local colors = require("colors.g")
+---@diagnostic disable-next-line: assign-type-mismatch
+local success, colors = pcall(require, "colors.g")
+if not success then return end
 local fg = colors.fg
 local bg = colors.bg
 local syntax = colors.syntax

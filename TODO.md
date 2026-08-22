@@ -12,3 +12,8 @@
 - [ ] manage generation content by using template
 - [ ] manage generation options by using center configuration
 - [ ] a router tool for locating repos
+
+## bug fix
+- [ ] waybar `colors.g.css` missing hard-fails `@import`; needs fallback (static colors or default file)
+- [ ] mako `g.colors` missing fails to parse config; needs fallback (default file or static colors)
+- [ ] cava `colors.g.theme` missing exits at startup; needs fallback theme file

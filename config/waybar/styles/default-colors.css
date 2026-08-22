@@ -1,32 +1,27 @@
-
 /* background */
 
-@define-color bg rgb(48, 45, 65);
-@define-color bg-hover rgb(58, 55, 75);
-@define-color bg-border rgb(88, 85, 105);
+@define-color bg-common #302d41;
+@define-color bg-hover #3a374b;
+@define-color bg-active #3a374b;
+@define-color bg-border #585569;
 @define-color bg-shadow #101010;
 
 /* text */
 
-@define-color fg #d8cdd4;
+@define-color fg-common #d8cdd4;
 @define-color fg-hover #c3bac6;
 @define-color fg-shadow rgba(0, 0, 0, 0.377);
 @define-color fg-muted #9a8f99;
+@define-color fg-subtle #9a8f99;
 
-/* accents */
+/* brand */
 
-@define-color a rgb(120, 112, 165);
-@define-color a1 rgb(150, 205, 251);
-@define-color a2 rgb(181, 232, 224);
-@define-color a3 rgb(245, 194, 231);
-@define-color a4 rgb(245, 224, 220);
-@define-color a5 rgb(248, 189, 150);
-@define-color a6 rgb(242, 143, 173);
+@define-color brand rgb(120, 112, 165);
 
 /* role */
 
-@define-color error rgb(234, 23, 23);
-@define-color ok #98c379;
-@define-color warning #e5c07b;
-@define-color info #61afef;
-@define-color hint #c678dd;
+@define-color role-error rgb(234, 23, 23);
+@define-color role-ok #98c379;
+@define-color role-warning #e5c07b;
+@define-color role-info #61afef;
+@define-color role-hint #c678dd;
