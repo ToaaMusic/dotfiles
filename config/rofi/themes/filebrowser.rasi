@@ -1,4 +1,13 @@
-@import "~/.config/rofi/colors.g.rasi"
+* {
+	// Fallback values used when the generated colors.g.rasi is absent.
+	bg-common:               #282738;
+	fg-common:               #E5B9C6;
+  bg-border:               #4A4761;
+  bg-active:               #3E3A52;
+  brand:                   #E5B9C6;
+}
+
+?import "~/.config/rofi/colors.g.rasi"
 
 * {
 	bg:                 @bg-common;

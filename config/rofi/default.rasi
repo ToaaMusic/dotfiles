@@ -1,14 +1,20 @@
 // --------------- global ---------------- //
 
 * {
+  // Fallback values used when the generated colors.g.rasi is absent.
+  // They are overridden by @import below whenever it exists.
   bg-common:               #282738;
   fg-common:               #E5B9C6;
+  bg-border:               #4A4761;
+  bg-hover:                #343246;
+  bg-active:               #3E3A52;
+  brand:                   #E5B9C6;
   font: "Maple Mono NF CN Bold 12";
 }
 
 // !!! DO NOT remove this or put it before "*{}" 
 // unless you want rofi to ignore the color generator from wallpaper
-@import "~/.config/rofi/colors.g.rasi" 
+?import "~/.config/rofi/colors.g.rasi" 
 
 * {
 	bg:                 @bg-common;
