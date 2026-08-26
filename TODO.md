@@ -2,7 +2,8 @@
 
 ## better linker
 - [x] a `clean` command in ./link for uninstallation
-- [ ] an `add` command in ./link and maybe make repo a template
+- [x] an `add` command in ./link
+- [ ] make repo a template
 
 ## center configuration
 - [ ] center config in lua for dotfiles
