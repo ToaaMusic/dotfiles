@@ -7,7 +7,8 @@ vim.lsp.enable({
 	"vue",
 	"glsl",
 	"bashls",
-	"jsonls"
+	"jsonls",
+	"lemminx"
 })
 
 ---@type vim.diagnostic.Opts
