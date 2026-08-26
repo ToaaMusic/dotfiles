@@ -1,14 +1,16 @@
-# PROMPT='%F{cyan}%m%f%#'
-# PROMPT=$'%F{cyan}%m%f '
-
 PROMPT='%F{cyan}>%f '
+ZLE_RPROMPT_INDENT=0
 
-HISTFILE="$HOME/.zsh_history"
+HISTFILE="$HOME/.local/state/.zsh_history"
 HISTSIZE=10000
 SAVEHIST=10000
+setopt extended_history
 setopt share_history
-setopt inc_append_history
 setopt append_history
+setopt inc_append_history
+setopt hist_find_no_dups
+# setopt hist_ignore_all_dups
+# setopt hist_ignore_dups
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -79,6 +81,7 @@ function cavat() {
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias pacman='pacman --color=auto'
 alias ff=fastfetch
 alias yazi=y
 alias zed=zeditor
