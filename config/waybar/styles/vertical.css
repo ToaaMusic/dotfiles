@@ -1,6 +1,5 @@
 /* global */
 @import "default.css";
-@import "default-colors.css";
 @import "colors.g.css";
 
 @define-color fg @fg-common;

@@ -24,12 +24,6 @@ if dotfiles then
 	env("TOAAM_DOTFILES", dotfiles)
 end
 
--- cursor
-env("XCURSOR_SIZE", "24")
-env("XCURSOR_THEME", "Imouto")
-
-env("HYPRCURSOR_SIZE", "24")
-
 -- nvidia
 env("LIBVA_DRIVER_NAME", "nvidia")
 env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
@@ -50,4 +44,3 @@ env("GDK_BACKEND", "wayland,x11,*")
 env("QT_QPA_PLATFORM", "wayland;xcb")
 env("SDL_VIDEODRIVER", "wayland")
 env("CLUTTER_BACKEND", "wayland")
-

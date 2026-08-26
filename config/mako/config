@@ -6,7 +6,7 @@ anchor=top-right
 margin=24,24
 
 # Style
-font="Maple Mono SC NF 11"
+# font=""
 width=300
 border-size=2
 border-radius=10

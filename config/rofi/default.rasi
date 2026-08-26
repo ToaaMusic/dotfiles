@@ -9,7 +9,6 @@
   bg-hover:                #343246;
   bg-active:               #3E3A52;
   brand:                   #E5B9C6;
-  font: "Maple Mono NF CN Bold 12";
 }
 
 // !!! DO NOT remove this or put it before "*{}" 
