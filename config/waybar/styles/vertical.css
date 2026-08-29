@@ -6,6 +6,7 @@
 @define-color bg @bg-common;
 
 * {
+  border: none;
   font-size: 10pt;
   font-weight: bold;
 }
@@ -44,16 +45,15 @@ tooltip label {
 #workspaces button {
   background-color: alpha(@fg, 0.5);
   border-radius: 999px;
-  padding: 0 9px;
-  margin: 4px;
-  min-width: 0;
+  margin: 4px 0;
+  min-width: 0px;
   min-height: 0;
   transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
 }
 
 #workspaces button.active {
   background-color: @brand;
-  padding: 16px 0;
+  min-height: 30px;
   transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
 }
 
@@ -67,15 +67,14 @@ tooltip label {
 
 #workspaces button.overview {
   background-color: @brand;
-  min-height: 30px;
+  min-height: 40px;
   transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
 }
 
 #workspaces button:hover {
-  border: 1px solid @bg-border;
   background-color: @brand;
   transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
-  min-height: 40px;
+  min-height: 30px;
 }
 
 #workspaces button.active:hover {

@@ -6,6 +6,7 @@
 @define-color bg @bg-common;
 
 * {
+  border: none;
   font-size: 10pt;
   font-weight: bold;
   border-radius: 10px;
@@ -69,7 +70,7 @@ tooltip label {
 
 #workspaces button.active {
   background-color: @brand;
-  min-width: 30px;
+  min-width: 20px;
   transition: all 0.8s cubic-bezier(0, 0.5, 0.35, 1);
 }
 
@@ -88,7 +89,6 @@ tooltip label {
 }
 
 #workspaces button:hover {
-  border: 1px solid @bg-border;
   background-color: @brand;
   transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
   min-width: 20px;
@@ -96,7 +96,7 @@ tooltip label {
 
 #workspaces button.active:hover {
   transition: all 0.4s cubic-bezier(0, 0.5, 0.35, 1);
-  min-width: 20px;
+  min-width: 30px;
 }
 
 /* modules */
@@ -113,6 +113,7 @@ tooltip label {
 #temperature,
 #backlight,
 #pulseaudio,
+#pulseaudio-slider,
 #network,
 #battery,
 #mpris,
@@ -125,11 +126,21 @@ tooltip label {
   margin: 0 1px;
 }
 
+#tray menu {
+  background-color: @bg;
+  color: @fg;
+  border: 2px solid @bg-border;
+}
+
 #mpris.playing {
   color: @fg;
 }
 #mpris.paused {
   color: @fg-hover;
+}
+
+#pulseaudio-slider {
+  padding: 0;
 }
 
 #pulseaudio-slider slider {
