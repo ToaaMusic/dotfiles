@@ -34,3 +34,8 @@ export PATH="$PATH:$HOME/.cargo/bin"
 
 # ruby
 export PATH="$HOME/.local/share/gem/ruby/3.4.0/bin:$PATH"
+
+# opencode
+export OPENCODE_ENABLE_EXA=1
+export OPENCODE_EXPERIMENTAL_LSP_TOOL=true
+# export OPENCODE_EXPERIMENTAL=true
