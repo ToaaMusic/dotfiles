@@ -1,0 +1,219 @@
+@import url("./colors.g.css");
+
+/* for pavucontrol (GTK4) */
+
+* {
+  /* all: unset; */
+  border: none;
+  color: @fg-common;
+  background-image: none;
+  transition: all 200ms ease;
+}
+
+window {
+  background-color: @bg-common;
+}
+
+box {
+  background-color: @bg-common;
+}
+
+label {
+  valign: center;
+  halign: center;
+}
+
+separator {
+  background-color: @bg-elevated;
+}
+
+button {
+  background-color: @bg-elevated;
+  border: 1px solid @bg-border;
+}
+
+button box {
+  background-color: transparent;
+}
+
+button:hover {
+  background-color: @brand;
+  color: @bg-common;
+}
+
+button:hover image {
+  color: @bg-common;
+}
+
+checkbutton:hover check {
+  background-color: @brand;
+  color: @bg-common;
+}
+
+button.toggle:checked {
+  background-color: @brand;
+  color: @bg-common;
+}
+
+button.toggle:checked image {
+  color: @bg-common;
+}
+
+button.combo:hover cellview {
+  color: @bg-common;
+}
+
+button.combo:hover arrow {
+  color: @bg-common;
+}
+
+button.combo popover {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+combobox popover {
+  padding: 0;
+}
+
+combobox popover contents {
+  padding: 0;
+  border: 1px solid @bg-border;
+}
+
+combobox popover modelbutton {
+  background-color: @bg-common;
+}
+
+combobox popover modelbutton:checked,
+combobox popover modelbutton:selected {
+  background-color: @bg-hover;
+}
+
+spinbutton {
+  background-color: @bg-elevated;
+  border: 1px solid @bg-border;
+  color: @fg-common;
+  caret-color: @brand;
+}
+
+spinbutton:focus-within {
+  border: 1px solid @brand;
+  outline-color: @brand;
+}
+
+menu {
+  background-color: @bg-common;
+  color: @fg-common;
+}
+
+menuitem {
+  border-radius: 12px;
+  transition: all 200ms ease;
+}
+
+menuitem:hover {
+  background-color: alpha(@brand, 0.09);
+}
+
+menu separator {
+  background-color: @fg-muted;
+  margin: 4px 16px;
+  min-height: 1px;
+}
+
+notebook {
+  background-color: @bg-common;
+}
+
+notebook header {
+  background-color: @bg-common;
+  border: none;
+}
+
+notebook tab:hover {
+  background-color: @bg-common;
+  box-shadow: none;
+}
+
+notebook tab:checked {
+  box-shadow: 0 -4px @brand inset;
+}
+
+scale {
+  padding: 0;
+  margin: 0 10px;
+}
+
+scale trough {
+  background-color: @bg-elevated;
+  border-radius: 10px;
+  min-height: 5px;
+}
+
+scale highlight {
+  background-color: @brand;
+  border-radius: 10px;
+}
+
+scale slider {
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+  border-radius: 999px;
+  margin: -5px;
+  padding: 0px;
+  min-width: 18px;
+  min-height: 18px;
+  transition: all 250ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+progressbar through {
+  background-color: @bg-elevated;
+}
+
+progressbar trough progress {
+  background-color: @brand;
+}
+
+scrollbar {
+  background-color: transparent;
+}
+scrollbar slider {
+  background-color: alpha(@brand, 0.4);
+  border-radius: 9999px;
+  min-width: 4px;
+  min-height: 4px;
+  margin: 4px 2px;
+  transition: all 250ms ease;
+}
+
+scrollbar slider:hover {
+  background-color: alpha(@brand, 0.6);
+  min-width: 8px;
+  min-height: 8px;
+}
+scrollbar slider:active {
+  background-color: @brand;
+}
+scrollbar.vertical slider {
+  min-height: 40px;
+}
+scrollbar.horizontal slider {
+  min-width: 40px;
+}
+scrollbar button {
+  background: none;
+  border: none;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+}
+
+tooltip {
+  background-color: @bg-common;
+  border: 1px solid @bg-border;
+  border-radius: 12px;
+}

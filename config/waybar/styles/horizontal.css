@@ -6,27 +6,18 @@
 @define-color bg @bg-common;
 
 * {
-  border: none;
   font-size: 10pt;
   font-weight: bold;
   border-radius: 10px;
 }
 window#waybar {
   background-color: transparent;
-  /* background-color: alpha(@bg, 0.5); */
-  color: @brand;
+  color: @fg;
   transition: background-color 0.3s ease;
 }
 
-/* tooltip */
-tooltip {
-  background: shade(alpha(@bg, 0.9), 1);
-  box-shadow: 1px 2px 2px @bg-shadow;
-  text-shadow: 1px 1px 2px @fg-shadow;
-  border: 2px solid @bg-border;
-}
-tooltip label {
-  color: @fg;
+box {
+  background-color: transparent;
 }
 
 .modules-left,
@@ -118,12 +109,11 @@ tooltip label {
 #battery,
 #mpris,
 #cava {
-  color: @fg;
   padding-left: 10px;
   padding-right: 10px;
   min-width: 25px;
-  transition: all 1s cubic-bezier(0, 0.5, 0.35, 1);
   margin: 0 1px;
+  transition: all 1s cubic-bezier(0, 0.5, 0.35, 1);
 }
 
 #tray menu {

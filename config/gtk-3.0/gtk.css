@@ -1,0 +1,46 @@
+@import url("./colors.g.css");
+
+/* for waybar (GTK3) */
+
+* {
+  border: none;
+}
+
+window {
+  background-color: @bg-common;
+}
+
+box {
+  background-color: @bg-common;
+}
+
+tooltip {
+  background: shade(alpha(@bg-common, 0.9), 1);
+  box-shadow: 1px 2px 2px @bg-shadow;
+  text-shadow: 1px 1px 2px @fg-shadow;
+  border: 2px solid @bg-border;
+}
+tooltip label {
+  color: @fg-common;
+}
+
+menu {
+  background-color: @bg-common;
+  color: @fg-common;
+}
+
+menuitem {
+  border-radius: 12px;
+  transition: all 200ms ease;
+}
+
+menuitem:hover {
+  background-color: @bg-hover;
+  color: @fg-common;
+}
+
+menu separator {
+  background-color: @bg-elevated;
+  margin: 4px 16px;
+  min-height: 1px;
+}

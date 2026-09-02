@@ -79,6 +79,16 @@ local default_config = {
 				type = "gtk_css"
 			},
 			{
+				header = "/* Generated from wallpaper\n * Do not edit manually!\n */\n\n",
+				path = HOME .. "/.config/gtk-3.0/colors.g.css",
+				type = "gtk_css"
+			},
+			{
+				header = "/* Generated from wallpaper\n * Do not edit manually!\n */\n\n",
+				path = HOME .. "/.config/gtk-4.0/colors.g.css",
+				type = "gtk_css"
+			},
+			{
 				header = "# Generated from wallpaper\n# Do not edit manually!\n\n",
 				path = HOME .. "/.config/cava/themes/colors.g.theme",
 				type = "cava"
