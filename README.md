@@ -76,12 +76,12 @@ sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpa
 ```
 
 ```bash
-sudo pacman -S lua grim slurp wl-copy ffmpeg
+sudo pacman -S lua grim slurp wl-clipboard ffmpeg
 ```
 
 - `lua`: for running my tools. (IMPORTANT)
 - `hyprpaper`: for showing wallpaper.
-- `grim`, `slurp`, `wl-copy`, `ffmpeg`: Screenshot, Selection, and copy to clipboard. for using color generation tool.
+- `grim`, `slurp`, `wl-clipboard`, `ffmpeg`: Screenshot, Selection, and copy to clipboard. for using color generation tool.
 
 ## Usage
 

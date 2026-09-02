@@ -74,12 +74,12 @@ sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpa
 ```
 
 ```bash
-sudo pacman -S lua grim slurp wl-copy ffmpeg
+sudo pacman -S lua grim slurp wl-clipboard ffmpeg
 ```
 
 - `lua`：运行我的工具脚本。（重要）
 - `hyprpaper`：显示壁纸。
-- `grim`、`slurp`、`wl-copy`、`ffmpeg`：截图、选区与剪贴板，供颜色生成工具使用。
+- `grim`、`slurp`、`wl-clipboard`、`ffmpeg`：截图、选区与剪贴板，供颜色生成工具使用。
 
 ## 使用
 
