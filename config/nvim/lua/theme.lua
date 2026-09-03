@@ -1,5 +1,6 @@
 -- nvim/lua/theme.lua
 -- https://neovim.io/doc/user/syntax/#%3Ahighlight
+---@diagnostic disable: param-type-mismatch
 
 local set_hl = vim.api.nvim_set_hl
 ---@type tdf.ColorScheme
@@ -47,7 +48,7 @@ vim.opt.winborder = "rounded"
 apply_hl_map({
 	["ColorColumn"]  = { bg = bg.active }, -- max col len
 	["Conceal"]      = { fg = fg.subtle },
-	["CurSearch"]    = { fg = fg.common, bg = colors.accents[4] },
+	["CurSearch"]    = { link = "Search" },
 	["Cursor"]       = { fg = colors.brand, bg = colors.brand },
 	["lCursor"]      = { fg = colors.brand, bg = colors.brand },
 	["CursorIM"]     = { fg = colors.brand, bg = colors.brand },
@@ -61,7 +62,7 @@ apply_hl_map({
 	-- ["DiffText"]     = { fg = colors.accents[5] },
 	-- ["DiffTextAdd"]  = { fg = colors.accents[2] },
 
-	["EndOfBuffer"]  = { fg = "NONE", bg = "none" },
+	["EndOfBuffer"]  = { fg = "none", bg = "none" },
 	["TermCursor"]   = { fg = colors.brand, bg = colors.brand },
 
 	["OkMsg"]        = { fg = role.ok },
@@ -111,7 +112,7 @@ apply_hl_map({
 	-- ["ComplHintMore"] = nil
 	-- ["Question"] = { fg = colors.accents[5] },
 	-- ["QuickFixLine"] = { bg = bg.active },
-	["Search"]       = { bg = colors.accents[3], fg = bg.common },
+	["Search"]       = { bg = bg.active },
 	-- ["SpecialKey"] = { fg = fg.subtle },
 
 	-- ["SpellBad"] = { sp = colors.accents[1], undercurl = true },
@@ -141,10 +142,10 @@ apply_hl_map({
 	["String"]         = { fg = syntax.string },
 	["Character"]      = { fg = syntax.string },  -- char
 	["Number"]         = { fg = syntax.number },
-	["Boolean"]        = { fg = syntax.builtin },
+	["Boolean"]        = { fg = syntax.bool },
 	["Float"]          = { fg = syntax.number },
 
-	["Identifier"]     = { fg = syntax.variable },
+	["Identifier"]     = { fg = syntax.variable }, -- variable name
 	["Function"]       = { fg = syntax.func },
 
 	["Statement"]      = { fg = syntax.keyword_flow },
@@ -233,126 +234,121 @@ apply_hl_map({
 -- treesitter
 -- https://neovim.io/doc/user/treesitter/#treesitter-highlight-groups
 apply_hl_map({
-	["@variable"]                   = { fg = syntax.variable },
-	["@variable.builtin"]           = { fg = syntax.builtin },
-	["@variable.parameter"]         = { fg = syntax.parameter },
-	["@variable.parameter.builtin"] = { fg = syntax.builtin },
-	["@variable.member"]            = { fg = syntax.property },
+	["@variable"]                    = { fg = syntax.variable },
+	["@variable.builtin"]            = { fg = syntax.builtin },
+	["@variable.parameter"]          = { fg = syntax.parameter },
+	["@variable.parameter.builtin"]  = { fg = syntax.builtin },
+	["@variable.member"]             = { fg = syntax.property },
 
-	["@constant"]                   = { link = "Constant" },
-	["@constant.builtin"]           = { fg = syntax.builtin },
-	["@constant.macro"]             = { fg = syntax.macro },
+	["@constant"]                    = { link = "Constant" },
+	["@constant.builtin"]            = { fg = syntax.builtin },
+	["@constant.macro"]              = { fg = syntax.macro },
 
-	["@module"]                     = { fg = syntax.namespace },
-	["@module.builtin"]             = { fg = syntax.namespace },
-	["@label"]                      = { fg = syntax.namespace },
+	["@module"]                      = { fg = syntax.namespace },
+	["@module.builtin"]              = { fg = syntax.namespace },
+	["@label"]                       = { fg = syntax.namespace },
 
-	["@string"]                     = { link = "String" },
-	["@string.documentation"]       = { link = "String" },
-	["@string.regexp"]              = { fg = syntax.constant },
-	["@string.escape"]              = { fg = syntax.constant },
-	["@string.special"]             = { fg = syntax.builtin },
-	["@string.special.symbol"]      = { fg = syntax.builtin },
-	["@string.special.path"]        = { fg = syntax.namespace },
-	["@string.special.url"]         = { fg = syntax.namespace, underline = true },
+	["@string"]                      = { link = "String" },
+	["@string.documentation"]        = { link = "String" },
+	["@string.regexp"]               = { fg = syntax.constant },
+	["@string.escape"]               = { fg = syntax.constant },
+	["@string.special"]              = { fg = syntax.builtin },
+	["@string.special.symbol"]       = { fg = syntax.builtin },
+	["@string.special.path"]         = { fg = syntax.namespace },
+	["@string.special.url"]          = { fg = syntax.namespace, underline = true },
 
-	-- ["@character"] = { link = "Charactor" },
-	-- ["@character.special"] = { link = "Charactor" },
+	["@character"]                   = { link = "Charactor" },
+	["@character.special"]           = { link = "Charactor" },
 
-	["@boolean"]                    = { link = "Boolean" },
-	["@number"]                     = { link = "Number" },
-	["@number.float"]               = { link = "Float" },
+	["@boolean"]                     = { link = "Boolean" },
+	["@number"]                      = { link = "Number" },
+	["@number.float"]                = { link = "Float" },
 
-	["@type"]                       = { link = "Type" },
-	["@type.builtin"]               = { fg = syntax.builtin },
-	["@type.definition"]            = { fg = syntax.namespace },
+	["@type"]                        = { link = "Type" },
+	["@type.builtin"]                = { fg = syntax.builtin },
+	["@type.definition"]             = { fg = syntax.namespace },
 
-	-- ["@attribute"] = { fg = syntax.macro },
-	-- ["@attribute.builtin"] = { fg = syntax.macro },
-	["@property"]                   = { fg = syntax.property },
+	["@attribute"]                   = { fg = syntax.macro },
+	["@attribute.builtin"]           = { fg = syntax.macro },
+	["@property"]                    = { fg = syntax.property },
 
-	["@function"]                   = { link = "Function" },
-	["@function.builtin"]           = { fg = syntax.builtin },
-	["@function.call"]              = { fg = syntax.func_call },
-	["@function.macro"]             = { fg = syntax.macro },
+	["@function"]                    = { link = "Function" },
+	["@function.builtin"]            = { fg = syntax.builtin },
+	["@function.call"]               = { fg = syntax.func_call },
+	["@function.macro"]              = { fg = syntax.macro },
 
-	["@function.method"]            = { link = "Function" },
-	["@function.method.call"]       = { fg = syntax.func_call },
+	["@function.method"]             = { link = "Function" },
+	["@function.method.call"]        = { fg = syntax.func_call },
 
-	["@constructor"]                = { fg = syntax.type },
-	["@operator"]                   = { link = "Operator" },
+	["@constructor"]                 = { fg = syntax.type },
+	["@operator"]                    = { link = "Operator" },
 
-	["@keyword"]                    = { link = "Keyword" },
-	-- ["@keyword.coroutine"] = { fg = syntax.keyword },
-	["@keyword.function"]           = { fg = syntax.keyword_flow },
-	["@keyword.operator"]           = { fg = syntax.operator },
-	["@keyword.import"]             = { fg = syntax.macro },
-	-- ["@keyword.type"] = { fg = syntax.type },
-	-- ["@keyword.modifier"] = { fg = syntax.keyword },
-	["@keyword.repeat"]             = { fg = syntax.keyword_flow },
-	["@keyword.return"]             = { fg = syntax.keyword_return, italic = true },
-	-- ["@keyword.debug"] = { fg = colors.accents[1] },
-	["@keyword.exception"]          = { fg = syntax.keyword_return },
+	["@keyword"]                     = { link = "Keyword" },
+	["@keyword.coroutine"]           = { fg = syntax.keyword },
+	["@keyword.function"]            = { fg = syntax.keyword_flow },
+	["@keyword.operator"]            = { fg = syntax.operator },
+	["@keyword.import"]              = { fg = syntax.macro },
+	["@keyword.type"]                = { fg = syntax.type },
+	["@keyword.modifier"]            = { fg = syntax.variable },
+	["@keyword.repeat"]              = { fg = syntax.keyword_flow },
+	["@keyword.return"]              = { fg = syntax.keyword_return, italic = true },
+	["@keyword.debug"]               = { fg = colors.accents[1] },
+	["@keyword.exception"]           = { fg = syntax.keyword_return },
 
-	["@keyword.conditional"]        = { fg = syntax.keyword_flow },
-	-- ["@keyword.conditional.ternary"] = { fg = syntax.operator },
+	["@keyword.conditional"]         = { fg = syntax.keyword_flow },
+	["@keyword.conditional.ternary"] = { fg = syntax.operator },
 
-	-- ["@keyword.directive"] = { fg = syntax.macro },
-	-- ["@keyword.directive.define"] = { fg = syntax.macro },
+	["@keyword.directive"]           = { fg = syntax.macro },
+	["@keyword.directive.define"]    = { fg = syntax.macro },
 
-	["@punctuation.delimiter"]      = { fg = syntax.punctuation },
-	["@punctuation.bracket"]        = { fg = syntax.punctuation },
-	["@punctuation.special"]        = { fg = syntax.builtin },
+	["@punctuation.delimiter"]       = { fg = syntax.punctuation },
+	["@punctuation.bracket"]         = { fg = syntax.punctuation },
+	["@punctuation.special"]         = { fg = syntax.builtin },
 
-	["@comment"]                    = { link = "Comment" },
-	["@comment.documentation"]      = { link = "Comment" },
+	["@comment"]                     = { link = "Comment" },
+	["@comment.documentation"]       = { link = "Comment" },
 
-	["@comment.error"]              = { link = "ErrorMsg" },
-	["@comment.warning"]            = { link = "WarningMsg" },
-	["@comment.todo"]               = { link = "Todo" },
-	["@comment.note"]               = { fg = role.info, bold = true },
+	["@comment.error"]               = { link = "ErrorMsg" },
+	["@comment.warning"]             = { link = "WarningMsg" },
+	["@comment.todo"]                = { link = "Todo" },
+	["@comment.note"]                = { fg = role.info, bold = true },
 
-	["@markup.strong"]              = { fg = fg.common, bold = true },
-	["@markup.italic"]              = { fg = fg.common, italic = true },
-	["@markup.strikethrough"]       = { fg = fg.common, strikethrough = true },
-	["@markup.underline"]           = { fg = fg.common, underline = true },
+	["@markup.strong"]               = { fg = fg.common, bold = true },
+	["@markup.italic"]               = { fg = fg.common, italic = true },
+	["@markup.strikethrough"]        = { fg = fg.common, strikethrough = true },
+	["@markup.underline"]            = { fg = fg.common, underline = true },
 
-	["@markup.heading"]             = { fg = fg.common },
-	["@markup.heading.1"]           = { fg = fg.common },
-	["@markup.heading.2"]           = { fg = fg.common },
-	["@markup.heading.3"]           = { fg = fg.common },
-	["@markup.heading.4"]           = { fg = fg.common },
-	["@markup.heading.5"]           = { fg = fg.common },
-	["@markup.heading.6"]           = { fg = fg.common },
+	["@markup.heading"]              = { fg = fg.common },
+	["@markup.heading.1"]            = { fg = fg.common },
+	["@markup.heading.2"]            = { fg = fg.common },
+	["@markup.heading.3"]            = { fg = fg.common },
+	["@markup.heading.4"]            = { fg = fg.common },
+	["@markup.heading.5"]            = { fg = fg.common },
+	["@markup.heading.6"]            = { fg = fg.common },
 
-	["@markup.quote"]               = { fg = fg.muted, italic = true },
-	["@markup.math"]                = { fg = syntax.constant },
+	["@markup.quote"]                = { fg = fg.muted, italic = true },
+	["@markup.math"]                 = { fg = syntax.constant },
 
-	["@markup.link"]                = { fg = syntax.namespace, underline = true },
-	["@markup.link.label"]          = { fg = syntax.namespace },
-	["@markup.link.url"]            = { fg = syntax.namespace, underline = true },
+	["@markup.link"]                 = { fg = syntax.namespace, underline = true },
+	["@markup.link.label"]           = { fg = syntax.namespace },
+	["@markup.link.url"]             = { fg = syntax.namespace, underline = true },
 
-	["@markup.raw"]                 = { fg = syntax.builtin, bg = "none" },
-	["@markup.raw.block"]           = { fg = syntax.builtin },
+	["@markup.raw"]                  = { fg = syntax.builtin, bg = "none" },
+	["@markup.raw.block"]            = { fg = syntax.builtin },
 
-	["@markup.list"]                = { fg = syntax.keyword },
-	["@markup.list.checked"]        = { fg = syntax.keyword },
-	["@markup.list.unchecked"]      = { fg = syntax.keyword },
+	["@markup.list"]                 = { fg = syntax.keyword },
+	["@markup.list.checked"]         = { fg = syntax.keyword },
+	["@markup.list.unchecked"]       = { fg = syntax.keyword },
 
-	["@diff.plus"]                  = { fg = colors.accents[2] },
-	["@diff.minus"]                 = { fg = colors.accents[1] },
-	["@diff.delta"]                 = { fg = colors.accents[4] },
+	["@diff.plus"]                   = { fg = colors.accents[2] },
+	["@diff.minus"]                  = { fg = colors.accents[1] },
+	["@diff.delta"]                  = { fg = colors.accents[4] },
 
-	["@tag"]                        = { fg = syntax.type },
-	["@tag.builtin"]                = { fg = syntax.type },
-	["@tag.attribute"]              = { fg = syntax.property },
-	["@tag.delimiter"]              = { fg = syntax.punctuation },
-
-	-- not in vimdocs
-	["@namespace"]                  = { fg = syntax.namespace },
-	["@field"]                      = { fg = syntax.property },
-	["@parameter"]                  = { fg = syntax.parameter },
-})
+	["@tag"]                         = { fg = syntax.type },
+	["@tag.builtin"]                 = { fg = syntax.type },
+	["@tag.attribute"]               = { fg = syntax.property },
+	["@tag.delimiter"]               = { fg = syntax.punctuation },
+}, false)
 
 -- lsp semantic
 -- https://neovim.io/doc/user/lsp/#lsp-semantic-highlight
@@ -381,7 +377,7 @@ apply_hl_map_fg_only({
 	["@lsp.type.variable"]      = syntax.variable,
 	["@lsp.type.decorator"]     = syntax.macro,
 	["@lsp.type.modifier"]      = syntax.keyword,
-})
+}, false)
 
 apply_hl_map({
 	["@lsp.type.comment"]   = { link = "Comment" },
@@ -439,7 +435,7 @@ apply_hl_map({
 	["NeoTreeTabSeparatorActive"]   = { fg = "none", bg = "none" },
 	["NeoTreeTabSeparatorInactive"] = { fg = "none", bg = "none" },
 	["NeoTreeRootName"]             = { fg = syntax.namespace, bold = true },
-	["NeoTreeIndentMarker"]         = { fg = syntax.comment, bg = "none" },
+	["NeoTreeIndentMarker"]         = { fg = fg.muted, bg = "none" },
 	["NeoTreeExpander"]             = { fg = syntax.punctuation, bg = "none" },
 	["NeoTreeDirectoryName"]        = { fg = syntax.namespace },
 	["NeoTreeDirectoryIcon"]        = { fg = syntax.namespace },
@@ -454,7 +450,7 @@ apply_hl_map({
 	["NeoTreeGitModified"]          = { fg = role.change },
 	["NeoTreeGitDeleted"]           = { fg = role.delete },
 	["NeoTreeGitUntracked"]         = { fg = role.delete },
-	["NeoTreeGitIgnored"]           = { fg = syntax.comment },
+	["NeoTreeGitIgnored"]           = { fg = fg.muted },
 	["NeoTreeGitUnstaged"]          = { fg = colors.accents[1] },
 	["NeoTreeGitStaged"]            = { fg = colors.accents[2] },
 	["NeoTreeGitConflict"]          = { fg = role.error, bold = true },

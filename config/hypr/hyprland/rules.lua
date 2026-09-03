@@ -56,7 +56,7 @@ wr({ match = { title = "^(File Upload)(.*)$" }, center = true, float = true })
 wr({ match = { title = "^(.*)(wants to save)$" }, center = true, float = true })
 wr({ match = { title = "^(.*)(wants to open)$" }, center = true, float = true })
 wr({ match = { class = "^(one.alynx.showmethekey)$" }, float = true, no_blur = true, border_size = 0 })
-wr({ match = { title = "Volume Control" }, center = true, float = true, size = float_size })
+wr({ match = { title = "Volume Control" }, center = true, float = true, size = { "(monitor_w*0.50)", "(monitor_h*0.25)" } })
 
 -- picture-in-picture
 wr({

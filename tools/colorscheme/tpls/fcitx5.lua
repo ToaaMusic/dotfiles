@@ -125,16 +125,16 @@ Bottom=5
 
 	local content = template:format(
 		scheme.fg.common, -- NormalColor
-		scheme.accents[1], -- HighlightCandidateColor
-		scheme.accents[1], -- HighlightColor
-		scheme.brand,     -- HighlightBackgroundColor
+		scheme.brand, -- HighlightCandidateColor
+		scheme.brand, -- HighlightColor
+		scheme.bg.elevated,     -- HighlightBackgroundColor
 		scheme.bg.common, -- [InputPanel/Background] Color
 		scheme.bg.border, -- BorderColor
 		scheme.bg.active, -- [InputPanel/Highlight] Color
 		asset_root,     -- [InputPanel/PrevPage] Image
 		asset_root,     -- [InputPanel/NextPage] Image
 		scheme.fg.common, -- [Menu] NormalColor
-		scheme.accents[1], -- [Menu] HighlightCandidateColor
+		scheme.brand, -- [Menu] HighlightCandidateColor
 		scheme.bg.common, -- [Menu/Background] Color
 		scheme.bg.border, -- [Menu/Background] BorderColor
 		asset_root,     -- [Menu/CheckBox] Image

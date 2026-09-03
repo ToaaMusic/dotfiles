@@ -110,6 +110,7 @@ ForegroundColors.__index = ForegroundColors
 ---@field comment string
 ---@field string string
 ---@field number string
+---@field bool string
 ---@field type string
 ---@field func string
 ---@field func_call string
@@ -127,6 +128,115 @@ ForegroundColors.__index = ForegroundColors
 ---@field keyword_return string
 local SyntaxColors = {}
 SyntaxColors.__index = SyntaxColors
+
+local SyntaxThemes = {
+	["RiderIslands"] = {
+		comment        = "#85c46c",
+		operator       = "#bdbdbd",
+		punctuation    = "#bdbdbd",
+		constant       = "#66c3cc",
+		string         = "#c9a26d",
+		number         = "#ed94c0",
+		bool           = "#ed94c0",
+		variable       = "#bdbdbd",
+		func           = "#39cc9b",
+		func_call      = "#39cc9b",
+		keyword        = "#6c95eb",
+		keyword_flow   = "#6c95eb",
+		keyword_return = "#6c95eb",
+		macro          = "#6c95eb",
+		type           = "#c191ff",
+		namespace      = "#c191ff",
+		builtin        = "#f0f0f0",
+		parameter      = "#bdbdbd",
+		property       = "#66c3cc",
+	},
+
+	["Sonokai"] = {
+		comment        = "#7f8490",
+		operator       = "#ff75a0",
+		punctuation    = "#e2e2e3",
+		constant       = "#e2e2e3",
+		string         = "#9ece6a",
+		number         = "#e2e2e3",
+		bool           = "#ff75a0",
+		variable       = "#e2e2e3",
+		func           = "#9dbbd0",
+		func_call      = "#9dbbd0",
+		keyword        = "#ff75a0",
+		keyword_flow   = "#ff75a0",
+		keyword_return = "#ff75a0",
+		macro          = "#ff75a0",
+		type           = "#9dbbd0",
+		namespace      = "#9dbbd0",
+		builtin        = "#ff75a0",
+		parameter      = "#e2e2e3",
+		property       = "#9ece6a",
+	},
+	["TokyoNight"] = {
+		comment        = "#565f89",
+		operator       = "#89ddff",
+		punctuation    = "#c0caf5",
+		constant       = "#bb9af7",
+		string         = "#9ece6a",
+		number         = "#ff9e64",
+		bool           = "#ff9e64",
+		variable       = "#c0caf5",
+		func           = "#7aa2f7",
+		func_call      = "#7aa2f7",
+		keyword        = "#bb9af7",
+		keyword_flow   = "#bb9af7",
+		keyword_return = "#bb9af7",
+		macro          = "#89ddff",
+		type           = "#2ac3de",
+		namespace      = "#7aa2f7",
+		builtin        = "#ff9e64",
+		parameter      = "#c0caf5",
+		property       = "#73daca",
+	},
+	["Dracula"] = {
+		comment        = "#6272a4",
+		operator       = "#ff79c6",
+		punctuation    = "#f8f8f2",
+		constant       = "#bd93f9",
+		string         = "#f1fa8c",
+		number         = "#bd93f9",
+		bool           = "#bd93f9",
+		variable       = "#f8f8f2",
+		func           = "#50fa7b",
+		func_call      = "#50fa7b",
+		keyword        = "#ff79c6",
+		keyword_flow   = "#ff79c6",
+		keyword_return = "#ff79c6",
+		macro          = "#ff79c6",
+		type           = "#8be9fd",
+		namespace      = "#8be9fd",
+		builtin        = "#8be9fd",
+		parameter      = "#f8f8f2",
+		property       = "#f1fa8c",
+	},
+	["Material"] = {
+		comment        = "#707880",
+		operator       = "#89ddff",
+		punctuation    = "#eeffff",
+		constant       = "#f78c6c",
+		string         = "#c3e88d",
+		number         = "#f78c6c",
+		bool           = "#f78c6c",
+		variable       = "#eeffff",
+		func           = "#82aaff",
+		func_call      = "#82aaff",
+		keyword        = "#c792ea",
+		keyword_flow   = "#c792ea",
+		keyword_return = "#c792ea",
+		macro          = "#89ddff",
+		type           = "#ffcb6b",
+		namespace      = "#82aaff",
+		builtin        = "#ffcb6b",
+		parameter      = "#eeffff",
+		property       = "#c3e88d",
+	}
+}
 
 ---@class tdf.ColorScheme
 ---@field dark_mode boolean         -- The day/night flag
@@ -228,30 +338,37 @@ function ColorScheme:build_ansi16()
 end
 
 ---@param self tdf.ColorScheme
+---@param theme string|nil
 ---@return tdf.ColorScheme
-function ColorScheme:build_syntax()
+function ColorScheme:build_syntax(theme)
+	if theme ~= nil and SyntaxThemes[theme] ~= nil then
+		self.syntax = SyntaxThemes[theme]
+		return self
+	end
 	local A = self.ansi16
 	local bg = self.bg.common
 	local fg = self.fg.common
 	self.syntax = {
 		comment        = h.mix(fg, bg, 0.5),
+		operator       = self.fg.subtle,
+		punctuation    = self.fg.subtle,
+		constant       = s.ensure_contrast_soft(h.mix(A.Yellow, A.Red, 0.25), bg, 4.2, 0.14),
+		string         = A.Green,
+		number         = A.Yellow,
+		bool           = s.ensure_contrast_soft(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
+		variable       = self.fg.hover,
+		func           = A.Cyan,
+		func_call      = s.ensure_contrast_soft(h.mix(A.Cyan, fg, 0.10), bg, 4.8, 0.14),
 		keyword        = A.Magenta,
 		keyword_flow   = s.ensure_contrast_soft(h.mix(A.Yellow, A.Red, 0.20), bg, 4.4, 0.14),
 		keyword_return = s.ensure_contrast_soft(h.mix(A.Magenta, A.Red, 0.35), bg, 4.6, 0.14),
-		string         = A.Green,
-		number         = A.Yellow,
-		type           = A.Blue,
-		func           = A.Cyan,
-		func_call      = s.ensure_contrast_soft(h.mix(A.Cyan, fg, 0.10), bg, 4.8, 0.14),
-		variable       = self.fg.hover,
-		constant       = s.ensure_contrast_soft(h.mix(A.Yellow, A.Red, 0.25), bg, 4.2, 0.14),
 		macro          = A.Red,
-		builtin        = s.ensure_contrast_soft(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
-		property       = A.Cyan,
-		parameter      = s.ensure_contrast_soft(h.mix(A.Cyan, A.Blue, 0.38), bg, 4.4, 0.14),
-		operator       = self.fg.subtle,
-		punctuation    = self.fg.subtle,
+		type           = A.Blue,
+
 		namespace      = s.ensure_contrast_soft(h.mix(A.Blue, A.Magenta, 0.32), bg, 4.4, 0.14),
+		builtin        = s.ensure_contrast_soft(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
+		parameter      = s.ensure_contrast_soft(h.mix(A.Cyan, A.Blue, 0.38), bg, 4.4, 0.14),
+		property       = A.Cyan,
 	}
 	return self
 end
@@ -271,22 +388,30 @@ function ColorScheme:build_role()
 	return self
 end
 
+---@class tdf.ColorAutoGenOpts
+---@field enable? boolean Generate colors or not when changing wallpaper
+---@field notify? boolean Send notification or not
+---@field theme_mode? "auto"|"invert"|"dark"|"light"
+---@field syntax_theme? string|"Sonokai"|"RiderIslands"|"Material"|"TokyoNight" Force name of the syntax theme
+---@field tasks? GenerationTask[] List of serialization tasks
+---@field force? tdf.ColorSchemeAllNullable Force use the fields in this scheme, only bg.common and fg.common are worked for now
+
 ---@package
 ---Factory function creates a ColorScheme instance from dominant color list.
 ---@param dominants string[] list of hex string
----@param theme_mode string|nil invert day/night mode, default is false (true to be opposite to wallpaper)
----@param force tdf.ColorSchemeAllNullable|nil
+---@param opts tdf.ColorAutoGenOpts|nil
 ---@return tdf.ColorScheme
-function ColorScheme.from_dominants(dominants, theme_mode, force)
+function ColorScheme.from_dominants(dominants, opts)
 	if #dominants < 4 then
 		logger:error("Not enough colors sampled from image")
 	end
 
+	opts = opts or {}
 	-- force
-	force = force or {}
+	local force = opts.force or {}
 	---@cast force +tdf.ColorScheme
 	---@cast force -tdf.ColorSchemeAllNullable
-	theme_mode = theme_mode or "auto"
+	local theme_mode = opts.theme_mode or "auto"
 	local bg_force = force.bg and force.bg.common or nil
 	local fg_force = force.fg and force.fg.common or nil
 
@@ -397,7 +522,7 @@ function ColorScheme.from_dominants(dominants, theme_mode, force)
 		accents    = accents,
 		ansi16     = nil,
 		syntax     = nil,
-	}):build_ansi16():build_syntax():build_role()
+	}):build_ansi16():build_syntax(opts.syntax_theme):build_role()
 	---@diagnostic enable: assign-type-mismatch
 end
 

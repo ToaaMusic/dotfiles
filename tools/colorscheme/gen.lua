@@ -60,7 +60,7 @@ local dominants = sample.top_colors(img, {
 })
 
 -- 3. Generate Scheme
-local scheme = new_Scheme(dominants, gen_config.theme_mode, gen_config.force)
+local scheme = new_Scheme(dominants, gen_config)
 
 -- 4. Output
 write.invoke(scheme)

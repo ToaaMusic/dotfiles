@@ -7,7 +7,7 @@ local config_path = tdf_root .. "/config.lua"
 
 ---@class tdf.Config
 ---@field components? tdf.Components
----@field color_auto_gen? tdf.ColorAutoGenConfig
+---@field color_auto_gen? tdf.ColorAutoGenOpts
 
 ---@class tdf.Components
 ---@field compositor? string|"hypr"
@@ -15,13 +15,6 @@ local config_path = tdf_root .. "/config.lua"
 ---@field notify? string|"mako"|"dunst"
 ---@field terminal? string|"kitty"|"gohstty"
 ---@field shell? string|"zsh"|"bash"|"fish"
-
----@class tdf.ColorAutoGenConfig
----@field enable? boolean Generate colors or not when changing wallpaper
----@field notify? boolean Send notification or not
----@field theme_mode? "auto"|"invert"|"dark"|"light"
----@field tasks? GenerationTask[] List of serialization tasks
----@field force? tdf.ColorSchemeAllNullable Force use the fields in this scheme, only bg.common and fg.common are worked for now
 
 local HOME = os.getenv("HOME")
 
