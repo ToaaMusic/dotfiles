@@ -14,10 +14,6 @@ window {
   background-color: @bg-common;
 }
 
-box {
-  background-color: @bg-common;
-}
-
 label {
   valign: center;
   halign: center;
@@ -27,13 +23,13 @@ separator {
   background-color: @bg-elevated;
 }
 
+toolbarview {
+  background-color: @bg-common;
+}
+
 button {
   background-color: @bg-elevated;
   border: 1px solid @bg-border;
-}
-
-button box {
-  background-color: transparent;
 }
 
 button:hover {
@@ -67,31 +63,6 @@ button.combo:hover arrow {
   color: @bg-common;
 }
 
-button.combo popover {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-combobox popover {
-  padding: 0;
-}
-
-combobox popover contents {
-  padding: 0;
-  border: 1px solid @bg-border;
-}
-
-combobox popover modelbutton {
-  background-color: @bg-common;
-}
-
-combobox popover modelbutton:checked,
-combobox popover modelbutton:selected {
-  background-color: @bg-hover;
-}
-
 spinbutton {
   background-color: @bg-elevated;
   border: 1px solid @bg-border;
@@ -102,6 +73,35 @@ spinbutton {
 spinbutton:focus-within {
   border: 1px solid @brand;
   outline-color: @brand;
+}
+
+modelbutton {
+  background-color: @bg-common;
+}
+
+modelbutton:checked,
+modelbutton:selected {
+  background-color: @bg-hover;
+}
+
+popover {
+  background-color: transparent;
+  padding: 0;
+}
+
+popover arrow {
+  background: @bg-common;
+  border: 1px solid @bg-border;
+}
+
+popover contents {
+  margin: 0;
+  padding: 0;
+  border: 1px solid @bg-border;
+}
+
+popover contents stack {
+  background-color: @bg-common;
 }
 
 menu {
@@ -125,6 +125,10 @@ menu separator {
 }
 
 notebook {
+  background-color: @bg-common;
+}
+
+notebook stack {
   background-color: @bg-common;
 }
 

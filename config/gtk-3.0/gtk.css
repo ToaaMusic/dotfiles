@@ -4,13 +4,11 @@
 
 * {
   border: none;
+  color: @fg-common;
+  transition: all 200ms ease;
 }
 
 window {
-  background-color: @bg-common;
-}
-
-box {
   background-color: @bg-common;
 }
 

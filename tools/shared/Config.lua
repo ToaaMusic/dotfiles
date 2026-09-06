@@ -82,6 +82,10 @@ local default_config = {
 				type = "gtk_css"
 			},
 			{
+				path = HOME .. "/.config/com.github.johnfactotum.Foliate/themes/autogen.json",
+				type = "foliate"
+			},
+			{
 				header = "# Generated from wallpaper\n# Do not edit manually!\n\n",
 				path = HOME .. "/.config/cava/themes/colors.g.theme",
 				type = "cava"
