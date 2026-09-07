@@ -67,7 +67,7 @@ write.invoke(scheme)
 
 if gen_config.notify then
 	os.execute([[
-WALL=$("$TOAAM_DOTFILES/scripts/kv.sh" "$TOAAM_DOTFILES/.cache" wallpaper 2>/dev/null) &&
+WALL=$("$TOAAM_DOTFILES/tools/kv.sh" "$TOAAM_DOTFILES/.cache/state" wallpaper 2>/dev/null) &&
 notify-send "Wallpaper Changed" "$(basename "$WALL")" -i "$WALL"
 ]])
 end

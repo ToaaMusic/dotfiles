@@ -1,6 +1,9 @@
 #!/bin/bash
 # change-bar.sh
 
+include_scripts_dir="$TOAAM_DOTFILES/tools"
+cache_dir="$TOAAM_DOTFILES/.cache"
+
 bar_name="${1:-horizontal}"
 
 bar_config="$HOME/.config/waybar/bars/$bar_name.jsonc"
@@ -14,4 +17,4 @@ else
 	waybar -c "$bar_config" &
 fi
 
-$TOAAM_DOTFILES/scripts/kv.sh $TOAAM_DOTFILES/.cache "bar" $bar_name
+$include_scripts_dir/kv.sh $cache_dir/state "bar" $bar_name

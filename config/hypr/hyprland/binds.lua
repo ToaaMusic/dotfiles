@@ -5,7 +5,7 @@ local bind = hl.bind
 local mainMod = "SUPER"
 local primMod = "ALT"
 local main_prim = mainMod .. " + " .. primMod
-local cmdPath = "$HOME/.config/hypr/cmds/"
+local include_scripts_dir = "$TOAAM_DOTFILES/tools/"
 
 local function set_binds(binds)
 	for k, va in pairs(binds) do
@@ -37,10 +37,11 @@ local bind_map = {
 	[mainMod .. " + B"]              = hl.dsp.exec_cmd(v.browser),
 
 	-- scripts
-	[mainMod .. " + W"]              = hl.dsp.exec_cmd(cmdPath .. "wall.sh"),
-	[mainMod .. " + SHIFT + W"]      = hl.dsp.exec_cmd(cmdPath .. "wall-gui.sh"),
-	[mainMod .. " + R"]              = hl.dsp.exec_cmd(cmdPath .. "refresh.sh"),
-	[mainMod .. " + H"]              = hl.dsp.exec_cmd(cmdPath .. "switch-waybar.sh"),
+	[mainMod .. " + W"]              = hl.dsp.exec_cmd(include_scripts_dir .. "wall.sh"),
+	[mainMod .. " + SHIFT + W"]      = hl.dsp.exec_cmd(include_scripts_dir .. "wall.sh -w"),
+	[mainMod .. " + CTRL + W"]       = hl.dsp.exec_cmd(include_scripts_dir .. "wall.sh -g"),
+	[mainMod .. " + R"]              = hl.dsp.exec_cmd(include_scripts_dir .. "refresh.sh"),
+	[mainMod .. " + H"]              = hl.dsp.exec_cmd(include_scripts_dir .. "switch-waybar.sh"),
 	[mainMod .. " + SHIFT + H"]      = hl.dsp.exec_cmd("~/.config/waybar/scripts/change-bar.sh winlike"),
 	["Print"]                        = hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'),
 
