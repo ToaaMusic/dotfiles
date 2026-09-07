@@ -94,6 +94,7 @@ box {
 #custom-lock,
 #custom-monitor,
 #custom-notify,
+#custom-tools,
 #custom-tray-expander,
 #mode,
 #clock,
@@ -154,6 +155,7 @@ box {
 
 #custom-tray-expander:hover,
 #custom-monitor:hover,
+#custom-tools:hover,
 #custom-lock:hover,
 #custom-notify:hover,
 #cpu:hover,
@@ -173,11 +175,13 @@ box {
 #pulseaudio,
 #custom-tray-expander,
 #custom-monitor,
+#custom-tools,
 #custom-lock,
 #custom-notify {
   padding: 0;
 }
 #custom-monitor:hover,
+#custom-tools:hover,
 #custom-lock:hover,
 #custom-notify:hover {
   min-width: 50px;

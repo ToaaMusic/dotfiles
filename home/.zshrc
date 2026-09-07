@@ -58,6 +58,11 @@ function ro() {
 	lua "$script" "$@"
 }
 
+function bar() {
+	local script="$TOAAM_DOTFILES/tools/bar.sh"
+	"$script" "$@"
+}
+
 # open dotfiles project
 function tdf() {
 	# local opener=${1:-${GUI_EDITOR:-nvim}}

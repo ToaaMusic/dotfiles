@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-pkill waybar
-waybar &
+include_scripts_dir="$TOAAM_DOTFILES/tools"
+cache_dir="$TOAAM_DOTFILES/.cache"
+bar_name=$($include_scripts_dir/kv.sh $cache_dir/state "bar")
 
-#pkill hyprpaper
-#hyprpaper &
+$include_scripts_dir/bar.sh $bar_name

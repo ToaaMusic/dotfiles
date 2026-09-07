@@ -8,6 +8,7 @@
   "modules-right": [
     // "wlr/taskbar",
     "group/tray",
+    "custom/tools",
     "custom/lock",
     "custom/notify",
   ],
@@ -34,13 +35,8 @@
     "on-click-middle": "close",
   },
 
-  "custom/monitor": {
-    "format": "󰣇",
-    "tooltip": false,
-  },
-
   "custom/tray-expander": {
-    "format": "󰇘",
+    "format": "󰪏",
     "tooltip": false,
   },
 
@@ -87,6 +83,24 @@
       "activated": "󰂚",
       "deactivated": "󰂛",
     },
+    "tooltip": false,
+  },
+
+  "custom/tools": {
+    "format": "󰀻",
+    "tooltip": false,
+    "menu": "on-click",
+    "menu-file": "~/.config/waybar/menus/tools_menu.xml",
+    "menu-actions": {
+      "refresh": "$TOAAM_DOTFILES/tools/refresh.sh",
+      "select": "$TOAAM_DOTFILES/tools/wall.sh -g",
+      "random": "$TOAAM_DOTFILES/tools/wall.sh",
+      "web": "$TOAAM_DOTFILES/tools/wall.sh -w",
+    },
+  },
+
+  "custom/monitor": {
+    "format": "󰣇",
     "tooltip": false,
   },
 

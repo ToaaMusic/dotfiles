@@ -28,7 +28,7 @@ local bind_map = {
 	[mainMod .. " + M"]              = hl.dsp.exec_cmd(hyprshutdown_cmd),
 	[mainMod .. " + V"]              = hl.dsp.window.float({ action = "toggle" }),
 	[mainMod .. " + P"]              = hl.dsp.window.pseudo(),
-	[mainMod .. " + J"]              = hl.dsp.layout("togglesplit"),       -- dwindle only
+	[mainMod .. " + J"]              = hl.dsp.layout("togglesplit"), -- dwindle only
 
 	-- apps
 	[mainMod .. " + TAB"]            = hl.dsp.exec_cmd(v.menu),
@@ -41,8 +41,7 @@ local bind_map = {
 	[mainMod .. " + SHIFT + W"]      = hl.dsp.exec_cmd(include_scripts_dir .. "wall.sh -w"),
 	[mainMod .. " + CTRL + W"]       = hl.dsp.exec_cmd(include_scripts_dir .. "wall.sh -g"),
 	[mainMod .. " + R"]              = hl.dsp.exec_cmd(include_scripts_dir .. "refresh.sh"),
-	[mainMod .. " + H"]              = hl.dsp.exec_cmd(include_scripts_dir .. "switch-waybar.sh"),
-	[mainMod .. " + SHIFT + H"]      = hl.dsp.exec_cmd("~/.config/waybar/scripts/change-bar.sh winlike"),
+	-- [mainMod .. " + H"]              = hl.dsp.exec_cmd(include_scripts_dir .. "bar.sh -g"),
 	["Print"]                        = hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'),
 
 	-- window management
