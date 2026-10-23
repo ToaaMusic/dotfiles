@@ -62,6 +62,7 @@ return {
 		opts = {
 			vt_position = "end_of_line",
 			filetypes = { "lua" },
+			disable = { filetypes = { "cs" } },
 			log = {},
 			kinds = {
 				vim.lsp.protocol.SymbolKind.Function,
@@ -98,14 +99,14 @@ return {
 			-- Options are not required
 			dotnet.setup({
 				managed_terminal = {
-					auto_hide = true,  -- auto hides terminal if exit code is 0
+					auto_hide = false, -- auto hides terminal if exit code is 0
 					auto_hide_delay = 1000, -- delay before auto hiding, 0 = instant
 					mappings = {
-						next_tab = { lhs = "<Tab>", desc = "Next terminal tab" },
-						prev_tab = { lhs = "<S-Tab>", desc = "Previous terminal tab" },
-						new_terminal = { lhs = "+", desc = "New user terminal" },
+						next_tab       = { lhs = "<Tab>", desc = "Next terminal tab" },
+						prev_tab       = { lhs = "<S-Tab>", desc = "Previous terminal tab" },
+						new_terminal   = { lhs = "+", desc = "New user terminal" },
 						close_terminal = { lhs = "X", desc = "Close current terminal tab" },
-						hide_panel = { lhs = "q", desc = "Hide terminal panel" },
+						hide_panel     = { lhs = "q", desc = "Hide terminal panel" },
 					},
 				},
 				-- Optional configuration for external terminals (matches nvim-dap structure)
@@ -127,17 +128,20 @@ return {
 					auto_refresh_codelens = false,
 					suggest_updates = true,            -- Periodically suggest roslyn-language-server updates
 					analyzer_assemblies = {},          -- Any additional roslyn analyzers you might use like SonarAnalyzer.CSharp
+					auto_load_projects = false,
+					daemon_mode = false,
+					bulk_filewatcher_registrations = true,
 					razor = {
 						enabled = true,
 						html = {
 							enabled = true,
+							---@diagnostic disable-next-line: assign-type-mismatch
 							cmd = nil, -- Auto-detect project node_modules/.bin/vscode-html-language-server, then PATH
 							request_timeout = 5000,
 						},
 					},
 					---@diagnostic disable-next-line: missing-fields
 					config = {
-						-- _configs = {},
 						-- settings = {
 						-- 	["csharp|code_lens"] = {
 						-- 		dotnet_enable_references_code_lens = true,
@@ -157,11 +161,14 @@ return {
 					console = "integratedTerminal", -- Controls where the target app runs: "integratedTerminal" (Neovim buffer) or "externalTerminal" (OS window)
 					apply_value_converters = true,
 					auto_register_dap = true,
+					-- Sample the debugged process' CPU/memory usage so the `easy-dotnet_cpu` and `easy-dotnet_mem`
+					-- dapui widgets have data to draw. Set to false to turn sampling off and unregister the widgets.
+					mem_cpu_usage = true,
 					mappings = {
 						open_variable_viewer = { lhs = "T", desc = "open variable viewer" },
 					},
 				},
-				---@type TestRunnerOptions
+				---@type easy-dotnet.TestRunner.Options
 				test_runner = {
 					auto_start_testrunner = true,
 					hide_legend = false,
@@ -204,6 +211,8 @@ return {
 						close = { lhs = "q", desc = "close testrunner" },
 						refresh_testrunner = { lhs = "<C-r>", desc = "refresh testrunner" },
 						cancel = { lhs = "<C-c>", desc = "cancel in-flight operation" },
+						next_failure = { lhs = "]f", desc = "jump to next failing test" },
+						prev_failure = { lhs = "[f", desc = "jump to previous failing test" },
 					},
 				},
 				new = {
@@ -215,7 +224,7 @@ return {
 				fsproj_mappings = true,
 				auto_bootstrap_namespace = {
 					--block_scoped, file_scoped
-					type = "block_scoped",
+					type = "file_scoped",
 					enabled = true,
 					use_clipboard_json = {
 						behavior = "prompt", --'auto' | 'prompt' | 'never',
@@ -237,9 +246,7 @@ return {
 					--Set this to false if you have configured lualine to avoid double logging
 					handler = function(start_event)
 						local spinner = require("easy-dotnet.ui-modules.spinner").new()
-						spinner:start_spinner(function()
-							return start_event.job.name
-						end)
+						spinner:start_spinner(function() return start_event.job.name end)
 						---@param finished_event JobEvent
 						return function(finished_event)
 							spinner:stop_spinner(finished_event.result.msg, finished_event.result.level)
@@ -267,8 +274,6 @@ return {
 			vim.keymap.set("n", "<C-p>", function()
 				dotnet.run_project()
 			end)
-
-			vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run, { desc = "Run CodeLens" })
 		end,
 	},
 }

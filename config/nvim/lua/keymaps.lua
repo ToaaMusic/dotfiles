@@ -6,6 +6,13 @@ vim.g.maplocalleader = "\\"
 km.set("i", "jk", "<Esc>")
 
 -- lsp
+km.set("n", "<leader>cL", vim.lsp.codelens.run)
+km.set("n", "<leader>cl",
+	function()
+		local enabled = vim.lsp.codelens.is_enabled()
+		vim.lsp.codelens.enable(not enabled)
+	end,
+	{ desc = "Toggle CodeLens" })
 km.set("n", "<leader>ca", vim.lsp.buf.code_action)
 km.set("n", "<leader>rn", vim.lsp.buf.rename)
 km.set('n', '<leader>hi', function()

@@ -483,3 +483,58 @@ apply_hl_map({
 	["RenderMarkdownCodeInfo"]   = { fg = fg.common },
 	["RenderMarkdownCodeBorder"] = { fg = fg.common },
 })
+
+-- 暗化 C# 的文档注释，根据已有语法高亮暗化，而非一味地灰色
+do
+	local dotfiles = os.getenv("TOAAM_DOTFILES")
+	if not dotfiles or dotfiles == "" then
+		return
+	end
+
+	local h = loadfile(dotfiles .. "/tools/colorscheme/src/color_helper.lua")()
+	if not h or not h.mix then
+		return
+	end
+	local loaded, strategy = pcall(function()
+		return loadfile(dotfiles .. "/tools/colorscheme/src/strategy.lua")()
+	end)
+	package.loaded["color_helper"] = h
+
+	---把颜色朝背景方向压暗，并守住一个最小对比度
+	---@param hex string 基准颜色
+	---@param amount number 0-1，朝背景混合的比例，越大越暗
+	---@return string
+	local function dim(hex, amount)
+		local out = h.mix(hex, bg.common, amount)
+		if loaded and strategy and strategy.ensure_contrast_soft then
+			out = strategy.ensure_contrast_soft(out, bg.common, 2.0, 0.08)
+		elseif h.get_contrast(out, bg.common) < 2.0 then
+			out = h.mix(out, fg.common, 0.3)
+		end
+		return out
+	end
+
+	-- token 类型 -> 基准语法色
+	---@type table<string, string>
+	local base = {
+		xmlDocCommentTag             = syntax.type,
+		xmlDocCommentTagName         = syntax.type,
+		xmlDocCommentTagAttribute    = syntax.property,
+		xmlDocCommentAttribute       = syntax.property,
+		xmlDocCommentAttributeName   = syntax.property,
+		xmlDocCommentAttributeValue  = syntax.string,
+		xmlDocCommentAttributeQuotes = syntax.string,
+		xmlDocCommentName            = syntax.func,
+		xmlDocCommentText            = syntax.variable,
+		xmlDocCommentDelimiter       = syntax.punctuation,
+		xmlDocCommentEntityReference = syntax.constant,
+		xmlDocCommentCDataSection    = syntax.string,
+		xmlDocCommentComment         = syntax.comment,
+	}
+
+	for token_type, hex in pairs(base) do
+		-- 注释正文压得更暗，让它退到背景里，又不与 tag 撞色
+		local amount = token_type == "xmlDocCommentText" and 0.66 or 0.45
+		set_hl(0, ("@lsp.type.%s.cs"):format(token_type), { fg = dim(hex, amount) })
+	end
+end
