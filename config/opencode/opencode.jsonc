@@ -1,23 +1,20 @@
 {
   "$schema": "https://opencode.ai/config.json",
 
-  // https://opencode.ai/docs/tools/
-  "permission": {
-    // "*": "ask",
-    "bash": "ask",
-    "edit": "ask",
-  },
+  // https://opencode.ai/v2/docs/tools/
+  "permissions": [
+    { "action": "shell", "resource": "*", "effect": "ask" },
+    { "action": "edit", "resource": "*", "effect": "ask" },
+  ],
 
-  // https://opencode.ai/docs/rules/
-  // "instructions": [""],
+  // https://opencode.ai/v2/docs/agents/
+  // "agents": {},
 
-  // https://opencode.ai/docs/agents/
-  // "agent": {},
-
-  // https://opencode.ai/docs/models/
-  "provider": {
+  // https://opencode.ai/v2/docs/models/
+  // https://opencode.ai/v2/docs/providers/
+  "providers": {
     "anthropic": {
-      "options": {
+      "settings": {
         "baseURL": "{env:LLM_END_POINT}",
         "apiKey": "{env:ANTHROPIC_API_KEY}",
       },
@@ -25,14 +22,14 @@
     "deepseek": {
       "models": {
         "deepseek-v4-pro": {
-          "options": {
+          "body": {
             "thinking": {
               "type": "disabled",
             },
           },
         },
         "deepseek-v4-flash": {
-          "options": {
+          "body": {
             "thinking": {
               "type": "disabled",
             },
@@ -42,24 +39,17 @@
     },
   },
 
-  // https://opencode.ai/docs/commands/
-  // "command": {},
-
-  // https://opencode.ai/docs/formatters/
+  // https://opencode.ai/v2/docs/formatters/
   "formatter": false,
 
-  //https://opencode.ai/docs/lsp/
-  // "lsp": {},
-
-  // https://opencode.ai/docs/mcp-servers/
+  // https://opencode.ai/v2/docs/mcp-servers/
   "mcp": {
-    "avalonia-docs": {
-      "type": "remote",
-      "url": "https://docs-mcp.avaloniaui.net/mcp",
-      "enabled": false,
+    "servers": {
+      "avalonia-docs": {
+        "type": "remote",
+        "url": "https://docs-mcp.avaloniaui.net/mcp",
+        "disabled": true,
+      },
     },
   },
-
-  // https://opencode.ai/docs/references/
-  // "references": {},
 }
