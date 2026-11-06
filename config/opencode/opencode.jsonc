@@ -20,20 +20,9 @@
       },
     },
     "deepseek": {
-      "models": {
-        "deepseek-v4-pro": {
-          "body": {
-            "thinking": {
-              "type": "disabled",
-            },
-          },
-        },
-        "deepseek-v4-flash": {
-          "body": {
-            "thinking": {
-              "type": "disabled",
-            },
-          },
+      "body": {
+        "thinking": {
+          "type": "disabled",
         },
       },
     },
