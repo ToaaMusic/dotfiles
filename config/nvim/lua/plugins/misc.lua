@@ -131,6 +131,7 @@ return {
 					auto_load_projects = false,
 					daemon_mode = false,
 					bulk_filewatcher_registrations = true,
+					log_level = "Information",
 					razor = {
 						enabled = true,
 						html = {
@@ -234,7 +235,7 @@ return {
 				server = {
 					use_visual_studio = false, -- Set true for .NET Framework support on Windows
 					---@type nil | "Off" | "Critical" | "Error" | "Warning" | "Information" | "Verbose" | "All"
-					log_level = nil,
+					log_level = "Verbose",
 				},
 				-- choose which picker to use with the plugin
 				-- possible values are "telescope" | "fzf" | "snacks" | "basic"
