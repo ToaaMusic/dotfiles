@@ -2,36 +2,41 @@
 
 这个仓库包含了我的Arch系统配置和一些我用lua写的小工具。
 
-你可以查看 [TODO.md](./TODO.md) 获取改动计划
+> [!WARNING]
+> 这个仓库目前还没准备好作为通用配置使用，除非你是刚装的系统，想完全跟着我的配置来，否则**不建议**使用下面的安装方式，因为这种方式存在且不限于以下问题：
+>
+> 1. 覆盖配置功能欠佳。我的个人配置居多，如果你需要写覆盖配置，那么需要完全理解项目自己去修改。
+> 2. 版本控制难。如果你本地做了个性化修改，那么将和我的仓库分叉。
+> 3. 依赖还未汇总。有些脚本会依赖一些包，如果你不安装它们，运行后会有未知行为。
+>
+> 因此建议你直接查看我的配置文件并去有取舍地 copy，这样也有助于你学习。你也可以 fork 这个仓库。
+
+查看 [TODO.md](./TODO.md) 获取我的改动计划
 
 ![screenshot](https://enhiucyodopknrbdtswy.supabase.co/storage/v1/object/public/projects/screenshot.png)
 
 ## 成分
 
-| 成分          | 描述               | 官方Docs/Wiki                              | 仓库位置                        |
-| ------------- | ------------------ | ------------------------------------------ | ------------------------------- |
-| **hyprland**  | Wayland 窗口合成器 | https://wiki.hyprland.org/                 | [hypr](./config/hypr)           |
-| **nvim**      | 文本编辑器         | https://neovim.io/                         | [nvim](./config/nvim)           |
-| **fastfetch** | 系统信息获取器     | https://github.com/fastfetch-cli/fastfetch | [fastfetch](./config/fastfetch) |
-| **waybar**    | 状态栏             | https://github.com/Alexays/Waybar/wiki     | [waybar](./config/waybar)       |
-| **rofi**      | App 启动器         | https://github.com/davatorium/rofi         | [rofi](./config/rofi)           |
-| **kitty**     | 终端模拟器         | https://sw.kovidgoyal.net/kitty/           | [kitty](./config/kitty)         |
-| **yazi**      | Tui 文件管理器     | https://yazi-rs.github.io/                 | [yazi](./config/yazi)           |
-| **mako**      | 通知               | https://github.com/emersion/mako           | [mako](./config/mako)           |
-| **cava**      | 音频可视化         | https://github.com/karlstav/cava           | [cava](./config/cava)           |
+| 成分                                                    | 解释                  | 位置                            |
+| ------------------------------------------------------- | --------------------- | ------------------------------- |
+| [hyprland](https://wiki.hyprland.org/)                  | Wayland 合成器 (平铺) | [hypr](./config/hypr)           |
+| [labwc](https://labwc.github.io/)                       | Wayland 合成器 (堆叠) | [labwc](./config/labwc)         |
+| [nvim](https://neovim.io/)                              | 文本编辑器            | [nvim](./config/nvim)           |
+| [opencode](https://opencode.ai/)                        | Ai 编程助手           | [opencode](./config/opencode)   |
+| [fastfetch](https://github.com/fastfetch-cli/fastfetch) | 系统信息              | [fastfetch](./config/fastfetch) |
+| [waybar](https://github.com/Alexays/Waybar/wiki)        | Bar                   | [waybar](./config/waybar)       |
+| [rofi](https://github.com/davatorium/rofi)              | App 启动器            | [rofi](./config/rofi)           |
+| [kitty](https://sw.kovidgoyal.net/kitty/)               | 终端模拟器            | [kitty](./config/kitty)         |
+| [yazi](https://yazi-rs.github.io/)                      | Tui 文件管理器        | [yazi](./config/yazi)           |
+| [mako](https://github.com/emersion/mako)                | 通知                  | [mako](./config/mako)           |
+| [cava](https://github.com/karlstav/cava)                | Tui 可视化音频        | [cava](./config/cava)           |
 
 ## 安装
 
-克隆本仓库到你喜欢的任何位置（例如 `~/repos`），然后执行 `./link`（建议带 `-s` 参数选择性安装）。
+> [!NOTE]
+> 项目被设计为自包含的，因此 clone 即安装。
 
-> [!IMPORTANT]
-> 请务必备份已有的配置文件，以防被覆盖。同时 ./link 也会检查并询问是否覆盖。
-
-```bash
-git clone https://github.com/ToaaMusic/dotfiles.git
-cd dotfiles
-./link -s
-```
+克隆本仓库到你喜欢的任何位置（例如 `~/dotfiles`），然后执行 `./link`（建议带 `-s` 参数选择性安装）。
 
 ### 关于 [link](./link)
 
@@ -56,85 +61,98 @@ cd dotfiles
 └── ...                       └── ...
 ```
 
-> [!NOTE]
-> 移动本仓库后，别忘了重新运行 `./link`。这样 [.zshenv](./home/.zshenv) 和 [hypr/hyprland/env.lua](./config/hypr/hyprland/env.lua) 会自动将仓库目录设为 `$TOAAM_DOTFILES` 环境变量，这是运行我的工具脚本和定位资源所必需的。
+> [!IMPORTANT]
+> 移动本仓库后，别忘了重新运行 `./link` 确保链接有效。
+>
+> 你可能还需要重新登录你的窗口管理器，因为 [.zshenv](./home/.zshenv) 和 [hypr/hyprland/env.lua](./config/hypr/hyprland/env.lua) 会将仓库目录设为 `$TOAAM_DOTFILES` 环境变量来定位和运行我的脚本。
+
+> [!IMPORTANT]
+> 请务必备份已有的配置文件，以防被覆盖。同时 ./link 也会检查并询问是否覆盖。
+
+```bash
+cd ~
+git clone https://github.com/ToaaMusic/dotfiles.git
+cd dotfiles
+./link -s
+```
 
 ## 卸载
 
 运行 `./link clean` 来清理链接过的配置项或者用你自己的配置覆盖那些符号链接，然后直接删掉你克隆的仓库即可。
 
-## 依赖
-
-随你喜好。
-
-装好关键组件后，如果想获得完整体验或懒得逐一配置，可以直接全部安装。
+## 项目结构 & 依赖
 
 ```bash
-sudo pacman -S hyprland neovim fastfetch waybar rofi kitty yazi mako cava hyprpaper hyprlock
+# path                          deps(include tools)
+
+config
+├── cava
+├── dunst
+├── fastfetch
+├── fontconfig                  ttf-maplemono-nf-cn-unhinted, ttf-lxgw-zhenkai, ttf-chillroundm(aur)
+├── git                         git-delta
+├── gtk-3.0
+├── gtk-4.0
+├── hypr
+│   ├── hyprland
+│   │   ├── autostart.lua       tools/start-hyprpaper.sh
+│   │   ├── binds.lua           rofi, waybar, tools/
+│   │   ├── colors.lua
+│   │   ├── devices.lua
+│   │   ├── env.lua
+│   │   ├── monitors.lua
+│   │   ├── rules.lua
+│   │   └── vars.lua
+│   ├── shaders
+│   ├── default.conf
+│   ├── hyprland.lua
+│   ├── hyprlock.conf           hyprlock
+│   ├── hyprpaper.conf          hyprpaper
+│   └── README.md
+├── kitty
+├── mako
+├── nvim
+├── opencode
+├── quickshell
+├── rofi
+├── waybar
+│   ├── bars
+│   ├── menus
+│   ├── modules
+│   ├── scripts
+│   │   ├── get-weather.sh
+│   │   ├── im-stat.sh
+│   │   ├── notify-stat.sh
+│   │   └── notify-toggle.sh
+│   ├── styles
+│   ├── config.jsonc
+│   └── style.css
+└── yazi
+    ├── plugins
+    ├── init.lua
+    ├── keymap.toml
+    ├── package.toml
+    └── yazi.toml
+home
+tools
+├── colorscheme                 lua
+├── shared
+│   ├── Config.lua
+│   ├── file_helper.lua
+│   ├── getopt.lua
+│   ├── logger.lua
+│   └── plugin.lua              lua-language-server
+├── todo                        lua
+├── bar.sh                      waybar
+├── gen-color-part.sh           grim, tolls/colorscheme
+├── gen-color.sh                grim, slurp, tools/colorscheme
+├── kv.sh
+├── refresh.sh                  waybar
+├── start-hyprpaper.sh          hyprpaper
+└── wall.sh                     hyprland, hyprpaper, rofi, ffmpeg, tools/colorscheme, tools/kv.sh
+LICENSE
+link
+README.md
+README.zh-CN.md
+TODO.md
 ```
-
-```bash
-sudo pacman -S lua grim slurp wl-clipboard ffmpeg
-```
-
-- `lua`：运行我的工具脚本。（重要）
-- `hyprpaper`：显示壁纸。
-- `grim`、`slurp`、`wl-clipboard`、`ffmpeg`：截图、选区与剪贴板，供颜色生成工具使用。
-
-## 使用
-
-### 快捷键
-
-更多细节见 [config/hypr/](./config/hypr/)
-
-#### 默认
-
-| 快捷键              | 作用                        |
-| ------------------- | --------------------------- |
-| `ALT + Q`           | 打开一个终端模拟器（Kitty） |
-| `ALT + C`           | 关闭窗口                    |
-| `ALT + V`           | 切换窗口浮动                |
-| `ALT + M`           | 退出Hyprland                |
-| `ALT + 1~0`         | 切换工作区 1~10             |
-| `ALT + SHIFT + 1~0` | 把窗口移到工作区 1~10       |
-
-#### 自定义
-
-| 快捷键            | 作用                          |
-| ----------------- | ----------------------------- |
-| `ALT + F`         | 打开一个文件管理器 (Yazi)     |
-| `ALT + Z`         | 打开一个音乐播放器 (Musicfox) |
-| `ALT + W`         | 随机设置一个壁纸              |
-| `ALT + SHIFT + W` | 打开壁纸设置面板              |
-| `ALT + R`         | 刷新                          |
-| `ALT + H`         | 切换状态栏横竖布局            |
-| `Print`           | 截取选中区域到剪贴板          |
-
-### 工具
-
-[tools/](./tools/)
-
-- **colorscheme/**
-
-  向 `gen.lua` 传入 **ppm** 格式的输入，它会将 `*.g.*` 输出到 `~/.config/*/`，随后各组件会自动应用配色方案。
-
-  ```bash
-  grim -t ppm - | lua gen.lua
-  ```
-
-  或
-
-  ```bash
-  ffmpeg -v error -i "$WALL" -f image2pipe -vcodec ppm - | lua gen.lua
-  ```
-
-- **todo/**
-
-  一个轻量级的 Lua 待办事项管理器，支持交互式跨日归档提醒和 Markdown 存储。
-
-  ```bash
-  lua todo.lua add "My new task"
-  lua todo.lua ls
-  lua todo.lua done 1
-  lua todo.lua arch
-  ```
