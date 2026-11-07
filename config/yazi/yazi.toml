@@ -13,7 +13,16 @@ title_format = ""
 
 [opener]
 edit = [
-  { run = 'nvim "$@"', block = true, for = "unix" },
+  { run = 'nvim %s', block = true, for = "unix" },
+]
+run = [
+  { run = 'chmod +x %s; %s --appimage-extract-and-run', desc = "Run AppImage", for = "unix" },
+]
+
+[open]
+prepend_rules = [
+  { url = "*.AppImage", use = "run" },
+  { url = "*.appimage", use = "run" },
 ]
 
 [preview]

@@ -1,0 +1,371 @@
+<labwc_config>
+	<core>
+		<decoration>server</decoration>
+		<gap>2</gap>
+		<adaptiveSync>no</adaptiveSync>
+		<allowTearing>no</allowTearing>
+		<autoEnableOutputs>yes</autoEnableOutputs>
+		<hdr>no</hdr>
+		<reuseOutputMode>no</reuseOutputMode>
+		<xwaylandPersistence>no</xwaylandPersistence>
+		<primarySelection>yes</primarySelection>
+	</core>
+
+	<placement>
+		<policy>cascade</policy>
+	</placement>
+
+	<theme>
+		<name>Default</name>
+		<icon>Adwaita</icon>
+		<fallbackAppIcon>labwc</fallbackAppIcon>
+		<titlebar>
+			<layout>icon:iconify,max,close</layout>
+			<showTitle>yes</showTitle>
+		</titlebar>
+		<cornerRadius>8</cornerRadius>
+		<keepBorder>yes</keepBorder>
+		<maximizedDecoration>titlebar</maximizedDecoration>
+		<dropShadows>yes</dropShadows>
+		<dropShadowsOnTiled>yes</dropShadowsOnTiled>
+		<font place="ActiveWindow">
+			<name>sans</name>
+			<size>12</size>
+		</font>
+		<font place="InactiveWindow">
+			<name>sans</name>
+			<size>12</size>
+		</font>
+		<font place="MenuHeader">
+			<name>sans</name>
+			<size>12</size>
+		</font>
+		<font place="MenuItem">
+			<name>sans</name>
+			<size>12</size>
+		</font>
+		<font place="OnScreenDisplay">
+			<name>sans</name>
+			<size>12</size>
+		</font>
+	</theme>
+
+	<windowSwitcher preview="yes" outlines="yes" unshade="yes">
+		<osd show="yes" style="thumbnail" output="all" thumbnailLabelFormat="%T" />
+		<fields>
+			<field content="icon" width="5%" />
+			<field content="desktop_entry_name" width="30%" />
+			<field content="title" width="65%" />
+		</fields>
+	</windowSwitcher>
+
+	<resistance>
+		<screenEdgeStrength>20</screenEdgeStrength>
+		<windowEdgeStrength>20</windowEdgeStrength>
+		<unSnapThreshold>20</unSnapThreshold>
+		<unMaximizeThreshold>150</unMaximizeThreshold>
+	</resistance>
+
+	<resize>
+		<popupShow>Never</popupShow>
+		<drawContents>yes</drawContents>
+		<minimumArea>8</minimumArea>
+	</resize>
+
+	<focus>
+		<followMouse>yes</followMouse>
+		<followMouseRequiresMovement>yes</followMouseRequiresMovement>
+		<raiseOnFocus>no</raiseOnFocus>
+		<raiseOnFocusDelay>0</raiseOnFocusDelay>
+	</focus>
+
+	<snapping>
+		<range inner="10" outer="10" />
+		<cornerRange>50</cornerRange>
+		<overlay enabled="yes">
+			<delay inner="500" outer="500" />
+		</overlay>
+		<topMaximize>yes</topMaximize>
+		<notifyClient>always</notifyClient>
+	</snapping>
+
+	<desktops>
+		<popupTime>1000</popupTime>
+		<initial>1_default</initial>
+		<names>
+			<name>1_default</name>
+			<name>2_dev</name>
+			<name>3_web</name>
+			<name>4_misc</name>
+		</names>
+	</desktops>
+
+	<regions>
+		<region name="top-left" x="0%" y="0%" height="50%" width="50%" />
+		<region name="top" x="0%" y="0%" height="50%" width="100%" />
+		<region name="top-right" x="50%" y="0%" height="50%" width="50%" />
+		<region name="left" x="0%" y="0%" height="100%" width="50%" />
+		<region name="center" x="10%" y="10%" height="80%" width="80%" />
+		<region name="right" x="50%" y="0%" height="100%" width="50%" />
+		<region name="bottom-left" x="0%" y="50%" height="50%" width="50%" />
+		<region name="bottom" x="0%" y="50%" height="50%" width="100%" />
+		<region name="bottom-right" x="50%" y="50%" height="50%" width="50%" />
+	</regions>
+
+	<keyboard>
+		<layoutScope>global</layoutScope>
+		<repeatRate>40</repeatRate>
+		<repeatDelay>250</repeatDelay>
+
+		<!-- Apps -->
+		<keybind key="W-Tab">
+			<action name="Execute" command="rofi -show drun" />
+		</keybind>
+		<keybind key="W-q">
+			<action name="Execute" command="kitty" />
+		</keybind>
+		<keybind key="W-f">
+			<action name="Execute" command="kitty yazi" />
+		</keybind>
+		<keybind key="W-b">
+			<action name="Execute" command="zen" />
+		</keybind>
+		<keybind key="W-z">
+			<action name="Execute" command="kitty musicfox" />
+		</keybind>
+		<keybind key="W-S-z">
+			<action name="Execute" command="musicfox" />
+		</keybind>
+
+		<!-- Menus -->
+		<keybind key="W-m">
+			<action name="ShowMenu" menu="root-menu">
+				<atCursor>yes</atCursor>
+			</action>
+		</keybind>
+		<keybind key="W-S-m">
+			<action name="ShowMenu" menu="client-menu">
+				<atCursor>yes</atCursor>
+			</action>
+		</keybind>
+
+		<!-- Custom scripts -->
+		<keybind key="W-w">
+			<action name="Execute" command="zsh -c $TOAAM_DOTFILES/tools/wall.sh" />
+		</keybind>
+		<keybind key="W-S-w">
+			<action name="Execute" command="zsh -c '$TOAAM_DOTFILES/tools/wall.sh -w'" />
+		</keybind>
+		<keybind key="W-C-w">
+			<action name="Execute" command="zsh -c '$TOAAM_DOTFILES/tools/wall.sh -g'" />
+		</keybind>
+		<keybind key="W-r">
+			<action name="Execute" command="zsh -c $TOAAM_DOTFILES/tools/refresh.sh" />
+			<action name="Reconfigure" />
+		</keybind>
+
+		<!-- Window management -->
+		<keybind key="W-c">
+			<action name="Close" />
+		</keybind>
+		<keybind key="W-v">
+			<action name="ToggleMaximize" />
+		</keybind>
+		<keybind key="W-d">
+			<action name="ToggleDecorations" />
+		</keybind>
+
+		<keybind key="W-j">
+			<action name="NextWindow" />
+		</keybind>
+		<keybind key="W-k">
+			<action name="PreviousWindow" />
+		</keybind>
+
+		<!-- Window snapping -->
+		<keybind key="W-Left">
+			<action name="SnapToEdge" direction="left" combine="yes" />
+		</keybind>
+		<keybind key="W-Right">
+			<action name="SnapToEdge" direction="right" combine="yes" />
+		</keybind>
+		<keybind key="W-Up">
+			<action name="SnapToEdge" direction="up" combine="yes" />
+		</keybind>
+		<keybind key="W-Down">
+			<action name="SnapToEdge" direction="down" combine="yes" />
+		</keybind>
+
+		<!-- Workspaces -->
+		<keybind key="W-1">
+			<action name="GoToDesktop" to="1" />
+		</keybind>
+		<keybind key="W-2">
+			<action name="GoToDesktop" to="2" />
+		</keybind>
+		<keybind key="W-3">
+			<action name="GoToDesktop" to="3" />
+		</keybind>
+		<keybind key="W-4">
+			<action name="GoToDesktop" to="4" />
+		</keybind>
+		<keybind key="W-s">
+			<action name="GoToDesktop" to="4" toggle="yes" />
+		</keybind>
+
+		<keybind key="W-S-1">
+			<action name="SendToDesktop" to="1" />
+		</keybind>
+		<keybind key="W-S-2">
+			<action name="SendToDesktop" to="2" />
+		</keybind>
+		<keybind key="W-S-3">
+			<action name="SendToDesktop" to="3" />
+		</keybind>
+		<keybind key="W-S-4">
+			<action name="SendToDesktop" to="4" />
+		</keybind>
+		<keybind key="W-S-s">
+			<action name="SendToDesktop" to="4" />
+		</keybind>
+
+		<!-- Hardware keys -->
+		<keybind key="XF86AudioLowerVolume">
+			<action name="Execute" command="pactl set-sink-volume @DEFAULT_SINK@ -5%" />
+		</keybind>
+		<keybind key="XF86AudioRaiseVolume">
+			<action name="Execute" command="pactl set-sink-volume @DEFAULT_SINK@ +5%" />
+		</keybind>
+		<keybind key="XF86AudioMute">
+			<action name="Execute" command="pactl set-sink-mute @DEFAULT_SINK@ toggle" />
+		</keybind>
+	</keyboard>
+
+	<mouse>
+		<doubleClickTime>500</doubleClickTime>
+
+		<context name="Frame">
+			<mousebind button="W-Left" action="Press">
+				<action name="Focus" />
+				<action name="Raise" />
+			</mousebind>
+			<mousebind button="W-Left" action="Drag">
+				<action name="Move" />
+			</mousebind>
+			<mousebind button="W-Right" action="Press">
+				<action name="Focus" />
+				<action name="Raise" />
+			</mousebind>
+			<mousebind button="W-Right" action="Drag">
+				<action name="Resize" />
+			</mousebind>
+		</context>
+
+		<context name="Border">
+			<mousebind button="Left" action="Press">
+				<action name="Focus" />
+				<action name="Raise" />
+			</mousebind>
+			<mousebind button="Left" action="Drag">
+				<action name="Resize" />
+			</mousebind>
+		</context>
+
+		<context name="TitleBar">
+			<mousebind button="Left" action="Press">
+				<action name="Focus" />
+				<action name="Raise" />
+			</mousebind>
+			<mousebind button="Right" action="Click">
+				<action name="Focus" />
+				<action name="Raise" />
+			</mousebind>
+			<mousebind direction="Up" action="Scroll">
+				<action name="Unshade" />
+				<action name="Focus" />
+			</mousebind>
+			<mousebind direction="Down" action="Scroll">
+				<action name="Unfocus" />
+				<action name="Shade" />
+			</mousebind>
+		</context>
+
+		<context name="Title">
+			<mousebind button="Left" action="Drag">
+				<action name="Move" />
+			</mousebind>
+			<mousebind button="Left" action="DoubleClick">
+				<action name="ToggleMaximize" />
+			</mousebind>
+			<mousebind button="Right" action="Click">
+				<action name="ShowMenu" menu="client-menu" />
+			</mousebind>
+		</context>
+
+		<context name="Maximize">
+			<mousebind button="Left" action="Click">
+				<action name="ToggleMaximize" />
+			</mousebind>
+		</context>
+
+		<context name="Iconify">
+			<mousebind button="Left" action="Click">
+				<action name="Iconify" />
+			</mousebind>
+		</context>
+
+		<context name="Close">
+			<mousebind button="Left" action="Click">
+				<action name="Close" />
+			</mousebind>
+		</context>
+
+		<context name="Client">
+			<mousebind button="Left" action="Press">
+				<action name="Focus" />
+				<action name="Raise" />
+			</mousebind>
+			<mousebind button="Right" action="Press">
+				<action name="Focus" />
+				<action name="Raise" />
+			</mousebind>
+		</context>
+
+		<context name="Root">
+			<mousebind button="Right" action="Press">
+				<action name="ShowMenu" menu="root-menu" />
+			</mousebind>
+			<mousebind direction="Up" action="Scroll">
+				<action name="GoToDesktop" to="left" wrap="yes" />
+			</mousebind>
+			<mousebind direction="Down" action="Scroll">
+				<action name="GoToDesktop" to="right" wrap="yes" />
+			</mousebind>
+		</context>
+	</mouse>
+
+	<touch>
+		<mouseEmulation>no</mouseEmulation>
+	</touch>
+
+	<libinput>
+		<device category="default">
+			<tap>yes</tap>
+			<naturalScroll>no</naturalScroll>
+			<scrollFactor>1.0</scrollFactor>
+		</device>
+	</libinput>
+
+	<menu>
+		<ignoreButtonReleasePeriod>250</ignoreButtonReleasePeriod>
+		<showIcons>yes</showIcons>
+	</menu>
+
+	<magnifier>
+		<width>400</width>
+		<height>400</height>
+		<initScale>2.0</initScale>
+		<increment>0.2</increment>
+		<useFilter>yes</useFilter>
+	</magnifier>
+</labwc_config>

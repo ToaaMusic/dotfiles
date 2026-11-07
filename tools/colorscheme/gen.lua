@@ -15,8 +15,8 @@ end
 
 --config
 local config = require("Config").load_tdf_config()
-local gen_config = config.color_auto_gen
-if not gen_config.enable then return end
+local gen_opts = config.color_auto_gen
+if not gen_opts.enable then return end
 
 local getopt = require("getopt")
 local logger = require("logger").get_logger()
@@ -60,12 +60,12 @@ local dominants = sample.top_colors(img, {
 })
 
 -- 3. Generate Scheme
-local scheme = new_Scheme(dominants, gen_config)
+local scheme = new_Scheme(dominants, gen_opts)
 
 -- 4. Output
-write.invoke(scheme)
+write.invoke(scheme, gen_opts)
 
-if gen_config.notify then
+if gen_opts.notify then
 	os.execute([[
 WALL=$("$TOAAM_DOTFILES/tools/kv.sh" "$TOAAM_DOTFILES/.cache/state" wallpaper 2>/dev/null) &&
 notify-send "Wallpaper Changed" "$(basename "$WALL")" -i "$WALL"

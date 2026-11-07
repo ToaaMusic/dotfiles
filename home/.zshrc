@@ -11,6 +11,11 @@ setopt inc_append_history
 setopt hist_find_no_dups
 # setopt hist_ignore_all_dups
 # setopt hist_ignore_dups
+unsetopt beep
+
+if command -v atuin >/dev/null 2>&1; then
+	eval "$(atuin init zsh)"
+fi
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
@@ -53,13 +58,13 @@ function todo() {
 	lua "$script" "$@"
 }
 
-function ro() {
-	local script="$TOAAM_DOTFILES/tools/router/router.lua"
-	lua "$script" "$@"
-}
-
 function bar() {
 	local script="$TOAAM_DOTFILES/tools/bar.sh"
+	"$script" "$@"
+}
+
+function wallpp() {
+	local script="$TOAAM_DOTFILES/tools/wall.sh"
 	"$script" "$@"
 }
 
@@ -67,11 +72,6 @@ function bar() {
 function tdf() {
 	# local opener=${1:-${GUI_EDITOR:-nvim}}
 	nvim "$TOAAM_DOTFILES"
-}
-
-# cd repos dir
-function repos() {
-	cd ~/repos/
 }
 
 # transparent cava
@@ -93,7 +93,6 @@ alias zed=zeditor
 alias oc=opencode
 alias sd=shutdown
 alias dn=dotnet
-alias ectl=/home/ToaaM/repos/ebrain-ai/.build/ctl/EbrainEngine.Ctl
 
 # prefix
 _CURRENT_PREFIX=""

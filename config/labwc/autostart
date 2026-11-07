@@ -1,0 +1,3 @@
+kanshi >/dev/null 2>&1 &
+fcitx5 --replace -d
+swaybg -i "$TOAAM_DOTFILES/.cache/wall_cache.png" -m fill >/dev/null 2>&1 &

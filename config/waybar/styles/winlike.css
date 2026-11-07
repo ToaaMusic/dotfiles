@@ -1,40 +1,30 @@
 @import "default.css";
 @import "colors.g.css";
 
-@define-color bg rgb(0, 0, 0);
-@define-color bg_main alpha(@bg, 0.85);
-@define-color bg_main_tooltip alpha(@bg, 0.7);
-@define-color bg_hover rgba(200, 200, 200, 0.3);
-@define-color bg_active rgba(100, 100, 100, 0.5);
-@define-color border_main rgba(255, 255, 255, 0.2);
-@define-color content_main white;
-@define-color content_inactive rgba(255, 255, 255, 0.25);
-
 * {
   text-shadow: none;
   box-shadow: none;
   border: none;
   border-radius: 0;
-  font-family: "Segoe UI", "Ubuntu";
   font-weight: 600;
   font-size: 12.7px;
 }
 
 window#waybar {
-  background: @bg_main;
-  border-top: 1px solid @border_main;
-  color: @content_main;
+  background: alpha(@bg-common, 0.85);
+  border-top: 1px solid @bg-border;
+  color: @fg-common;
 }
 
 tooltip {
-  background: @bg_main_tooltip;
+  background: alpha(@bg-common, 0.75);
   border-radius: 5px;
   border-width: 1px;
   border-style: solid;
-  border-color: @border_main;
+  border-color: @bg-border;
 }
 tooltip label {
-  color: @content_main;
+  color: @fg-common;
 }
 
 #custom-start {
@@ -46,7 +36,7 @@ tooltip label {
 }
 
 #custom-start:hover {
-  background: @bg_hover;
+  background: alpha(@bg-border, 0.5);
 }
 
 #taskbar button {
@@ -74,11 +64,11 @@ tooltip label {
     transparent 70%
   );
   border-image-slice: 1;
-  background: @bg_active;
+  background: alpha(@bg-active, 0.5);
 }
 
 #taskbar button:hover {
-  background: @bg_hover;
+  background: alpha(@bg-hover, 0.5);
 }
 
 #custom-tray-expander,
@@ -109,11 +99,10 @@ tooltip label {
   padding: 3px;
 }
 #tray > widget:hover {
-  background: @bg_hover;
+  background: alpha(@bg-hover, 0.5);
 }
 
 #pulseaudio {
-  font-family: "JetBrainsMono Nerd Font";
   padding-left: 3px;
   padding-right: 3px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -130,5 +119,5 @@ tooltip label {
 #custom-im:hover,
 #pulseaudio:hover,
 #clock:hover {
-  background: @bg_hover;
+  background: alpha(@bg-hover, 0.5);
 }

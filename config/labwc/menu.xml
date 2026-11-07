@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<openbox_menu>
+	<menu id="root-menu" label="">
+		<item label="Reconfigure" icon="system-run-symbolic">
+			<action name="Reconfigure" />
+		</item>
+
+		<separator />
+
+		<item label="Terminal" icon="kitty">
+			<action name="Execute" command="kitty" />
+		</item>
+
+		<item label="Web browser" icon="zen-browser">
+			<action name="Execute" command="zen" />
+		</item>
+
+		<item label="Files" icon="yazi">
+			<action name="Execute" command="kitty yazi" />
+		</item>
+
+		<item label="Apps" icon="rofi">
+			<action name="Execute" command="rofi -show drun" />
+		</item>
+
+		<separator />
+
+		<menu id="wall" label="Wallpaper" icon="preferences-desktop-wallpaper-symbolic">
+			<item label="Random" icon="media-playlist-repeat-symbolic">
+				<action name="Execute" command="~/dotfiles/tools/wall.sh" />
+			</item>
+
+			<item label="Random from web" icon="network-wireless-symbolic">
+				<action name="Execute" command="~/dotfiles/tools/wall.sh -w" />
+			</item>
+
+			<item label="Choose" icon="system-search-symbolic">
+				<action name="Execute" command="~/dotfiles/tools/wall.sh -g" />
+			</item>
+		</menu>
+
+		<separator />
+
+		<menu id="help" label="Help" icon="dialog-information-symbolic">
+			<separator label="Online Help" />
+
+			<item label="labwc.github.io" name.action="Execute"
+				command.action="zen-browser https://labwc.github.io" icon="web-browser-symbolic" />
+
+			<separator label="Man Pages" />
+
+			<item label="labwc(1)" name.action="Execute"
+				command.action="zen-browser https://labwc.github.io/labwc.1.html"
+				icon="help-contents-symbolic" />
+
+			<item label="labwc-config(5)" name.action="Execute"
+				command.action="zen-browser https://labwc.github.io/labwc-config.5.html"
+				icon="help-contents-symbolic" />
+
+			<item label="labwc-theme(5)" name.action="Execute"
+				command.action="zen-browser https://labwc.github.io/labwc-theme.5.html"
+				icon="help-contents-symbolic" />
+
+			<item label="labwc-menu(5)" name.action="Execute"
+				command.action="zen-browser https://labwc.github.io/labwc-menu.5.html"
+				icon="help-contents-symbolic" />
+
+			<item label="labwc-actions(5)" name.action="Execute"
+				command.action="zen-browser https://labwc.github.io/labwc-actions.5.html"
+				icon="help-contents-symbolic" />
+
+			<item label="labnag(1)" name.action="Execute"
+				command.action="zen-browser https://labwc.github.io/labnag.1.html"
+				icon="help-contents-symbolic" />
+		</menu>
+
+		<menu id="Config" label="Config" icon="preferences-system-symbolic">
+			<item label="labwc" name.action="Execute"
+				command.action="kitty nvim ~/.config/labwc" icon="text-editor-symbolic" />
+
+			<item label="rc.xml" name.action="Execute"
+				command.action="kitty nvim ~/.config/labwc/rc.xml" icon="text-editor-symbolic" />
+
+			<item label="autostart" name.action="Execute"
+				command.action="kitty nvim ~/.config/labwc/autostart" icon="text-editor-symbolic" />
+
+			<item label="menu.xml" name.action="Execute"
+				command.action="kitty nvim ~/.config/labwc/menu.xml" icon="text-editor-symbolic" />
+
+			<item label="environment" name.action="Execute"
+				command.action="kitty nvim ~/.config/labwc/environment" icon="text-editor-symbolic" />
+		</menu>
+
+		<menu id="Exit" label="Exit" icon="system-log-out-symbolic">
+			<item label="Reconfigure" name.action="Reconfigure" icon="system-run-symbolic" />
+
+			<item label="Logout" icon="application-exit-symbolic">
+				<action name="If">
+					<prompt message="Do you really want to exit the compositor?" />
+					<then>
+						<action name="Exit" />
+					</then>
+				</action>
+			</item>
+		</menu>
+
+	</menu>
+</openbox_menu>

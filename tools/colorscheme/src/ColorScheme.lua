@@ -393,8 +393,9 @@ end
 ---@field notify? boolean Send notification or not
 ---@field theme_mode? "auto"|"invert"|"dark"|"light"
 ---@field syntax_theme? string|"Sonokai"|"RiderIslands"|"Material"|"TokyoNight" Force name of the syntax theme
----@field tasks? GenerationTask[] List of serialization tasks
+---@field tasks? table<string, GenerationTask> List of serialization tasks
 ---@field force? tdf.ColorSchemeAllNullable Force use the fields in this scheme, only bg.common and fg.common are worked for now
+---@field on_reload? fun(cs: tdf.ColorScheme)
 
 ---@package
 ---Factory function creates a ColorScheme instance from dominant color list.

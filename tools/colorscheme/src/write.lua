@@ -108,6 +108,7 @@ local scheme = {
 
 ]]
 ---@class GenerationTask
+---@field enabled? boolean Whether to enable this task, default true
 ---@field path string The target path
 ---@field type? string|"flat"|"lua"|"gtk_css" The type of file to generate, which decides the build-in generation function to use
 ---@field flatOpts? FlatSerializeOpts Flat serialize options, only used when type is "flat"
@@ -344,6 +345,9 @@ end
 ---@param self GenerationTask
 ---@param scheme tdf.ColorScheme
 function GenerationTask:run(scheme)
+	if self.enabled == false then
+		return
+	end
 	local path = self.path
 	local func = self.func
 	local header = self.header or ""
@@ -421,20 +425,15 @@ function M.dump_mako(colors, msg)
 end
 
 ---@param p tdf.ColorScheme
-function M.invoke(p)
-	local cag_config = require("Config").load_tdf_config().color_auto_gen
-	---@diagnostic disable-next-line: need-check-nil
-	for _, gen_task in ipairs(cag_config.tasks) do
+---@param opts tdf.ColorAutoGenOpts
+function M.invoke(p, opts)
+	for _, gen_task in pairs(opts.tasks) do
 		GenerationTask.run(gen_task, p)
 	end
 
-	-- reload
-	os.execute("hyprctl reload config-only")
-	os.execute("pkill -SIGUSR2 waybar") -- TODO: 不知道为什么waybar的css引用嵌套多了重载没效果，需要手动
-	os.execute("makoctl reload >/dev/null 2>&1")
-	os.execute("fcitx5 -rd >/dev/null 2>&1")
-	os.execute("pkill -SIGUSR1 kitty")
-	os.execute("pkill -SIGUSR1 cava")
+	if opts.on_reload ~= nil then
+		opts.on_reload(p)
+	end
 end
 
 M.serialize_lua = serialize_lua

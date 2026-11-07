@@ -44,7 +44,13 @@ EOF
 # }}}
 
 set_wall() {
-	hyprctl hyprpaper wallpaper ",$1"
+	if [[ -n "$HYPRLAND_INSTANCE_SIGNATURE" ]]; then
+		hyprctl hyprpaper wallpaper ",$1"
+	else
+		pkill -x swaybg 2>/dev/null
+		swaybg -i "$1" -m fill >/dev/null 2>&1 &
+		disown
+	fi
 
 	# cache
 	KV_FILE="$cache_dir/state"
@@ -111,8 +117,9 @@ main() {
 
 	if [[ $opt_web == "true" ]]; then
 		WALL_CACHE="$cache_dir/wall_cache.png"
+		WALL_URL=$(lua $include_scripts_dir/shared/Config.lua wall_url)
 
-		curl -sfL --max-time 10 "https://api.yppp.net/pc.php" -o $WALL_CACHE
+		curl -sfL --max-time 10 $WALL_URL -o $WALL_CACHE
 
 		if [ -f "$WALL_CACHE" ]; then
 			set_wall $WALL_CACHE

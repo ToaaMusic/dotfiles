@@ -4,6 +4,7 @@
 include_scripts_dir="$TOAAM_DOTFILES/tools"
 cache_dir="$TOAAM_DOTFILES/.cache"
 bar_name="$1"
+bar_opt="$2"
 
 # check null
 if [[ -z "$bar_name" ]]; then
@@ -27,4 +28,6 @@ else
 	waybar -c "$bar_config" &
 fi
 
-$include_scripts_dir/kv.sh $cache_dir/state "bar" $bar_name
+if [[ "$bar_opt" != "--no-cache" ]]; then
+	$include_scripts_dir/kv.sh $cache_dir/state "bar" $bar_name
+fi
