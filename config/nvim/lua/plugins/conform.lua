@@ -27,6 +27,7 @@ return {
 				vue = { "prettier" },
 				yaml = { "prettier" }, -- Or "yamlfmt" / "yamllint" if installed
 				xml = { "lsp" },
+				python = { "lsp" }
 			},
 			default_format_opts = {
 				lsp_format = "fallback"

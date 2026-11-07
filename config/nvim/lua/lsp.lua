@@ -8,7 +8,8 @@ vim.lsp.enable({
 	"glsl",
 	"bashls",
 	"jsonls",
-	"lemminx"
+	"lemminx",
+	"py"
 })
 
 ---@type vim.diagnostic.Opts
