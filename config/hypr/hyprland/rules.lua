@@ -31,6 +31,9 @@ wr({ name = "move-hyprland-run", match = { class = "hyprland-run" }, move = "20 
 
 -- custom
 
+-- Waydroid: fullscreen automatically
+wr({ name = "waydroid-fullscreen", match = { class = "Waydroid" }, fullscreen = true })
+
 -- Borderless workspace w[tv1]
 wsr({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
 wr({ name = "no-border-wtv1", match = { float = false, workspace = "w[tv1]" }, border_size = 0, rounding = 0 })
@@ -44,19 +47,10 @@ wr({ name = "no-blur-ebrain-title", match = { title = "ebrain-ai" }, no_blur = t
 
 -- floating
 local float_size = { "(monitor_w*0.75)", "(monitor_h*0.75)" }
-wr({ match = { class = "kitty" }, center = true, float = true, size = float_size })
-wr({ match = { title = "^(Copying — Dolphin)$" }, move = { 40, 80 } })
-wr({ match = { class = "^(org.kde.dolphin)$" }, center = true, float = true, size = float_size })
-wr({ match = { title = "^(Open File)(.*)$" }, center = true, float = true })
-wr({ match = { title = "^(Select a File)(.*)$" }, center = true, float = true })
-wr({ match = { title = "^(Open Folder)(.*)$" }, center = true, float = true })
-wr({ match = { title = "^(Save As)(.*)$" }, center = true, float = true })
-wr({ match = { title = "^(Library)(.*)$" }, center = true, float = true })
-wr({ match = { title = "^(File Upload)(.*)$" }, center = true, float = true })
-wr({ match = { title = "^(.*)(wants to save)$" }, center = true, float = true })
-wr({ match = { title = "^(.*)(wants to open)$" }, center = true, float = true })
-wr({ match = { class = "^(one.alynx.showmethekey)$" }, float = true, no_blur = true, border_size = 0 })
+-- wr({ match = { class = "kitty" }, center = true, float = true, size = float_size })
 wr({ match = { title = "Volume Control" }, center = true, float = true, size = { "(monitor_w*0.50)", "(monitor_h*0.25)" } })
+wr({ match = { title = "^(Yazi:)(.*)$" }, center = true, float = true, size = float_size })
+wr({ match = { title = "termfilechooser" }, center = true, float = true, size = float_size })
 
 -- picture-in-picture
 wr({
@@ -90,3 +84,4 @@ wr({
 
 -- layer rule
 lr({ match = { namespace = "notifications" }, animation = "slide right" })
+lr({ match = { namespace = "rofi" }, animation = "slide bottom" })

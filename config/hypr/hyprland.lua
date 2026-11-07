@@ -71,7 +71,21 @@ hl.config({
 
 			popups = true,
 			input_methods = true,
+
+			variant = "drops",
 		},
+
+		glow = {
+			enabled = false,
+		},
+
+		motion_blur = {
+			enabled = false,
+		},
+
+		wobble = {
+			enabled = true,
+		}
 	},
 
 	animations = {

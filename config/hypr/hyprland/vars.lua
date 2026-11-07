@@ -1,7 +1,7 @@
 return {
 	terminal    = "kitty",
 	fileManager = "yazi",
-	menu        = "rofi -show drun",
+	menu        = "pkill rofi || rofi -show drun",
 	music       = "musicfox",
 	browser     = "zen",
 	editor      = "zeditor",

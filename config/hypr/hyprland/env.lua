@@ -32,7 +32,7 @@ env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 env("NVD_BACKEND", "direct")
 
 -- qt
-env("QT_QPA_PLATFORMTHEME", "qt6ct")
+env("QT_QPA_PLATFORMTHEME", "kvantum")
 
 -- xdg
 env("XDG_CURRENT_DESKTOP", "Hyprland")
