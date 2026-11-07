@@ -1,8 +1,13 @@
+configuration {
+	modes: "drun,window";
+	window-thumbnail: true;
+	location: 6;
+}
+
 // --------------- global ---------------- //
 
 * {
   // Fallback values used when the generated colors.g.rasi is absent.
-  // They are overridden by @import below whenever it exists.
   bg-common:               #282738;
   fg-common:               #E5B9C6;
   bg-border:               #4A4761;
@@ -13,174 +18,172 @@
 
 // !!! DO NOT remove this or put it before "*{}" 
 // unless you want rofi to ignore the color generator from wallpaper
-?import "~/.config/rofi/colors.g.rasi" 
+?import "../colors.g.rasi" 
 
 * {
+	// alias
 	bg:                 @bg-common;
 	fg:                 @fg-common;
+
   background-color:   @bg;
   text-color:         @fg;
 }
 
 window {
-  background-color: @bg;
-  border-color: @bg-border;
-  border:       2px;
-  border-radius: 12px;
-  width: 600px;
+  border-color:  @bg-border;
+  border:        2px 2px 0 2px;
+  border-radius: 12px 12px 0 0;
+  width:         600px;
 }
 
 // --------- optional sub content ---------- //
 
 mainbox {
-  children: [message,inputbar,listview];
+  children: [message,listview,inputbar];
 }
 
 // --------------- message ----------------- //
 
 message {
-    enabled:                     true;
-    margin:                      0px 100px;
-    padding:                     15px;
-    border:                      0px solid;
-    border-radius:               15px;
-    border-color:                inherit;
-    background-color:            inherit;
-    text-color:                  inherit;
-    size:                        400em;
+  enabled:                     true;
+  margin:                      0px 100px;
+  padding:                     15px;
+  border:                      0px solid;
+  border-radius:               15px;
+  border-color:                inherit;
+  background-color:            inherit;
+  text-color:                  inherit;
+  size:                        400em;
 }
 textbox {
-    background-color:            inherit;
-    text-color:                  inherit;
-    vertical-align:              0.5;
-    horizontal-align:            0.5;
-    placeholder-color:           inherit;
-    blink:                       true;
-    markup:                      true;
-    size:                        400em;
+  background-color:            inherit;
+  text-color:                  inherit;
+  vertical-align:              0.5;
+  horizontal-align:            0.5;
+  placeholder-color:           inherit;
+  blink:                       true;
+  markup:                      true;
+  size:                        400em;
 }
 error-message {
-    padding:                     12px;
-    border:                      0px solid;
-    border-radius:               0px;
-    border-color:                inherit;
-    background-color:            inherit;
-    text-color:                  inherit;
+  padding:                     12px;
+  border:                      0px solid;
+  border-radius:               0px;
+  border-color:                inherit;
+  background-color:            inherit;
+  text-color:                  inherit;
 }
 
 // --------------- inputbar ----------------- //
-
 inputbar {
-  padding: 12px;
+  padding: 0;
+	margin: 6px;
   spacing: 0.4em;
-  children: [entry,overlay,case-indicator];
+  children: [entry,overlay];
 }
+
 entry {
-    placeholder: "";
-    placeholder-color: @bg;
-    cursor: text;
-    background-color: @bg-hover;
-    padding: 8px;
-    border-radius: 5px;
-    text-color: @fg;
-  }
+  placeholder: "Type to search...";
+  placeholder-color: @brand;
+  cursor: text;
+  background-color: @bg-hover;
+  padding: 8px;
+  border-radius: 5px;
+  text-color: @fg;
+}
 
 // --------------- listview ----------------- //
 
 listview {
-  columns: 1;
-  lines:   5;
-  spacing: 10px;
-  scrollbar:    false;
-  padding: 12px;
-  border:       0;
+  columns:   1;
+  lines:     5;
+  spacing:   10px;
+  scrollbar: false;
+  padding:   6px;
+  border:    0;
+	require-input: true;
+  fixed-height: false;
 }
 scrollbar {
-    width:        4px ;
-    border:       0;
-    handle-color: @brand;
-    handle-width: 8px ;
-    padding:      0;
+  width:        4px ;
+  border:       0;
+  handle-color: @brand;
+  handle-width: 8px ;
+  padding:      0;
 }
-
-// ------------ listview - item ------------ //
 
 element {
   background: transparent;
   children: [ element-icon, element-text ];
+	border-radius: 5px;
+  padding: 5px;
 }
-element,element-text,element-icon, button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
+element,element-text,element-icon,button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
-
-element {
-    border-radius: 5px;
-    padding: 5px;
-}
-element-text {
-    background-color: transparent;
-}
-
 element normal.normal {
-    background-color: @bg;
-    text-color:       @fg;
+  background-color: @bg;
+  text-color:       @fg;
 }
 element.normal.urgent {
-    background-color: @bg;
-    text-color:       @fg;
+  background-color: @bg;
+  text-color:       @fg;
 }
 element.normal.active {
-    background-color: @bg;
-    text-color:       @fg;
+  background-color: @bg;
+  text-color:       @fg;
 }
 element.selected.normal {
-    background-color: @brand;
-    border-color:     @brand;
-    text-color:       @bg;
+  background-color: @brand;
+  border-color:     @brand;
+  text-color:       @bg;
 }
 element.selected.urgent {
-    background-color: @brand;
-    border-color:     @brand;
-    text-color:       @bg;
+  background-color: @brand;
+  border-color:     @brand;
+  text-color:       @bg;
 }
 element.selected.active {
-    background-color: @brand;
-    border-color:     @brand;
-    text-color:       @bg;
+  background-color: @brand;
+  border-color:     @brand;
+  text-color:       @bg;
 }
 element.alternate.normal {
-    background-color: @bg;
-    text-color:       @fg;
+  background-color: @bg;
+  text-color:       @fg;
 }
 element.alternate.urgent {
-    background-color: @bg;
-    text-color:       @fg;
+  background-color: @bg;
+  text-color:       @fg;
 }
 element.alternate.active {
-    background-color: @bg;
-    text-color:       @fg;
+  background-color: @bg;
+  text-color:       @fg;
 }
-
-
 element-text.selected.normal {
-    background-color: @brand;
-    border-color:     @brand;
-    text-color:       @bg;
+  background-color: @brand;
+  border-color:     @brand;
+  text-color:       @bg;
 }
 element-text.selected.urgent {
-    background-color: @brand;
-    border-color:     @brand;
-    text-color:       @bg;
+  background-color: @brand;
+  border-color:     @brand;
+  text-color:       @bg;
 }
 element-text.selected.active {
-    background-color: @brand;
-    border-color:     @brand;
-    text-color:       @bg;
+  background-color: @brand;
+  border-color:     @brand;
+  text-color:       @bg;
 }
+
+// --------------- mode switcher ----------------- //
+
 mode-switcher {
-    border:  0px;
-    spacing: 0px;
-    expand: true;
+	background-color: @bg-elevated;
+	padding: 5px;
+  border:  0px;
+  spacing: 0px;
+  expand: false;
 }
