@@ -1,29 +1,26 @@
-# https://github.com/sxyazi/yazi/blob/shipped/yazi-config/preset/yazi-default.toml
-# https://yazi-rs.github.io/docs/configuration/yazi
+# default: https://github.com/sxyazi/yazi/blob/shipped/yazi-config/preset/yazi-default.toml
+# docs: https://yazi-rs.github.io/docs/configuration/yazi
 
 [mgr]
-show_hidden = true
 ratio = [1, 2, 4] # 至少一列，分母可变
 
 sort_translit = true
+
 linemode = "size"
 
+show_hidden = true
+
 scrolloff = 200
-title_format = ""
+
+[preview]
+wrap = "yes"
 
 [opener]
-edit = [
-  { run = 'nvim %s', block = true, for = "unix" },
-]
-run = [
+run_appimage = [
   { run = 'chmod +x %s; %s --appimage-extract-and-run', desc = "Run AppImage", for = "unix" },
 ]
 
 [open]
 prepend_rules = [
-  { url = "*.AppImage", use = "run" },
-  { url = "*.appimage", use = "run" },
+  { url = "*.AppImage", use = "run_appimage" },
 ]
-
-[preview]
-wrap = "yes"

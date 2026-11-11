@@ -28,10 +28,9 @@ op.clipboard = "unnamedplus"
 
 -- fold
 wo.foldenable = true
--- wo.foldmethod = "expr"
--- wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
--- wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
--- wo.foldlevel = 99
+wo.foldmethod = "expr"
+wo.foldexpr = "v:lua.vim.lsp.foldexpr()"
+wo.foldlevel = 99
 -- wo.foldnestmax = 5
 -- op.foldmarker = "#region,#endregion"
 op.foldtext = "'> ' . getline(v:foldstart)"
