@@ -16,7 +16,7 @@
 	</placement>
 
 	<theme>
-		<name>Default</name>
+		<name>auto_gen</name>
 		<icon>Adwaita</icon>
 		<fallbackAppIcon>labwc</fallbackAppIcon>
 		<titlebar>

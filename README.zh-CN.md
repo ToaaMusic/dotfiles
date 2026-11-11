@@ -109,6 +109,12 @@ config
 │   ├── hyprlock.conf           hyprlock
 │   ├── hyprpaper.conf          hyprpaper
 │   └── README.md
+├── labwc
+│   ├── autostart               kanshi, fcitx5, swaybg, tools/kv.sh
+│   ├── environment
+│   ├── menu.xml                kitty, rofi, tools/wall.sh
+│   ├── rc.xml                  rofi, kitty, musicfox, tools/
+│   └── themerc-override
 ├── kitty
 ├── mako
 ├── nvim
