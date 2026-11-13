@@ -2,29 +2,17 @@ config/cava/themes
 config/cava/shaders
 
 # cache
-# config/fcitx5/conf/cached_layouts
 /.cache
 cache.conf
 
 # auto generated files
 g.*
 *.g.*
-config/fcitx5/themes/auto-gen/theme.conf
-
-# ide
-
-# unready
-fcitx5/
-ebrain-ai/
-tools/router/
-tools/gui/
-/config.lua
-tools/colorscheme/TODO.md
 
 # log
 logs/
 log/
 
 # personal files
-others/
+/config.lua
 test.ppm

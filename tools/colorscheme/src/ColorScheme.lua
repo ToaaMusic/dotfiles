@@ -1,6 +1,9 @@
 -- ColorScheme.lua
 -- tdf.ColorScheme class definition.
 
+-- vim:foldmethod=marker
+-- vim:foldmarker=#region,#endregion
+
 local h = require("color_helper")
 local s = require("strategy")
 ---@diagnostic disable-next-line: unused-local

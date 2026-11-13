@@ -1,6 +1,9 @@
 -- write.lua
 -- write tdf.ColorScheme to config files
 
+-- vim:foldmethod=marker
+-- vim:foldmarker=#region,#endregion
+
 local h = require("color_helper")
 
 local M = {}
