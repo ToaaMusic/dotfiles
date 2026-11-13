@@ -98,10 +98,6 @@ local default_config = {
 				path = HOME .. "/.config/cava/themes/colors.g.theme",
 				type = "cava"
 			},
-			fcitx5 = {
-				path = HOME .. "/.local/share/fcitx5/themes/auto-gen/theme.conf",
-				type = "fcitx5"
-			},
 			kitty = {
 				header = "# Generated from wallpaper\n# Do not edit manually!\n\n",
 				path = HOME .. "/.config/kitty/colors.g.conf",
