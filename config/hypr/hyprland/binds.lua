@@ -43,6 +43,8 @@ local bind_map = {
 	[mainMod .. " + R"]              = hl.dsp.exec_cmd(include_scripts_dir .. "refresh.sh"),
 	-- [mainMod .. " + H"]              = hl.dsp.exec_cmd(include_scripts_dir .. "bar.sh -g"),
 	["Print"]                        = hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'),
+	[mainMod .. " + Print"]          = hl.dsp.exec_cmd(
+	'grim -g "$(slurp)" "$HOME/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png"'),
 
 	-- window management
 	[mainMod .. " + left"]           = hl.dsp.focus({ direction = "left" }),

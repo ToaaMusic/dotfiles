@@ -136,6 +136,9 @@
 		<keybind key="W-S-z">
 			<action name="Execute" command="musicfox" />
 		</keybind>
+		<keybind key="W-S-p">
+			<action name="Execute" command="pavucontrol" />
+		</keybind>
 
 		<!-- Menus -->
 		<keybind key="W-m">
@@ -238,6 +241,36 @@
 		</keybind>
 		<keybind key="XF86AudioMute">
 			<action name="Execute" command="pactl set-sink-mute @DEFAULT_SINK@ toggle" />
+		</keybind>
+		<keybind key="XF86AudioNext">
+			<action name="Execute" command="playerctl next" />
+		</keybind>
+		<keybind key="XF86AudioPrev">
+			<action name="Execute" command="playerctl previous" />
+		</keybind>
+		<keybind key="XF86AudioPlay">
+			<action name="Execute" command="playerctl play-pause" />
+		</keybind>
+		<keybind key="XF86AudioPause">
+			<action name="Execute" command="playerctl play-pause" />
+		</keybind>
+
+		<keybind key="Print">
+			<action name="Execute" command="sh -c 'grim -g &quot;$(slurp)&quot; - | wl-copy'" />
+		</keybind>
+		<keybind key="W-Print">
+			<action name="Execute"
+				command="sh -c 'grim -g &quot;$(slurp)&quot; ~/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png'" />
+		</keybind>
+
+		<keybind key="W-S-Return">
+			<action name="Execute" command="playerctl play-pause" />
+		</keybind>
+		<keybind key="W-bracketright">
+			<action name="Execute" command="playerctl next" />
+		</keybind>
+		<keybind key="W-bracketleft">
+			<action name="Execute" command="playerctl previous" />
 		</keybind>
 	</keyboard>
 
