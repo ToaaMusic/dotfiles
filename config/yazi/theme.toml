@@ -1,0 +1,6 @@
+[flavor]
+dark = "g"
+light = "g"
+
+[mgr]
+border_symbol = " "
