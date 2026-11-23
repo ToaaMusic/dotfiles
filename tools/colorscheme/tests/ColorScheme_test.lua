@@ -4,7 +4,6 @@ local write = require("write")
 local ppm = require("ppm")
 local sample = require("sample")
 local h = require("color_helper")
-local s = require("strategy")
 
 local tdf_dir = os.getenv("TOAAM_DOTFILES")
 
@@ -53,7 +52,7 @@ return function()
 	--]]
 
 	local brand = scheme.brand
-	write.dump_console(s.gradient(brand, black, 6))
+	write.dump_console(h.gradient(brand, black, 6))
 
 	print(require("write").serialize_gtk_css(scheme))
 end

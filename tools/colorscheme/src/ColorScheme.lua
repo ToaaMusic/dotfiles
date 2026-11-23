@@ -1,11 +1,17 @@
 -- ColorScheme.lua
 -- tdf.ColorScheme class definition.
 
--- vim:foldmethod=marker
--- vim:foldmarker=#region,#endregion
+-- vim:foldmethod=marker:foldmarker=#region,#endregion
 
 local h = require("color_helper")
-local s = require("strategy")
+local ensure_contrast = h.ensure_contrast
+local role_color = h.role_color
+local mix = h.mix
+local distance = h.get_distance
+local chroma = h.get_chroma
+local luma = h.get_luma
+local contrast = h.get_contrast
+
 ---@diagnostic disable-next-line: unused-local
 local logger = require("logger").get_logger()
 
@@ -132,6 +138,7 @@ ForegroundColors.__index = ForegroundColors
 local SyntaxColors = {}
 SyntaxColors.__index = SyntaxColors
 
+---@type table<string, tdf.SyntaxColors>
 local SyntaxThemes = {
 	["RiderIslands"] = {
 		comment        = "#85c46c",
@@ -287,15 +294,13 @@ function ColorScheme:build_ansi16()
 
 	-- local base_hue   = h.get_hue(brand) or 0
 	local base_hue    = 0
-	local black_slot  = dark and h.mix(bg, fg, 0.26) or h.mix(bg, fg, 0.68)
-	local white_slot  = dark and h.mix(fg, bg, 0.18) or h.mix(fg, bg, 0.30)
-
-	local role_color  = s.role_color
+	local black_slot  = dark and mix(bg, fg, 0.26) or mix(bg, fg, 0.68)
+	local white_slot  = dark and mix(fg, bg, 0.18) or mix(fg, bg, 0.30)
 
 	---@type string[]
 	local normal      = {}
 	local hue_offsets = { 15, 135, 60, 225, 300, 185 }
-	normal[1]         = s.ensure_contrast_soft(black_slot, bg, 1.8, 0.18)
+	normal[1]         = ensure_contrast(black_slot, bg, 1.8, 0.18)
 	for i = 2, 7 do
 		normal[i] = role_color(
 			candidates,
@@ -309,15 +314,15 @@ function ColorScheme:build_ansi16()
 			brand
 		)
 	end
-	normal[8] = s.ensure_contrast(white_slot, bg, 4.5)
+	normal[8] = ensure_contrast(white_slot, bg, 4.5)
 
 	---@type string[]
 	local bright = {}
-	bright[1] = s.ensure_contrast_soft(h.mix(normal[1], fg, dark and 0.28 or 0.18), bg, 2.4, 0.16)
+	bright[1] = ensure_contrast(mix(normal[1], fg, dark and 0.28 or 0.18), bg, 2.4, 0.16)
 	for i = 2, 7 do
-		bright[i] = s.ensure_contrast_soft(h.mix(normal[i], fg, dark and 0.14 or 0.10), bg, 4.0, 0.14)
+		bright[i] = ensure_contrast(mix(normal[i], fg, dark and 0.14 or 0.10), bg, 4.0, 0.14)
 	end
-	bright[8] = s.ensure_contrast(fg, bg, 7.0)
+	bright[8] = ensure_contrast(fg, bg, 7.0)
 
 	self.ansi16 = Ansi16.new({
 		Black         = normal[1],
@@ -352,25 +357,25 @@ function ColorScheme:build_syntax(theme)
 	local bg = self.bg.common
 	local fg = self.fg.common
 	self.syntax = {
-		comment        = h.mix(fg, bg, 0.5),
+		comment        = mix(fg, bg, 0.5),
 		operator       = self.fg.subtle,
 		punctuation    = self.fg.subtle,
-		constant       = s.ensure_contrast_soft(h.mix(A.Yellow, A.Red, 0.25), bg, 4.2, 0.14),
+		constant       = ensure_contrast(h.mix(A.Yellow, A.Red, 0.25), bg, 4.2, 0.14),
 		string         = A.Green,
 		number         = A.Yellow,
-		bool           = s.ensure_contrast_soft(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
+		bool           = ensure_contrast(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
 		variable       = self.fg.hover,
 		func           = A.Cyan,
-		func_call      = s.ensure_contrast_soft(h.mix(A.Cyan, fg, 0.10), bg, 4.8, 0.14),
+		func_call      = ensure_contrast(h.mix(A.Cyan, fg, 0.10), bg, 4.8, 0.14),
 		keyword        = A.Magenta,
-		keyword_flow   = s.ensure_contrast_soft(h.mix(A.Yellow, A.Red, 0.20), bg, 4.4, 0.14),
-		keyword_return = s.ensure_contrast_soft(h.mix(A.Magenta, A.Red, 0.35), bg, 4.6, 0.14),
+		keyword_flow   = ensure_contrast(h.mix(A.Yellow, A.Red, 0.20), bg, 4.4, 0.14),
+		keyword_return = ensure_contrast(h.mix(A.Magenta, A.Red, 0.35), bg, 4.6, 0.14),
 		macro          = A.Red,
 		type           = A.Blue,
 
-		namespace      = s.ensure_contrast_soft(h.mix(A.Blue, A.Magenta, 0.32), bg, 4.4, 0.14),
-		builtin        = s.ensure_contrast_soft(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
-		parameter      = s.ensure_contrast_soft(h.mix(A.Cyan, A.Blue, 0.38), bg, 4.4, 0.14),
+		namespace      = ensure_contrast(h.mix(A.Blue, A.Magenta, 0.32), bg, 4.4, 0.14),
+		builtin        = ensure_contrast(h.mix(A.Red, A.Yellow, 0.45), bg, 4.4, 0.14),
+		parameter      = ensure_contrast(h.mix(A.Cyan, A.Blue, 0.38), bg, 4.4, 0.14),
 		property       = A.Cyan,
 	}
 	return self
@@ -420,14 +425,14 @@ function ColorScheme.from_dominants(dominants, opts)
 	local fg_force = force.fg and force.fg.common or nil
 
 	-- sort by luma (dark -> light)
-	local sorted = s.unique_colors(dominants)
+	local sorted = h.unique_colors(dominants)
 	table.sort(sorted, function(a, b)
-		return h.get_luma(a) < h.get_luma(b)
+		return luma(a) < luma(b)
 	end)
 
 	-- dark theme or not
 	local median       = sorted[math.ceil(#sorted / 2)]
-	local wall_is_dark = s.is_dark(median)
+	local wall_is_dark = h.is_dark(median)
 	local dark_theme
 	if theme_mode == "auto" then
 		dark_theme = wall_is_dark
@@ -443,62 +448,62 @@ function ColorScheme.from_dominants(dominants, opts)
 
 	-- bg & fg
 	-- TODO: 这里只是为了让壁纸是亮色而config设置强制暗色后背景更深，但也会影响壁纸本身是暗色的情况，这种情况不需要
-	local bg          = bg_force or (dark_theme and h.change_lightness(sorted[1], 0.15) or sorted[#sorted])
-	local fg          = fg_force or s.ensure_contrast(dark_theme and sorted[#sorted] or sorted[1], bg, 7.0)
+	local bg_common   = bg_force or (dark_theme and h.change_lightness(sorted[1], 0.15) or sorted[#sorted])
+	local fg_common   = fg_force or ensure_contrast(dark_theme and sorted[#sorted] or sorted[1], bg_common, 7.0)
 
-	local bg_elevated = h.mix(bg, fg, dark_theme and 0.10 or 0.08)
-	local bg_hover    = h.mix(bg, fg, dark_theme and 0.15 or 0.12)
-	local bg_active   = h.mix(bg, fg, dark_theme and 0.22 or 0.18)
-	local bg_border   = h.mix(bg, fg, dark_theme and 0.28 or 0.24)
+	local bg_elevated = mix(bg_common, fg_common, dark_theme and 0.10 or 0.08)
+	local bg_hover    = mix(bg_common, fg_common, dark_theme and 0.15 or 0.12)
+	local bg_active   = mix(bg_common, fg_common, dark_theme and 0.22 or 0.18)
+	local bg_border   = mix(bg_common, fg_common, dark_theme and 0.28 or 0.24)
 	local bg_shadow   = dark_theme and "#101010" or "#bfb7af"
 
-	local fg_muted    = s.ensure_contrast(h.mix(fg, bg, 0.35), bg, 4.5)
-	local fg_subtle   = s.ensure_contrast(h.mix(fg, bg, 0.48), bg, 3.2)
-	local fg_hover    = s.ensure_contrast(h.mix(fg, bg, 0.14), bg, 6.0)
-	local fg_shadow   = dark_theme and "#000000" or bg
+	local fg_muted    = ensure_contrast(mix(fg_common, bg_common, 0.35), bg_common, 4.5)
+	local fg_subtle   = ensure_contrast(mix(fg_common, bg_common, 0.48), bg_common, 3.2)
+	local fg_hover    = ensure_contrast(mix(fg_common, bg_common, 0.14), bg_common, 6.0)
+	local fg_shadow   = dark_theme and "#000000" or bg_common
 
 	-- candidates
 	local candidates  = {}
 	for _, hex in ipairs(dominants) do
-		if h.get_distance(hex, bg) >= 28 and h.get_distance(hex, fg) >= 24 then
+		if distance(hex, bg_common) >= 28 and distance(hex, fg_common) >= 24 then
 			candidates[#candidates + 1] = hex
 		end
 	end
 	table.sort(candidates, function(a, b)
-		local score_a = h.get_chroma(a) * 1.6 + h.get_distance(a, bg) * 0.35 + math.min(h.get_contrast(a, bg), 6) * 14
-		local score_b = h.get_chroma(b) * 1.6 + h.get_distance(b, bg) * 0.35 + math.min(h.get_contrast(b, bg), 6) * 14
+		local score_a = chroma(a) * 1.6 + distance(a, bg_common) * 0.35 + math.min(contrast(a, bg_common), 6) * 14
+		local score_b = chroma(b) * 1.6 + distance(b, bg_common) * 0.35 + math.min(contrast(b, bg_common), 6) * 14
 		return score_a > score_b
 	end)
 
 	-- accents
 	local accents = {}
 	for _, hex in ipairs(candidates) do
-		if s.push_if_varied(accents, hex, 36, 28) and #accents >= 6 then
+		if h.push_if_varied(accents, hex, 36, 28) and #accents >= 6 then
 			break
 		end
 	end
 
-	local accent_seed = accents[1] or sorted[math.floor(#sorted / 2)] or fg
-	local accent = s.ensure_contrast_soft(accent_seed, bg, 2.6, 0.16)
+	local accent_seed = accents[1] or sorted[math.floor(#sorted / 2)] or fg_common
+	local accent = ensure_contrast(accent_seed, bg_common)
 
 	local fallback_accents = {
 		accent,
-		s.ensure_contrast_soft(h.mix(accent, fg, 0.25), bg, 3.0, 0.16),
-		s.ensure_contrast_soft(h.mix(accent, bg, 0.25), bg, 2.0, 0.16),
-		s.ensure_contrast_soft(h.mix(accent, fg, 0.45), bg, 2.4, 0.16),
-		s.ensure_contrast_soft(h.mix(accent, bg, 0.45), bg, 1.8, 0.16),
-		s.ensure_contrast_soft(h.mix(sorted[#sorted], bg, 0.35), bg, 3.0, 0.16),
+		ensure_contrast(mix(accent, fg_common, 0.25), bg_common, 3.0, 0.16),
+		ensure_contrast(mix(accent, bg_common, 0.25), bg_common, 2.0, 0.16),
+		ensure_contrast(mix(accent, fg_common, 0.45), bg_common, 2.4, 0.16),
+		ensure_contrast(mix(accent, bg_common, 0.45), bg_common, 1.8, 0.16),
+		ensure_contrast(mix(sorted[#sorted], bg_common, 0.35), bg_common, 3.0, 0.16),
 	}
 
 	for _, hex in ipairs(fallback_accents) do
 		if #accents >= 6 then
 			break
 		end
-		s.push_if_varied(accents, hex, 18, 12)
+		h.push_if_varied(accents, hex, 18, 12)
 	end
 
 	while #accents < 6 do
-		accents[#accents + 1] = s.ensure_contrast_soft(h.mix(accent, fg, 0.12 * #accents), bg, 2.0, 0.16)
+		accents[#accents + 1] = ensure_contrast(mix(accent, fg_common, 0.12 * #accents), bg_common, 2.0, 0.16)
 	end
 
 	-- new instance
@@ -507,7 +512,7 @@ function ColorScheme.from_dominants(dominants, opts)
 	return ColorScheme.new({
 		dark_mode  = dark_theme,
 		bg         = {
-			common   = bg,
+			common   = bg_common,
 			elevated = bg_elevated,
 			hover    = bg_hover,
 			active   = bg_active,
@@ -515,7 +520,7 @@ function ColorScheme.from_dominants(dominants, opts)
 			shadow   = bg_shadow,
 		},
 		fg         = {
-			common = fg,
+			common = fg_common,
 			muted  = fg_muted,
 			subtle = fg_subtle,
 			hover  = fg_hover,

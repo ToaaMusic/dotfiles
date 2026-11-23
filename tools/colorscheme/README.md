@@ -35,5 +35,4 @@ grim -g "$(slurp)" -t ppm - | lua gen.lua
 - `src/ColorScheme.lua`: ColorScheme class definition
 - `src/write.lua`: write generated theme files for each target program
 - `src/color_helper.lua`: shared color helpers
-- `src/strategy.lua`: shared theme strategy helpers
 - tpls/: templates for generated files

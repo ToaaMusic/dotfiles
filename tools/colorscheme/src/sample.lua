@@ -55,7 +55,7 @@ function M.top_colors(img, opts)
 	setmetatable(opts, { __index = SampleOptions_default })
 	local samples    = opts.samples
 	local topn       = opts.topn
-	local qbits      = opts.qbits
+	local qbits      = opts.qbits or 5
 	local region     = opts.region
 	local min_luma   = opts.min_luma
 	local max_luma   = opts.max_luma
