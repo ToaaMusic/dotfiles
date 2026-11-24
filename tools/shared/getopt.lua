@@ -234,6 +234,7 @@ local function getopt(args, optstring, longopts, options)
 				opts.short[c] = value
 				opts.order[#opts.order + 1] = { type = "short", name = c, value = value }
 			else -- optional
+				---@type boolean|string
 				local value = true
 				if k < #s then
 					value = s:sub(k + 1)

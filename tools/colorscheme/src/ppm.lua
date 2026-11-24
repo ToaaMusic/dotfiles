@@ -1,8 +1,17 @@
 -- colorscheme/src/ppm.lua
+-- vim:foldmethod=marker:foldmarker={{{,}}}
 
-local Factory = {}
+-- Internal {{{
 
--- internal
+local function clamp(v, lo, hi)
+	if v < lo then
+		return lo
+	end
+	if v > hi then
+		return hi
+	end
+	return v
+end
 
 ---@param b number byte value
 ---@return boolean is_space
@@ -77,7 +86,29 @@ local function read_all_file(path)
 	return data
 end
 
--- def
+---Read the whole content produced by a command.
+---Return values follow the Lua 5.2+ io.popen close() convention ("exit", code, 0).
+---@param cmd string
+---@return string|nil out
+local function run_capture(cmd)
+	local p, err = io.popen(cmd, "r")
+	if not p then return nil, err end
+	local out = p:read("*a")
+	p:close()
+	return out
+end
+
+---Check whether a binary is available in PATH.
+---@param name string binary name
+---@return boolean
+local function command_exists(name)
+	local out = run_capture(("command -v %s >/dev/null 2>&1 && printf ok"):format(name))
+	return out == "ok"
+end
+
+-- }}}
+
+-- Defination {{{
 
 ---@class PPM
 ---@field data string
@@ -86,22 +117,36 @@ end
 ---@field maxval number
 ---@field pixel_start number
 ---@field pixel_bytes number
+---methods
+---@field get_pixel_by_index fun(self:PPM, idx:number):number, number, number
 ---@field get_pixel fun(self:PPM, x:number, y:number): number, number, number
----@field random_pixel_in fun(self:PPM, x0:number, y0:number, x1:number, y1:number): number, number, number
+---@field random_pixel_in fun(self:PPM, region:ImgRegion): number, number, number
 ---@field random_pixel fun(self:PPM): number, number, number
 ---@field random_index fun(self:PPM): number
 ---@field seed_rng fun(self:PPM)
----@field get_pixel_by_index fun(self:PPM, idx:number):number, number, number
+---@field center_region fun(self:PPM, margin_ratio:number|nil): ImgRegion
 local PPM = {}
 PPM.__index = PPM
 
--- public
+---@class ImgRegion
+---@field x0 number
+---@field y0 number
+---@field x1 number
+---@field y1 number
+
+local Factory = {}
+
+-- }}}
+
+-- API {{{
+
+-- Factory functions {{{
 
 ---Parse P6 PPM data from a raw string.
 ---@param raw string raw PPM content
 ---@return PPM|nil ppm
 ---@return string|nil error
-function Factory.parse(raw)
+function Factory.parse(raw) -- {{{
 	if type(raw) ~= "string" or #raw == 0 then
 		return nil, "ppm.parse: empty input"
 	end
@@ -114,7 +159,7 @@ function Factory.parse(raw)
 		return nil, ("ppm.parse: not P6 (magic=%s)"):format(tostring(magic))
 	end
 
-	-- width, height and maxv
+	-- read width, height and maxv
 	local w_s; w_s, i = read_token(raw, i)
 	local h_s; h_s, i = read_token(raw, i)
 	local m_s; m_s, i = read_token(raw, i)
@@ -161,6 +206,8 @@ function Factory.parse(raw)
 	}, PPM), nil
 end
 
+-- }}}
+
 ---Read and parse P6 PPM from stdin.
 ---@return PPM|nil ppm
 ---@return string|nil error
@@ -177,6 +224,31 @@ function Factory.from_file(path)
 	if not data then return nil, ("ppm.from_file: %s"):format(err or "read failed") end
 	return Factory.parse(data)
 end
+
+---Read any image file ffmpeg understands, converting it to P6 PPM first.
+---Fails when ffmpeg is not installed.
+---@param path string
+---@return PPM|nil ppm
+---@return string|nil error
+function Factory.from_any(path)
+	if type(path) ~= "string" or path == "" then
+		return nil, "ppm.from_any: empty path"
+	end
+	if not command_exists("ffmpeg") then
+		return nil, "ppm.from_any: ffmpeg not found in PATH"
+	end
+
+	local out = run_capture(("ffmpeg -v error -nostdin -i \"%s\" -f image2pipe -vcodec ppm -pix_fmt rgb24 - 2>/dev/null")
+		:format(path))
+	if not out or #out == 0 then
+		return nil, ("ppm.from_any: ffmpeg could not decode '%s'"):format(path)
+	end
+	return Factory.parse(out)
+end
+
+-- }}}
+
+-- Member functions {{{
 
 --- Get pixel RGB by absolute index.
 function PPM:get_pixel_by_index(idx)
@@ -199,6 +271,15 @@ function PPM:get_pixel(x, y)
 	return self:get_pixel_by_index(idx)
 end
 
+---Return a centered region.
+function PPM:center_region(margin_ratio)
+	margin_ratio = margin_ratio or 0
+	margin_ratio = clamp(margin_ratio, 0, 0.49)
+	local mx = math.floor(self.width * margin_ratio)
+	local my = math.floor(self.height * margin_ratio)
+	return { x0 = mx, y0 = my, x1 = self.width - mx, y1 = self.height - my }
+end
+
 --- Seed RNG for sampling.
 function PPM:seed_rng()
 	math.randomseed(os.time() ~ self.width ~ (self.height << 16))
@@ -217,7 +298,8 @@ function PPM:random_pixel()
 end
 
 --- Sample a random pixel within a 0-based half-open region.
-function PPM:random_pixel_in(x0, y0, x1, y1)
+function PPM:random_pixel_in(region)
+	local x0, y0, x1, y1 = region.x0, region.y0, region.x1, region.y1
 	if x0 < 0 then x0 = 0 end
 	if y0 < 0 then y0 = 0 end
 	if x1 > self.width then x1 = self.width end
@@ -229,5 +311,9 @@ function PPM:random_pixel_in(x0, y0, x1, y1)
 	local y = math.random(y0, y1 - 1)
 	return self:get_pixel(x, y)
 end
+
+-- }}}
+
+-- }}}
 
 return Factory

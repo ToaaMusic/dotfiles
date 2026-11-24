@@ -8,26 +8,6 @@ local h = require("color_helper")
 local tdf_dir = os.getenv("TOAAM_DOTFILES")
 
 return function()
-	-- local scheme = new_Scheme({
-	-- 	"#c0cfd0",
-	-- 	"#232625",
-	-- 	"#2b2d2b",
-	-- 	"#e78481",
-	-- 	"#818284",
-	-- 	"#878887",
-	-- 	"#b3b3b2",
-	-- 	"#f6f7f4",
-	-- 	"#ed8c8c",
-	-- 	"#109868",
-	-- 	"#07989a",
-	-- 	"#f2d17d",
-	-- 	"#75b5af",
-	-- 	"#b279a3"
-	-- })
-
-	local white = "#FFFFFF"
-	local black = "#000000"
-
 	local img, err = ppm.from_file(tdf_dir .. "/tools/colorscheme/test.ppm")
 	if not img then
 		error(err)
@@ -52,7 +32,7 @@ return function()
 	--]]
 
 	local brand = scheme.brand
-	write.dump_console(h.gradient(brand, black, 6))
+	write.dump_console(h.gradient(brand, h.black, 6))
 
 	print(require("write").serialize_gtk_css(scheme))
 end

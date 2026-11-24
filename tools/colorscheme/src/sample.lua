@@ -4,23 +4,16 @@
 local h = require("color_helper")
 local luma = h.rgb_get_luma
 local rgb_to_hex = h.rgb_to_hex
-local clamp = h.clamp
 local quantize = h.quantize
 local dequantize = h.dequantize
 
 local M = {}
 
----@class SampleRegion
----@field x0 number
----@field y0 number
----@field x1 number
----@field y1 number
-
 ---@class SampleOptions
 ---@field samples? number
 ---@field topn? number
 ---@field qbits? number
----@field region? SampleRegion
+---@field region? ImgRegion
 ---@field min_luma? number 0-255
 ---@field max_luma? number 0-255
 ---@field oversample_factor? number
@@ -72,7 +65,7 @@ function M.top_colors(img, opts)
 
 	local function next_rgb()
 		if region then
-			return img:random_pixel_in(region.x0, region.y0, region.x1, region.y1)
+			return img:random_pixel_in(region)
 		end
 		return img:random_pixel()
 	end
@@ -116,18 +109,6 @@ function M.top_colors(img, opts)
 	end
 
 	return picked
-end
-
----Return a centered half-open sampling region.
----@param img PPM
----@param margin_ratio number|nil to be clamped from 0.0 to 0.49, default 0
----@return SampleRegion
-function M.center_region(img, margin_ratio)
-	margin_ratio = margin_ratio or 0
-	margin_ratio = clamp(margin_ratio, 0, 0.49)
-	local mx = math.floor(img.width * margin_ratio)
-	local my = math.floor(img.height * margin_ratio)
-	return { x0 = mx, y0 = my, x1 = img.width - mx, y1 = img.height - my }
 end
 
 return M

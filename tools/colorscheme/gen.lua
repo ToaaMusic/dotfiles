@@ -1,8 +1,8 @@
+#!/usr/bin/env lua
 -- gen.lua
 -- The entry of color generator
 
----@diagnostic disable: need-check-nil
-
+-- path
 local script_dir = debug.getinfo(1, "S").source:sub(2):match("(.*/)")
 local tdf_dir = os.getenv("TOAAM_DOTFILES")
 for _, dep in ipairs({
@@ -16,8 +16,10 @@ end
 --config
 local config = require("Config").load_tdf_config()
 local gen_opts = config.color_auto_gen
+---@cast gen_opts tdf.ColorAutoGenOpts
 if not gen_opts.enable then return end
 
+-- import
 local getopt = require("getopt")
 local logger = require("logger").get_logger()
 local ppm = require("ppm")
@@ -25,8 +27,7 @@ local sample = require("sample")
 local write = require("write")
 local new_Scheme = require("ColorScheme")
 
--- arg
-
+-- args
 local opts, _, arg_err = getopt(arg, "hf:", nil, {
 	alternative = false,
 	posixly_correct = true,
@@ -37,10 +38,22 @@ if arg_err then
 	os.exit(1)
 end
 
--- 1. Load img data from stdin
+-- 1. Load img
 local img, err
 if opts.short["f"] then
-	img, err = ppm.from_file(opts.short["f"])
+	local path = opts.short["f"]
+	if type(path) ~= "string" then
+		logger:error("-f expects a string path")
+		return
+	end
+	local f = io.open(path, "rb")
+	local magic = f and f:read(2)
+	if f then f:close() end
+	if magic == "P6" then
+		img, err = ppm.from_file(path)
+	else
+		img, err = ppm.from_any(path)
+	end
 else
 	img, err = ppm.from_stdin()
 end
@@ -53,11 +66,7 @@ end
 img:seed_rng()
 
 -- 2. Sample dominant colors
-local dominants = sample.top_colors(img, {
-	-- topn = 1000,
-	-- qbits = 4,
-	-- sample.center_region(img),
-})
+local dominants = sample.top_colors(img)
 
 -- 3. Generate Scheme
 local scheme = new_Scheme(dominants, gen_opts)
